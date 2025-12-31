@@ -16,25 +16,20 @@ const apiClient = axios.create({
     baseURL: getBaseURL(),
 });
 
-console.log('API Client: Final BaseURL:', apiClient.defaults.baseURL);
 
 // AUTO-ATTACH TOKEN INTERCEPTOR
 apiClient.interceptors.request.use(async (config) => {
     const session: any = await getSession();
 
-    console.log('API Client: Session Check:', {
-        hasSession: !!session,
-        hasToken: !!session?.accessToken,
-        user: session?.user?.email || session?.user?.name
-    });
+    // console.log('API Client: Session Check:', {
+    //     hasSession: !!session,
+    //     hasToken: !!session?.accessToken,
+    //     user: session?.user?.email || session?.user?.name
+    // });
 
     if (session?.accessToken) {
         config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
-
-    console.log(`API Client: Outgoing Request: [${config.method?.toUpperCase()}] ${config.baseURL}${config.url}`, {
-        headers: config.headers
-    });
 
     return config;
 }, (error) => {
@@ -45,7 +40,6 @@ apiClient.interceptors.request.use(async (config) => {
 // RESPONSE INTERCEPTOR FOR AUTH ERRORS
 apiClient.interceptors.response.use(
     (response) => {
-        console.log(`API Client: Success Response from ${response.config.url}:`, response.data);
         return response;
     },
     (error) => {
