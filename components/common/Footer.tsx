@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Footer() {
   return (
     <footer className="bg-[#010001] border-t border-gray-800 mt-16">
@@ -7,7 +9,9 @@ export function Footer() {
             <div className="text-xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent mb-4">
               Pankhuri
             </div>
-            <p className="text-sm text-gray-400">Empowering learners worldwide with world-class education.</p>
+            <p className="text-sm text-gray-400">
+              Empowering learners worldwide with world-class education.
+            </p>
           </div>
           <div>
             <h4 className="text-white font-semibold mb-4">Explore</h4>
@@ -71,9 +75,20 @@ export function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 Pankhuri. All rights reserved.</p>
+          <p>
+            &copy; 2026 Designed and Developed By{" "}
+            <Link
+              className="font-bold"
+              href="https://www.pantharinfohub.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Panthar InfoHub
+            </Link>{" "}
+            .
+          </p>
         </div>
       </div>
     </footer>
-  )
-}
+  );
+} 
