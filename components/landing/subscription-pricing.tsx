@@ -1,16 +1,25 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
-import { Check, Crown, Zap } from "lucide-react"
+import { Check, Crown, Zap, Loader2 } from "lucide-react"
+import { useSession } from "next-auth/react"
+import { useRouter, usePathname } from "next/navigation"
+import { useState } from "react"
+import apiClient from "@/lib/api-client"
+import { toast } from "sonner"
 
 const plans = [
   {
+    id: "cmkl2ueng0001s61ww9euleyb",
     name: "Monthly",
-    price: "₹499",
+    price: "₹349",
     period: "/month",
     description: "Perfect for trying out",
     features: ["Access to all courses", "Certificates included", "Recording access", "Community access"],
     popular: false,
   },
   {
+    id: "cmkl2vw8r0002s61wts4ohp8z",
     name: "Yearly",
     price: "₹2,999",
     period: "/year",
@@ -24,25 +33,59 @@ const plans = [
     ],
     popular: true,
   },
-  {
-    name: "Lifetime",
-    price: "₹4,999",
-    period: "one-time",
-    description: "Pay once, learn forever",
-    features: [
-      "Everything in Yearly",
-      "Lifetime updates",
-      "VIP community badge",
-      "Free future courses",
-      "Premium support forever",
-    ],
-    popular: false,
-  },
 ]
 
 export function SubscriptionPricing() {
+  const { data: session } = useSession()
+  const router = useRouter()
+  const pathname = usePathname()
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
+
+  const handleSubscribe = async (planId: string) => {
+    if (!session) {
+      // Redirect to login with callbackUrl
+      router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
+      return
+    }
+
+    setLoadingPlan(planId)
+    try {
+      const response = await apiClient.post("/api/subscriptions", {
+        planId: planId,
+      })
+
+      const { success, data, message } = response.data
+
+      if (success && data.shortUrl) {
+        toast.success(message || "Redirecting to payment...")
+        // Redirect to Razorpay short URL
+        window.location.href = data.shortUrl
+      } else {
+        toast.error(message || "Failed to initiate subscription")
+      }
+    } catch (error: any) {
+      // Better error logging for debugging
+      if (error.response) {
+        // The server responded with a status code outside the range of 2xx
+        console.error("Backend Error:", error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("Network Error (No response):", error.request);
+        toast.error("Network error: Please check if the backend server is running.");
+      } else {
+        // Something happened in setting up the request
+        console.error("Request Setup Error:", error.message);
+      }
+
+      const errorMessage = error.response?.data?.message || error.message || "Failed to connect to the server";
+      if (!error.request) toast.error(errorMessage);
+    } finally {
+      setLoadingPlan(null)
+    }
+  }
+
   return (
-    <section className="py-20">
+    <section className="py-20" id="pricing">
       <div className="container mx-auto px-4">
         <div className="mb-12 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-pink-100 px-4 py-2 text-sm font-medium text-pink-700">
@@ -55,15 +98,14 @@ export function SubscriptionPricing() {
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:px-20">
           {plans.map((plan, index) => (
             <div
-              key={index}
-              className={`relative flex flex-col rounded-2xl border-2 p-6 transition-all hover:-translate-y-1 hover:shadow-xl ${
-                plan.popular
-                  ? "border-pink-500 bg-gradient-to-b from-pink-50 to-white shadow-lg shadow-pink-500/10"
-                  : "border-pink-100 bg-white shadow-sm"
-              }`}
+              key={plan.id}
+              className={`relative flex flex-col rounded-2xl border-2 p-6 transition-all hover:-translate-y-1 hover:shadow-xl ${plan.popular
+                ? "border-pink-500 bg-gradient-to-b from-pink-50 to-white shadow-lg shadow-pink-500/10"
+                : "border-pink-100 bg-white shadow-sm"
+                }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -96,13 +138,21 @@ export function SubscriptionPricing() {
               </ul>
 
               <Button
-                className={`w-full py-6 font-semibold ${
-                  plan.popular
-                    ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/30"
-                    : "bg-pink-100 text-pink-700 hover:bg-pink-200"
-                }`}
+                onClick={() => handleSubscribe(plan.id)}
+                disabled={loadingPlan === plan.id}
+                className={`w-full py-6 font-semibold transition-all ${plan.popular
+                  ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/30"
+                  : "bg-pink-100 text-pink-700 hover:bg-pink-200"
+                  }`}
               >
-                Get Started
+                {loadingPlan === plan.id ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  "Get Started"
+                )}
               </Button>
             </div>
           ))}

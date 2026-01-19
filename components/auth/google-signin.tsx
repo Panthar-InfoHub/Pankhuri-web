@@ -7,11 +7,13 @@ import { signIn as nextAuthSignIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export function GoogleSignIn() {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get("callbackUrl")
 
     const handleLogin = async () => {
         setLoading(true)
@@ -32,7 +34,7 @@ export function GoogleSignIn() {
                 toast.error("Backend authentication failed")
             } else {
                 toast.success("Welcome back!")
-                router.push("/")
+                router.push(callbackUrl || "/")
                 router.refresh()
             }
         } catch (error: any) {

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Phone, ArrowRight, Loader2, CheckCircle2 } from "lucide-react"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export function PhoneSignIn() {
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -18,6 +18,8 @@ export function PhoneSignIn() {
     const [step, setStep] = useState<"phone" | "otp">("phone")
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get("callbackUrl")
 
     const setupRecaptcha = () => {
         if ((window as any).recaptchaVerifier) return
@@ -67,7 +69,7 @@ export function PhoneSignIn() {
                     toast.error("Backend authentication failed")
                 } else {
                     toast.success("Logged in successfully!")
-                    router.push("/")
+                    router.push(callbackUrl || "/")
                     router.refresh()
                 }
             }

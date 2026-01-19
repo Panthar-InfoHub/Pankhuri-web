@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Star, Users, Sparkles } from "lucide-react"
@@ -29,7 +31,7 @@ export function HeroSection() {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-              1000+ Courses, 18+ Categories, ₹2.5 Lakh worth Courses. 
+              1000+ Courses, 18+ Categories, ₹2.5 Lakh worth Courses.
             </p>
 
             <div className="space-y-4 max-w-md">
@@ -63,6 +65,7 @@ export function HeroSection() {
 
                   <Button
                     size="lg"
+                    onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
                     className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-full h-14 text-lg font-bold shadow-lg shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 transition-all"
                   >
                     Subscribe now
@@ -74,14 +77,14 @@ export function HeroSection() {
 
             <div className="flex flex-wrap gap-4 pt-4">
               <div className="pt-4">
-              <Image
-                src="/landing/logo.png"
-                alt="Download on App Store or Get it on Google Play"
-                width={300}
-                height={150}
-                className="w-64 h-auto"
-              />
-            </div>
+                <Image
+                  src="/landing/logo.png"
+                  alt="Download on App Store or Get it on Google Play"
+                  width={300}
+                  height={150}
+                  className="w-64 h-auto"
+                />
+              </div>
             </div>
           </div>
 

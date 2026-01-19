@@ -5,12 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { GoogleSignIn } from "@/components/auth/google-signin"
 import { PhoneSignIn } from "@/components/auth/phone-signin"
 
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ callbackUrl?: string }> }) {
     const session = await auth()
+    const { callbackUrl } = await searchParams
 
     // Server-side redirect if already authenticated
     if (session) {
-        redirect("/")
+        redirect(callbackUrl || "/")
     }
 
     return (
