@@ -84,19 +84,19 @@ export function PhoneSignIn() {
             <form onSubmit={handleVerifyOtp} className="space-y-6">
                 <div className="space-y-2 text-center">
                     <Input
-                        placeholder="Enter 6-digit OTP"
+                        placeholder="000000"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         disabled={loading}
                         maxLength={6}
-                        className="h-14 text-center text-2xl tracking-[0.5em] font-bold rounded-xl border-slate-200 focus:ring-pink-500 bg-slate-50/30"
+                        className="h-16 text-center text-3xl tracking-[0.5em] font-bold rounded-2xl border-white/10 focus:ring-rose-500 bg-white/5 text-white placeholder:text-gray-700 transition-all focus:bg-white/10"
                     />
-                    <p className="text-xs text-slate-500 mt-4">
+                    <p className="text-sm text-gray-500 mt-4">
                         Didn't receive code? {" "}
                         <button
                             type="button"
                             onClick={() => setStep("phone")}
-                            className="text-pink-600 font-bold hover:underline"
+                            className="text-rose-500 font-bold hover:text-rose-400 transition-colors"
                         >
                             Resend
                         </button>
@@ -105,21 +105,23 @@ export function PhoneSignIn() {
                 <Button
                     type="submit"
                     disabled={loading || otp.length < 6}
-                    className="w-full h-12 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-bold shadow-lg shadow-pink-200/50 transition-all duration-300 transform hover:-translate-y-0.5"
+                    className="w-full h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white text-lg font-bold shadow-xl shadow-pink-500/20 transition-all duration-300 transform active:scale-[0.98]"
                 >
-                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Verify & Continue"}
-                    {!loading && <CheckCircle2 className="ml-2 h-4 w-4" />}
+                    {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Verify & Continue"}
+                    {!loading && <CheckCircle2 className="ml-2 h-5 w-5" />}
                 </Button>
             </form>
         )
     }
 
     return (
-        <form onSubmit={handleSendOtp} className="space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="phone" className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Phone Number</Label>
-                <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+        <form onSubmit={handleSendOtp} className="space-y-6">
+            <div className="space-y-3">
+                <Label htmlFor="phone" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">
+                    Phone Number
+                </Label>
+                <div className="relative group">
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-rose-500 transition-colors" />
                     <Input
                         id="phone"
                         placeholder="Enter 10-digit number"
@@ -127,17 +129,17 @@ export function PhoneSignIn() {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         disabled={loading}
-                        className="pl-11 h-12 rounded-xl border-slate-200 focus:ring-pink-500 focus:border-pink-500 transition-all bg-slate-50/30"
+                        className="pl-12 h-14 rounded-2xl border-white/10 focus:ring-rose-500 focus:border-rose-500 transition-all bg-white/5 text-white placeholder:text-gray-600 focus:bg-white/10"
                     />
                 </div>
             </div>
             <Button
                 type="submit"
                 disabled={loading || !phoneNumber}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-bold shadow-lg shadow-pink-200/50 transition-all duration-300 transform hover:-translate-y-0.5"
+                className="w-full h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white text-lg font-bold shadow-xl shadow-pink-500/20 transition-all duration-300 transform active:scale-[0.98]"
             >
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Request OTP"}
-                {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+                {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Request OTP"}
+                {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
             </Button>
             <div id="recaptcha-container"></div>
         </form>
