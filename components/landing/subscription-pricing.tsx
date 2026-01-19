@@ -21,7 +21,7 @@ const plans = [
   {
     id: "cmkl2vw8r0002s61wts4ohp8z",
     name: "Yearly",
-    price: "₹2,999",
+    price: "₹1,999",
     period: "/year",
     description: "Best value - Save 50%",
     features: [
