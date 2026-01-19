@@ -1,7 +1,7 @@
 // Payment Service - Razorpay Integration
 
 import { config } from "@/config/env"
-import { getRazorpayKeyId } from "@/app/actions/payment"
+import { getRazorpayKeyId } from "@/app/(web)/actions/payment"
 
 interface PaymentDetails {
   courseId: string
