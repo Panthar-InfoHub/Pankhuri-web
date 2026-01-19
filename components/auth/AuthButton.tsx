@@ -13,9 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { User, LogOut, BookOpen } from "lucide-react"
+import { usePathname } from "next/navigation"
+
 
 export function AuthButton() {
   const { data: session, status } = useSession()
+  const pathname = usePathname()
+
 
   if (status === "loading") {
     return <div className="h-9 w-24 animate-pulse bg-slate-200 rounded-md" />
@@ -66,7 +70,8 @@ export function AuthButton() {
   }
 
   return (
-    <Link href="/login">
+    <Link href={`/login?callbackUrl=${encodeURIComponent(pathname)}`}>
+
       <Button className="bg-linear-to-r from-purple-500 to-pink-500 hover:opacity-80 text-white border-0 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-pink-200 px-6 font-semibold">
         Sign In
       </Button>

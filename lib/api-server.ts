@@ -9,7 +9,7 @@ export async function serverApi(path: string, options: RequestInit = {}) {
 
     // Ensure path starts with a slash
     const cleanPath = path.startsWith("/") ? path : `/${path}`;
-    const baseUrl = process.env.BACKEND_URL?.replace(/\/$/, "");
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/\/$/, "");
     const fullUrl = `${baseUrl}${cleanPath}`;
 
     const res = await fetch(fullUrl, {

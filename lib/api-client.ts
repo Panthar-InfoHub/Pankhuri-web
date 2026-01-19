@@ -1,13 +1,10 @@
 import axios from "axios";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 
 const getBaseURL = () => {
-    const envUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const backupUrl = process.env.BACKEND_URL;
+    const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+    // const backupUrl = process.env.BACKEND_URL;
 
-    console.log('API Client: Checking Env Vars:', { NEXT_PUBLIC_BACKEND_URL: envUrl, BACKEND_URL: backupUrl });
-
-    const url = envUrl || backupUrl;
     if (!url && process.env.NODE_ENV === 'development') {
         console.warn('API Client: NEXT_PUBLIC_BACKEND_URL is missing. Falling back to http://localhost:8080');
         return 'http://localhost:8080';
@@ -60,9 +57,14 @@ apiClient.interceptors.response.use(
         });
 
         if (error.response?.status === 401) {
-            console.warn('API Client: Unauthorized (401). Redirecting to login...');
+            console.warn('API Client: Unauthorized (401). Clearing session and redirecting...');
             if (typeof window !== "undefined") {
-                window.location.href = "/login?session_expired=true";
+                const currentPath = window.location.pathname + window.location.search;
+                // signOut from next-auth/react clears the session cookie
+                signOut({
+                    callbackUrl: `/login?callbackUrl=${encodeURIComponent(currentPath)}&session_expired=true`,
+                    redirect: true
+                });
             }
         }
         return Promise.reject(error);
