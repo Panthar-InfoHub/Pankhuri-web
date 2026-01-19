@@ -6,12 +6,12 @@ import { CategoryGrid } from "@/components/home/CategoryGrid"
 import { CourseGrid } from "@/components/home/CourseGrid"
 import { TestimonialSection } from "@/components/home/TestimonialSection"
 import { MyCoursesSection } from "@/components/home/MyCoursesSection"
-import { useAuth } from "@/hooks/useAuth"
+// import { useAuth } from "@/hooks/useAuth"
 import { categories } from "@/data/categories"
 import { courses } from "@/data/courses"
 
 export default function HomePage() {
-  const { isLoggedIn } = useAuth()
+  // const { isLoggedIn } = useAuth()
   const [activeSection, setActiveSection] = useState("home")
 
   return (
@@ -25,7 +25,7 @@ export default function HomePage() {
       </section>
 
       {/* My Courses Section - Only show if logged in */}
-      {isLoggedIn && <MyCoursesSection />}
+      {/* {isLoggedIn && <MyCoursesSection />} */}
 
       {/* Featured Courses */}
       <section className="bg-[#010001] max-w-7xl mx-auto px-4 py-12">

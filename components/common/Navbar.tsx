@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useAuth } from "@/hooks/useAuth"
+// import { useAuth } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -10,12 +10,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Menu, X } from "lucide-react"
 
 export function Navbar() {
-  const { isLoggedIn, logout, user } = useAuth()
+  // const { isLoggedIn, logout, user } = useAuth()
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleLogout = () => {
-    logout()
+    // logout()
     router.push("/")
   }
 
@@ -50,19 +50,19 @@ export function Navbar() {
             >
               Courses
             </Link>
-            {isLoggedIn && (
+            {/* {isLoggedIn && (
               <Link
                 href="/?section=my-courses"
                 className="text-sm text-gray-200 hover:text-purple-400 transition-colors duration-200 font-medium"
               >
                 My Courses
               </Link>
-            )}
+            )} */}
           </div>
 
           {/* Profile & Auth */}
           <div className="hidden md:flex items-center gap-4">
-            {isLoggedIn ? (
+            {/* {isLoggedIn ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold cursor-pointer hover:opacity-80 transition-opacity">
@@ -93,7 +93,7 @@ export function Navbar() {
                   Sign In
                 </Button>
               </Link>
-            )}
+            )} */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -114,7 +114,7 @@ export function Navbar() {
             <Link href="/courses" className="block text-sm text-gray-200 hover:text-purple-400 font-medium">
               Courses
             </Link>
-            {isLoggedIn && (
+            {/* {isLoggedIn && (
               <Link
                 href="/?section=my-courses"
                 className="block text-sm text-gray-200 hover:text-purple-400 font-medium"
@@ -135,7 +135,7 @@ export function Navbar() {
                   Sign In
                 </Button>
               </Link>
-            )}
+            )} */}
           </div>
         )}
       </div>

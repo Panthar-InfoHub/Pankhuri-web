@@ -1,35 +1,35 @@
 "use client"
 
-import { useAuth } from "@/hooks/useAuth"
+// import { useAuth } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
-import { useCourse } from "@/hooks/useCourse"
+// import { useCourse } from "@/hooks/useCourse"
 import { courses } from "@/data/courses"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 
 export default function AccountPage() {
-  const { isLoggedIn, user, logout } = useAuth()
-  const { purchasedCourses } = useCourse()
+  // const { isLoggedIn, user, logout } = useAuth()
+  // const { purchasedCourses } = useCourse()
   const router = useRouter()
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      router.push("/login")
-    }
-  }, [isLoggedIn, router])
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     router.push("/login")
+  //   }
+  // }, [isLoggedIn, router])
 
-  const myCourses = courses.filter((course) => purchasedCourses.includes(course.id))
+  const myCourses = courses.filter((course) => true)
 
   const handleLogout = () => {
-    logout()
+    // logout()
     router.push("/")
   }
 
-  if (!isLoggedIn || !user) {
-    return null
-  }
+  // if (!isLoggedIn || !user) {
+  //   return null
+  // }
 
   return (
     <main className="bg-black min-h-screen">
@@ -38,11 +38,11 @@ export default function AccountPage() {
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 mb-12">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
             <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-4xl font-bold flex-shrink-0">
-              {user.name.charAt(0).toUpperCase()}
+              {/* {user.name.charAt(0).toUpperCase()} */}
             </div>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-white mb-2">{user.name}</h1>
-              <p className="text-gray-400 mb-4">{user.email}</p>
+              {/* <h1 className="text-3xl font-bold text-white mb-2">{user.name}</h1> */}
+              {/* <p className="text-gray-400 mb-4">{user.email}</p> */}
               {/* TODO: Fetch real user data from auth.service.ts */}
             </div>
           </div>

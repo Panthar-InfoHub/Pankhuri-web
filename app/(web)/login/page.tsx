@@ -1,20 +1,20 @@
 "use client"
 
-import { useAuth } from "@/hooks/useAuth"
+// import { useAuth } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import Link from "next/link"
 import { LoginForm } from "@/components/auth/LoginForm"
 
 export default function LoginPage() {
-  const { isLoggedIn } = useAuth()
+  // const { isLoggedIn } = useAuth()
   const router = useRouter()
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.push("/")
-    }
-  }, [isLoggedIn, router])
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     router.push("/")
+  //   }
+  // }, [isLoggedIn, router])
 
   return (
     <main className="bg-black min-h-screen flex items-center justify-center px-4">

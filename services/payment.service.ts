@@ -1,6 +1,6 @@
 // Payment Service - Razorpay Integration
 
-import { config } from "@/config/env"
+
 import { getRazorpayKeyId } from "@/app/(web)/actions/payment"
 
 interface PaymentDetails {
@@ -25,7 +25,7 @@ declare global {
 export const paymentService = {
   async initiatePayment(details: PaymentDetails): Promise<RazorpayOrder> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/payment/create-order`, {
+      const response = await fetch(`http://localhost:3001/api/payment/create-order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export const paymentService = {
 
   async verifyPayment(orderId: string, paymentId: string, signature: string): Promise<boolean> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/payment/verify`, {
+      const response = await fetch(`/payment/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

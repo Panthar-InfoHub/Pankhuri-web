@@ -1,11 +1,9 @@
 // Course Service
 
-import { config } from "@/config/env"
-
 export const courseService = {
   async getCourses(): Promise<any[]> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/courses`, {
+      const response = await fetch(`http://localhost:3001/api/courses`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +23,7 @@ export const courseService = {
 
   async getCourseById(courseId: string): Promise<any> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/courses/${courseId}`, {
+      const response = await fetch(`http://localhost:3001/api/courses/${courseId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +43,7 @@ export const courseService = {
 
   async getCourseVideos(courseId: string): Promise<any[]> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/courses/${courseId}/videos`, {
+      const response = await fetch(`http://localhost:3001/api/courses/${courseId}/videos`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +63,7 @@ export const courseService = {
 
   async getCategories(): Promise<any[]> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/categories`, {
+      const response = await fetch(`http://localhost:3001/api/categories`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +83,7 @@ export const courseService = {
 
   async enrollCourse(courseId: string): Promise<boolean> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/courses/${courseId}/enroll`, {
+      const response = await fetch(`http://localhost:3001/api/courses/${courseId}/enroll`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

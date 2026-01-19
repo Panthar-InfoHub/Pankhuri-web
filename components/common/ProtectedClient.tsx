@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "@/hooks/useAuth"
+// import { useAuth } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
 import { type ReactNode, useEffect } from "react"
 import { Loader } from "./Loader"
@@ -12,18 +12,18 @@ export function ProtectedClient({
   children: ReactNode
   redirectTo?: string
 }) {
-  const { isLoggedIn } = useAuth()
+  // const { isLoggedIn } = useAuth()
   const router = useRouter()
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      router.push(redirectTo)
-    }
-  }, [isLoggedIn, redirectTo, router])
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     router.push(redirectTo)
+  //   }
+  // }, [isLoggedIn, redirectTo, router])
 
-  if (!isLoggedIn) {
-    return <Loader />
-  }
+  // if (!isLoggedIn) {
+  //   return <Loader />
+  // }
 
   return children
 }

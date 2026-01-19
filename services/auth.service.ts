@@ -1,7 +1,5 @@
 // Authentication Service
 
-import { config } from "@/config/env"
-
 interface LoginCredentials {
   email: string
   password: string
@@ -19,7 +17,7 @@ interface AuthResponse {
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/auth/login`, {
+      const response = await fetch(`http://localhost:3001/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +46,7 @@ export const authService = {
 
   async logout(): Promise<void> {
     try {
-      await fetch(`${config.API_BASE_URL}/auth/logout`, {
+      await fetch(`/auth/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +59,7 @@ export const authService = {
 
   async getCurrentUser(): Promise<any> {
     try {
-      const response = await fetch(`${config.API_BASE_URL}/auth/me`, {
+      const response = await fetch(`/auth/me`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

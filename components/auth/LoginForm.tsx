@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useAuth } from "@/hooks/useAuth"
+// import { useAuth } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,7 +12,7 @@ export function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
+  // const { login } = useAuth()
   const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,7 +22,7 @@ export function LoginForm() {
     // TODO: Replace with API call from auth.service.ts
     setTimeout(() => {
       if (email && password) {
-        login(email, password)
+        // login(email, password)
         router.push("/")
       }
       setLoading(false)

@@ -3,18 +3,15 @@
 import Link from "next/link"
 import { ChevronDown, Lock } from "lucide-react"
 import { useState } from "react"
-import { useCourse } from "@/hooks/useCourse"
-import type { Curriculum } from "@/context/types"
+// import { useCourse } from "@/hooks/useCourse"
+// import type { Curriculum } from "@/context/types"
 
-interface CourseCurriculumProps {
-  curriculum: Curriculum[]
-  courseId: string
-}
 
-export function CourseCurriculum({ curriculum, courseId }: CourseCurriculumProps) {
+
+export function CourseCurriculum({ curriculum, courseId }: any) {
   const [expandedSections, setExpandedSections] = useState<string[]>([curriculum[0]?.id || ""])
-  const { hasPurchased } = useCourse()
-  const isPurchased = hasPurchased(courseId)
+  // const { hasPurchased } = useCourse()
+  // const isPurchased = hasPurchased(courseId)
 
   const toggleSection = (sectionId: string) => {
     setExpandedSections((prev) =>
@@ -26,7 +23,7 @@ export function CourseCurriculum({ curriculum, courseId }: CourseCurriculumProps
     <div className="max-w-7xl mx-auto px-4 py-12">
       <h2 className="text-3xl font-bold text-white mb-8">Course Curriculum</h2>
       <div className="space-y-4">
-        {curriculum.map((section) => (
+        {curriculum.map((section:any) => (
           <div key={section.id} className="border border-gray-800 rounded-lg overflow-hidden">
             <button
               onClick={() => toggleSection(section.id)}
@@ -41,9 +38,9 @@ export function CourseCurriculum({ curriculum, courseId }: CourseCurriculumProps
 
             {expandedSections.includes(section.id) && (
               <div className="space-y-2 p-4 bg-gray-950">
-                {section.videos.map((video) => (
+                {section.videos.map((video:any) => (
                   <div key={video.id} className="flex items-center gap-4 p-3 hover:bg-gray-900 rounded">
-                    {isPurchased ? (
+                    {/* {isPurchased ? (
                       <Link
                         href={`/course/${courseId}/video/${video.id}`}
                         className="flex-1 flex items-center gap-4 cursor-pointer group"
@@ -64,7 +61,7 @@ export function CourseCurriculum({ curriculum, courseId }: CourseCurriculumProps
                           <p className="text-gray-500 text-sm">{video.duration} min</p>
                         </div>
                       </div>
-                    )}
+                    )} */}
                   </div>
                 ))}
               </div>

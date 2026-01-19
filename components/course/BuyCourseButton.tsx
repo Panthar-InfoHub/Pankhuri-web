@@ -1,7 +1,6 @@
 "use client"
 
-import { useCourse } from "@/hooks/useCourse"
-import { useAuth } from "@/hooks/useAuth"
+
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -12,23 +11,22 @@ interface BuyCourseButtonProps {
 }
 
 export function BuyCourseButton({ courseId, courseName }: BuyCourseButtonProps) {
-  const { hasPurchased, purchaseCourse } = useCourse()
-  const { isLoggedIn } = useAuth()
+
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(false)
 
-  const isPurchased = hasPurchased(courseId)
+  const isPurchased = false
 
   const handlePurchase = async () => {
-    if (!isLoggedIn) {
-      router.push("/login")
-      return
-    }
+    // if (!isLoggedIn) {
+    //   router.push("/login")
+    //   return
+    // }
 
     setIsProcessing(true)
     // TODO: Replace with Razorpay payment integration from payment.service.ts
     setTimeout(() => {
-      purchaseCourse(courseId)
+      // purchaseCourse(courseId)
       setIsProcessing(false)
     }, 1000)
   }

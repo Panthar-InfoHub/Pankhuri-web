@@ -5,7 +5,7 @@ import { courses } from "@/data/courses"
 import { curriculumData } from "@/data/curriculum"
 import { VideoPlayer } from "@/components/video/VideoPlayer"
 import { CoursePlaylist } from "@/components/video/CoursePlaylist"
-import { useCourse } from "@/hooks/useCourse"
+// import { useCourse } from "@/hooks/useCourse"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { useState, useEffect } from "react"
@@ -19,25 +19,25 @@ export default function VideoPage() {
 
   const course = courses.find((c) => c.id === courseId)
   const curriculum = curriculumData[courseId] || []
-  const { hasPurchased } = useCourse()
+  // const { hasPurchased } = useCourse()
   const [selectedVideoId, setSelectedVideoId] = useState(videoId)
 
   // Find the video from curriculum
   let selectedVideo = null
   for (const section of curriculum) {
-    const video = section.videos.find((v) => v.id === selectedVideoId)
+    const video = section.videos.find((v:any) => v.id === selectedVideoId)
     if (video) {
       selectedVideo = video
       break
     }
   }
 
-  useEffect(() => {
-    // Check if user has purchased the course
-    if (!hasPurchased(courseId)) {
-      router.push(`/course/${courseId}`)
-    }
-  }, [courseId, hasPurchased, router])
+  // useEffect(() => {
+  //   // Check if user has purchased the course
+  //   if (!hasPurchased(courseId)) {
+  //     router.push(`/course/${courseId}`)
+  //   }
+  // }, [courseId, hasPurchased, router])
 
   if (!course || !selectedVideo) {
     return (
