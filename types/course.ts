@@ -8,7 +8,46 @@ export interface Trainer {
         id?: string;
         displayName: string;
         profileImage: string;
+        email?: string;
     };
+}
+
+export interface Lesson {
+    id: string;
+    courseId: string;
+    moduleId: string;
+    title: string;
+    slug: string;
+    type: 'video' | 'text' | 'quiz';
+    description: string;
+    sequence: number;
+    duration: number;
+    isFree: boolean;
+    isMandatory: boolean;
+    status: string;
+    metadata: any;
+    createdAt: string;
+    updatedAt: string;
+    videoLesson: any;
+    textLesson: any;
+    thumbnail: string | null;
+    isLocked: boolean;
+}
+
+export interface Module {
+    id: string;
+    courseId: string;
+    title: string;
+    slug: string;
+    description: string;
+    sequence: number;
+    duration: number;
+    status: string;
+    metadata: any;
+    createdAt: string;
+    updatedAt: string;
+    lessons: Lesson[];
+    type: 'module';
 }
 
 export interface Course {
@@ -37,6 +76,10 @@ export interface Course {
         instructor?: string;
     };
     demoVideoId: string | null;
+    demoVideo?: {
+        id: string;
+        playbackUrl: string | null;
+    } | null;
     createdAt: string;
     updatedAt: string;
     category: {
@@ -45,7 +88,23 @@ export interface Course {
         slug: string;
     };
     trainer: Trainer;
+    _count: {
+        modules: number;
+        lessons: number;
+    };
     isPaid: boolean;
     hasAccess: boolean;
     pricing: CategoryPricing | null;
+    curriculum?: Module[];
+    certificateInfo?: {
+        hasCertificate: boolean;
+        isClaimable: boolean;
+        isCompleted: boolean;
+        certificateUrl: string | null;
+    };
+    stats?: {
+        totalModules: number;
+        totalLessons: number;
+        totalDuration: number;
+    };
 }

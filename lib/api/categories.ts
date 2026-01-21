@@ -15,10 +15,6 @@ export async function getCategories(params: QueryParams = {}): Promise<ApiRespon
     const queryString = searchParams.toString();
     const path = `/api/categories/flat${queryString ? `?${queryString}` : ''}`;
 
-    return serverApi(path, {
-        next: {
-            revalidate: 3600, // Revalidate every hour
-            tags: ['categories']
-        }
-    });
+    return serverApi(path);
+
 }

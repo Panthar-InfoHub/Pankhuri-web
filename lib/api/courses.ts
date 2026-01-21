@@ -7,12 +7,7 @@ import { ApiResponse, QueryParams } from "@/types/api";
 export async function getTrendingCourses(limit: number = 10): Promise<ApiResponse<Course[]>> {
     const path = `/api/courses/trending?limit=${limit}`;
 
-    return serverApi(path, {
-        next: {
-            revalidate: 3600,
-            tags: ['trending-courses']
-        }
-    });
+    return serverApi(path);
 }
 
 export async function getAllCourses(params: QueryParams = {}): Promise<ApiResponse<Course[]>> {
@@ -28,19 +23,13 @@ export async function getAllCourses(params: QueryParams = {}): Promise<ApiRespon
     const queryString = searchParams.toString();
     const path = `/api/courses${queryString ? `?${queryString}` : ''}`;
 
-    return serverApi(path, {
-        next: {
-            revalidate: 3600,
-            tags: ['courses']
-        }
-    });
+    return serverApi(path);
 }
 
 export async function getCourseBySlug(slug: string): Promise<ApiResponse<Course>> {
-    return serverApi(`/api/courses/${slug}`, {
-        next: {
-            revalidate: 3600,
-            tags: [`course-${slug}`]
-        }
-    });
+    return serverApi(`/api/courses/slug/${slug}`);
+}
+
+export async function getCourseById(id: string): Promise<ApiResponse<Course>> {
+    return serverApi(`/api/courses/${id}`);
 }
