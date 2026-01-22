@@ -10,7 +10,7 @@ import { toast } from "sonner"
 
 const plans = [
   {
-    id: "cmkl2ueng0001s61ww9euleyb",
+    id: "cmkp30f4b0002s61wh7clpglh",
     name: "Monthly",
     price: "₹349",
     period: "/month",
@@ -19,7 +19,7 @@ const plans = [
     popular: false,
   },
   {
-    id: "cmkl2vw8r0002s61wts4ohp8z",
+    id: "cmkp32skx0003s61w7ggh60q1",
     name: "Yearly",
     price: "₹1,999",
     period: "/year",
