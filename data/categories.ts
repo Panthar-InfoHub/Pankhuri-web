@@ -1,6 +1,6 @@
-import type { Category } from "@/context/types"
+// import type { Category } from "@/context/types"
 
-export const categories: Category[] = [
+export const categories: any= [
   {
     id: "1",
     name: "Makeup",

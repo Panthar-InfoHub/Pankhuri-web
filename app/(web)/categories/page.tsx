@@ -1,5 +1,3 @@
-"use client"
-
 import { categories } from "@/data/categories"
 import { CategoryGrid } from "@/components/home/CategoryGrid"
 
