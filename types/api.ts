@@ -12,6 +12,8 @@ export interface ApiResponse<T> {
     data: T;
     pagination?: Pagination;
     message?: string;
+    error?: string;
+    code?: string;
 }
 
 export interface QueryParams {

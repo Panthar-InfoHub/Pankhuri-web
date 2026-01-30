@@ -1,7 +1,5 @@
-import type { Curriculum } from "@/context/types"
-
 // TODO: Replace mock data with API response from backend
-export const curriculumData: { [courseId: string]: Curriculum[] } = {
+export const curriculumData: { [courseId: string]: any[] } = {
   // MAKEUP COURSES
   "1": [
     {

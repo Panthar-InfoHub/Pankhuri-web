@@ -1,10 +1,8 @@
 "use client"
 import { ChevronDown } from "lucide-react"
 import { useState } from "react"
-import type { Curriculum } from "@/context/types"
-
 interface CoursePlaylistProps {
-  curriculum: Curriculum[]
+  curriculum: any[]
   selectedVideoId: string
   onVideoSelect: (videoId: string) => void
   courseId: string
@@ -34,20 +32,18 @@ export function CoursePlaylist({ curriculum, selectedVideoId, onVideoSelect, cou
               <span className="text-white font-medium text-sm">{section.title}</span>
               <ChevronDown
                 size={16}
-                className={`text-gray-400 transition-transform ${
-                  expandedSections.includes(section.id) ? "rotate-180" : ""
-                }`}
+                className={`text-gray-400 transition-transform ${expandedSections.includes(section.id) ? "rotate-180" : ""
+                  }`}
               />
             </button>
             {expandedSections.includes(section.id) && (
               <div className="bg-gray-950 space-y-1 p-2">
-                {section.videos.map((video) => (
+                {section.videos.map((video: any) => (
                   <button
                     key={video.id}
                     onClick={() => onVideoSelect(video.id)}
-                    className={`w-full text-left p-3 rounded text-sm transition-colors ${
-                      selectedVideoId === video.id ? "bg-purple-600 text-white" : "text-gray-300 hover:bg-gray-800"
-                    }`}
+                    className={`w-full text-left p-3 rounded text-sm transition-colors ${selectedVideoId === video.id ? "bg-purple-600 text-white" : "text-gray-300 hover:bg-gray-800"
+                      }`}
                   >
                     <p className="font-medium">{video.title}</p>
                     <p className="text-xs opacity-75">{video.duration} min</p>

@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"
+import { Poppins } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
 import { SessionProvider } from "next-auth/react"
@@ -28,6 +29,13 @@ export const metadata: Metadata = {
     },
 }
 
+const poppins =   Poppins({
+    variable: "--font-sans",
+    subsets: ["latin"],
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+})
+
+
 
 
 export default function RootLayout({
@@ -37,7 +45,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`font-sans antialiased`}>
+            <body className={`antialiased ${poppins.className}`}>
                 <SessionProvider>
                     {children}
                 </SessionProvider>

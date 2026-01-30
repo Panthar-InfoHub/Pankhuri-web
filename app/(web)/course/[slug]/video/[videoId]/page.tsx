@@ -25,7 +25,7 @@ export default function VideoPage() {
   // Find the video from curriculum
   let selectedVideo = null
   for (const section of curriculum) {
-    const video = section.videos.find((v:any) => v.id === selectedVideoId)
+    const video = section.videos.find((v: any) => v.id === selectedVideoId)
     if (video) {
       selectedVideo = video
       break
@@ -47,7 +47,7 @@ export default function VideoPage() {
           <p className="text-gray-400 mb-8">The video you're looking for doesn't exist.</p>
           <Button
             onClick={() => router.push("/")}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0"
+            className="bg-linear-to-r from-purple-500 to-pink-500 text-white border-0"
           >
             Go Home
           </Button>
@@ -72,7 +72,11 @@ export default function VideoPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Player */}
           <div className="lg:col-span-3">
-            <VideoPlayer videoUrl={selectedVideo.videoUrl} title={selectedVideo.title} />
+            <VideoPlayer
+              videoId={selectedVideo.id}
+              title={selectedVideo.title}
+              thumbnailUrl={selectedVideo.thumbnailUrl}
+            />
 
             {/* Video Info */}
             <VideoDescription video={selectedVideo} course={course} />

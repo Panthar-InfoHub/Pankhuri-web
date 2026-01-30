@@ -1,6 +1,6 @@
 // components/home/TrendingCourses.tsx
 
-import { getTrendingCourses } from "@/lib/api/courses";
+import { getTrendingCourses } from "@/api/courses";
 import { CourseGrid } from "./CourseGrid";
 import { ErrorState } from "@/components/shared/error-state";
 import { GridSkeleton } from "@/components/shared/skeletons";

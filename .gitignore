@@ -22,6 +22,14 @@ yarn-error.log*
 # vercel
 .vercel
 
+#skills
+.agents
+.skills
+.agent
+
+#todo
+todo.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

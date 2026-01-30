@@ -1,12 +1,10 @@
 "use client"
 
-import type { Video } from "@/context/types"
-import type { Course } from "@/context/types"
 import { Clock, User, Tag } from "lucide-react"
 
 interface VideoDescriptionProps {
-  video: Video
-  course: Course
+  video: any
+  course: any
 }
 
 export function VideoDescription({ video, course }: VideoDescriptionProps) {
@@ -16,7 +14,7 @@ export function VideoDescription({ video, course }: VideoDescriptionProps) {
   const tags = ["React", "Web Development", "JavaScript"]
 
   return (
-    <div className="mt-8 bg-gradient-to-b from-gray-900 to-black rounded-lg p-6 border border-gray-800">
+    <div className="mt-8 bg-linear-to-b from-gray-900 to-black rounded-lg p-6 border border-gray-800">
       {/* Video Title */}
       <h2 className="text-2xl font-bold text-white mb-3">{video.title}</h2>
 
@@ -60,7 +58,7 @@ export function VideoDescription({ video, course }: VideoDescriptionProps) {
           {tags.map((tag) => (
             <span
               key={tag}
-              className="px-3 py-1 text-sm bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 rounded-full border border-purple-500/30 hover:border-purple-500/60 transition-colors"
+              className="px-3 py-1 text-sm bg-linear-to-r from-purple-500/20 to-pink-500/20 text-purple-300 rounded-full border border-purple-500/30 hover:border-purple-500/60 transition-colors"
             >
               {tag}
             </span>
