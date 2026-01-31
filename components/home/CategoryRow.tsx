@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useRef } from "react"
-import type { Category } from "@/context/types"
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
+import type { Category } from "@/context/types";
 
 interface CategoryRowProps {
-  categories: Category[]
+  categories: Category[];
 }
 
 export function CategoryRow({ categories }: CategoryRowProps) {
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = 400
+      const scrollAmount = 400;
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
-      })
+      });
     }
-  }
+  };
 
   return (
     <div className="relative group">
@@ -38,7 +38,11 @@ export function CategoryRow({ categories }: CategoryRowProps) {
         style={{ scrollBehavior: "smooth" }}
       >
         {categories.map((category) => (
-          <Link key={category.id} href={`/category/${category.id}`} className="flex-shrink-0 group/card">
+          <Link
+            key={category.id}
+            href={`/category/${category.slug}`}
+            className="flex-shrink-0 group/card"
+          >
             <div className="w-64 h-32 relative rounded-lg overflow-hidden cursor-pointer">
               <Image
                 src={category.thumbnail || "/placeholder.svg"}
@@ -61,5 +65,5 @@ export function CategoryRow({ categories }: CategoryRowProps) {
         <ChevronRight size={32} className="text-white hover:text-purple-400" />
       </button>
     </div>
-  )
+  );
 }

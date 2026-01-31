@@ -21,12 +21,6 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(async (config) => {
     const session: any = await getSession();
 
-    // console.log('API Client: Session Check:', {
-    //     hasSession: !!session,
-    //     hasToken: !!session?.accessToken,
-    //     user: session?.user?.email || session?.user?.name
-    // });
-
     if (session?.accessToken) {
         config.headers.Authorization = `Bearer ${session.accessToken}`;
     }

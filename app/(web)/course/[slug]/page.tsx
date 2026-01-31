@@ -1,13 +1,13 @@
-import { getCourseBySlug } from "@/lib/api/courses"
-import { CourseHeader } from "@/components/course/CourseHeader"
-import { CourseCurriculum } from "@/components/course/CourseCurriculum"
-import { RelatedCourses } from "@/components/course/RelatedCourses"
-import { notFound } from "next/navigation"
-import { Award, Check, Shield } from "lucide-react"
-import { CourseDescription } from "@/components/course/CourseDescription"
+import { getCourseBySlug } from "@/lib/api/course.server";
+import { CourseHeader } from "@/components/course/CourseHeader";
+import { CourseCurriculum } from "@/components/course/CourseCurriculum";
+import { RelatedCourses } from "@/components/course/RelatedCourses";
+import { notFound } from "next/navigation";
+import { Award, Check, Shield } from "lucide-react";
+import { CourseDescription } from "@/components/course/CourseDescription";
 
 interface CoursePageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
@@ -39,10 +39,16 @@ export default async function CoursePage({ params }: CoursePageProps) {
               <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
                 <h2 className="text-2xl font-bold text-white tracking-tight">Curriculum</h2>
                 <p className="text-gray-500 text-sm font-medium">
-                  {curriculum.length} Modules • {curriculum.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0)} Lessons
+                  {curriculum.length} Modules •{" "}
+                  {curriculum.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0)}{" "}
+                  Lessons
                 </p>
               </div>
-              <CourseCurriculum curriculum={curriculum} courseSlug={course.slug} hasAccess={course.hasAccess} />
+              <CourseCurriculum
+                curriculum={curriculum}
+                courseSlug={course.slug}
+                hasAccess={course.hasAccess}
+              />
             </section>
 
             {course.metadata?.whatYouWillLearn && (
@@ -72,12 +78,14 @@ export default async function CoursePage({ params }: CoursePageProps) {
                     Prerequisites
                   </h3>
                   <ul className="space-y-4">
-                    {(course.metadata.prerequisites as string[]).map((item: string, idx: number) => (
-                      <li key={idx} className="flex gap-3">
-                        <span className="text-blue-500 font-bold text-sm">•</span>
-                        <span className="text-gray-400 text-sm leading-relaxed">{item}</span>
-                      </li>
-                    ))}
+                    {(course.metadata.prerequisites as string[]).map(
+                      (item: string, idx: number) => (
+                        <li key={idx} className="flex gap-3">
+                          <span className="text-blue-500 font-bold text-sm">•</span>
+                          <span className="text-gray-400 text-sm leading-relaxed">{item}</span>
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </div>
               )}
@@ -89,5 +97,5 @@ export default async function CoursePage({ params }: CoursePageProps) {
       {/* Related Courses */}
       <RelatedCourses courseId={course.id} />
     </main>
-  )
+  );
 }

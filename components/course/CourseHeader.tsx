@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { Star, Clock, Globe, Shield, Award, PlayCircle } from "lucide-react"
-import { BuyCourseButton } from "./BuyCourseButton"
-import { Course } from "@/types/course"
-import { DemoVideoPlayer } from "@/components/video/DemoVideoPlayer"
+import { useState } from "react";
+import Image from "next/image";
+import { Star, Clock, Globe, Shield, Award, PlayCircle } from "lucide-react";
+import { BuyCourseButton } from "./BuyCourseButton";
+import { Course } from "@/types/course";
+import { DemoVideoPlayer } from "@/components/video/DemoVideoPlayer";
 
 interface CourseHeaderProps {
-  course: Course
+  course: Course;
 }
 
 export function CourseHeader({ course }: CourseHeaderProps) {
@@ -48,11 +48,15 @@ export function CourseHeader({ course }: CourseHeaderProps) {
               <div className="flex flex-wrap items-center gap-x-8 gap-y-4 py-6 border-y border-white/5">
                 <div className="flex items-center gap-2 text-white/60">
                   <Clock size={16} className="text-purple-500" />
-                  <span className="text-sm font-medium">{Math.floor(course.duration / 60)}h {course.duration % 60}m</span>
+                  <span className="text-sm font-medium">
+                    {Math.floor(course.duration / 60)}h {course.duration % 60}m
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-white/60">
                   <Star size={16} className="text-yellow-500 fill-yellow-500" />
-                  <span className="text-sm font-medium">{course.averageRating || course.rating} ({course.totalReviews})</span>
+                  <span className="text-sm font-medium">
+                    {course.averageRating || course.rating} ({course.totalReviews})
+                  </span>
                 </div>
                 <div className="text-white/60 text-sm font-medium capitalize">
                   {course.level} Level
@@ -76,7 +80,9 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                   />
                 </div>
                 <div>
-                  <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest leading-none mb-1">Created by</p>
+                  <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest leading-none mb-1">
+                    Created by
+                  </p>
                   <p className="text-white font-bold">{course.trainer?.user?.displayName}</p>
                 </div>
               </div>
@@ -93,7 +99,10 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                     {/* Media Preview with Elevated Frame */}
                     <div
                       className="relative aspect-video rounded-2xl overflow-hidden border border-white/5 group/media cursor-pointer"
-                      onClick={() => (course.demoVideo?.playbackUrl || course.demoVideoId) && setIsPlayingDemo(true)}
+                      onClick={() =>
+                        (course.demoVideo?.playbackUrl || course.demoVideoId) &&
+                        setIsPlayingDemo(true)
+                      }
                     >
                       <Image
                         src={course.thumbnailImage || "/placeholder.svg"}
@@ -113,45 +122,83 @@ export function CourseHeader({ course }: CourseHeaderProps) {
 
                     {/* Pricing & Value Prop */}
                     <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-green-500" />
-                            <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/40">Lifetime Access</span>
-                          </div>
-                          <div className="flex items-baseline gap-3">
-                            <span className="text-5xl font-extrabold text-white tracking-tighter">₹{price / 100}</span>
+                      {!course.hasAccess && (
+                        <>
+                          <div className="flex items-center justify-between">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-green-500" />
+                                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/40">
+                                  Lifetime Access
+                                </span>
+                              </div>
+                              <div className="flex items-baseline gap-3">
+                                <span className="text-5xl font-extrabold text-white tracking-tighter">
+                                  ₹{price / 100}
+                                </span>
+                                {course.pricing?.price && course.pricing?.price > price && (
+                                  <span className="text-lg font-light text-white/20 line-through">
+                                    ₹{course.pricing.price / 100}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
                             {course.pricing?.price && course.pricing?.price > price && (
-                              <span className="text-lg font-light text-white/20 line-through">₹{course.pricing.price / 100}</span>
+                              <div className="px-3 py-1 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-black uppercase tracking-wider">
+                                Save{" "}
+                                {Math.round(
+                                  ((course.pricing.price - price) / course.pricing.price) * 100,
+                                )}
+                                %
+                              </div>
                             )}
                           </div>
-                        </div>
+                        </>
+                      )}
 
-                        {course.pricing?.price && course.pricing?.price > price && (
-                          <div className="px-3 py-1 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-black uppercase tracking-wider">
-                            Save {Math.round(((course.pricing.price - price) / course.pricing.price) * 100)}%
+                      <div className="space-y-4">
+                        {course.hasAccess ? (
+                          <div className="p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-center">
+                            <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
+                              <Award size={20} />
+                              <span>Already Purchased</span>
+                            </div>
+                            <p className="text-green-400/60 text-xs mt-2">
+                              You have full access to this course
+                            </p>
+                          </div>
+                        ) : (
+                          <BuyCourseButton
+                            courseId={course.id}
+                            courseName={course.title}
+                            isPurchased={false}
+                          />
+                        )}
+
+                        {!course.hasAccess && (
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center justify-center text-center">
+                              <Shield size={16} className="text-purple-400 mb-1" />
+                              <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">
+                                Secure
+                              </span>
+                            </div>
+                            <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center justify-center text-center">
+                              <Globe size={16} className="text-blue-400 mb-1" />
+                              <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">
+                                Global
+                              </span>
+                            </div>
                           </div>
                         )}
                       </div>
 
-                      <div className="space-y-4">
-                        <BuyCourseButton courseId={course.id} courseName={course.title} />
-
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center justify-center text-center">
-                            <Shield size={16} className="text-purple-400 mb-1" />
-                            <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Secure</span>
-                          </div>
-                          <div className="p-3 rounded-xl bg-white/5 border border-white/5 flex flex-col items-center justify-center text-center">
-                            <Globe size={16} className="text-blue-400 mb-1" />
-                            <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Global</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <p className="text-center text-[10px] text-white/20 font-medium uppercase tracking-[0.3em]">
-                        Enrollment processing in 256-bit AES
-                      </p>
+                      {!course.hasAccess && (
+                        <p className="text-center text-[10px] text-white/20 font-medium uppercase tracking-[0.3em]">
+                          Enrollment processing in 256-bit AES
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

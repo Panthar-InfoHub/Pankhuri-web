@@ -60,6 +60,5 @@ export const uploadToS3 = async (url: string, file: File, contentType: string) =
     throw new Error(`Failed to upload to S3: ${response.statusText}`);
   }
 
-  console.log("✅ [S3 Upload] Success:", response.status);
   return response;
 };

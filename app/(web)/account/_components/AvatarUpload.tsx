@@ -40,11 +40,7 @@ export function AvatarUpload({ currentImage, displayName, onUploadSuccess }: Ava
       // NOTE: The backend must generate a presigned URL with 'public-read' ACL
       // The DigitalOcean Space bucket must also allow public-read ACL
       const { data } = await getPresignedUrl(file.name, file.type);
-      console.log("✅ [Profile Upload] Step 1: Received presigned URL:", {
-        uploadUrl: data.uploadUrl.substring(0, 100) + "...",
-        publicUrl: data.publicUrl,
-        key: data.key,
-      });
+
 
       // Step 2: Upload file to S3 using the upload URL
       await uploadToS3(data.uploadUrl, file, file.type);

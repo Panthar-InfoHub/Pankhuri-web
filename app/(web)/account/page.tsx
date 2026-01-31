@@ -33,8 +33,6 @@ export default function AccountPage() {
   const fetchUserData = async () => {
     try {
       const { data } = await getCurrentUser();
-
-      console.log("👤 [Account Page] Fetched user data:", data);
       setUser(data);
     } catch (error) {
       console.error("Failed to fetch user data", error);
