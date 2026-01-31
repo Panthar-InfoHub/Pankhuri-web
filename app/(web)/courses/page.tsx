@@ -1,6 +1,8 @@
 import { getAllCourses } from "@/lib/api/course.server";
 import { CourseGrid } from "@/components/home/CourseGrid";
 
+export const dynamic = "force-dynamic";
+
 export default async function CoursesPage() {
   try {
     const response = await getAllCourses();

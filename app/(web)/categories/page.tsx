@@ -1,6 +1,8 @@
 import { getAllCategories } from "@/lib/api/category.server";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 
+export const dynamic = "force-dynamic";
+
 export default async function CategoriesPage() {
   try {
     const response = await getAllCategories();

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CategorySubscriptionButton } from "@/components/category/CategorySubscriptionButton";
 
+export const dynamic = "force-dynamic";
+
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -17,12 +19,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     const response = await getCategoryBySlug(slug, true);
 
     if (!response.success || !response.data) {
-
       notFound();
     }
 
     const category = response.data;
-
 
     return (
       <main className="bg-gradient-to-br from-zinc-950 via-black to-zinc-950 min-h-screen">
