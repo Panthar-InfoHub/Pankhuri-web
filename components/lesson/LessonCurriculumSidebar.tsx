@@ -55,30 +55,36 @@ export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonS
 
                         {expandedSections.includes(module.id) ? (
                             <div className="bg-black/20">
-                                {module.lessons?.map((lesson) => {
-                                    const isLocked = !hasAccess && !lesson.isFree;
-                                    const isActive = lesson.slug === currentLessonSlug;
+                                {module.lessons && module.lessons.length > 0 ? (
+                                    module.lessons.map((lesson) => {
+                                        const isLocked = !hasAccess && !lesson.isFree;
+                                        const isActive = lesson.slug === currentLessonSlug;
 
-                                    return (
-                                        <Link
-                                            key={lesson.id}
-                                            href={isLocked ? "#" : `/course/${courseSlug}/lesson/${lesson.slug}`}
-                                            className={`flex items-center gap-3 px-8 py-2.5 text-xs transition-colors ${isActive
-                                                ? 'bg-purple-500/10 text-purple-400 border-l-2 border-purple-500'
-                                                : isLocked
-                                                    ? 'text-gray-600 cursor-not-allowed'
-                                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                                                }`}
-                                        >
-                                            {getLessonIcon(lesson.type)}
-                                            <span className="truncate flex-1">{lesson.title}</span>
-                                            {!lesson.videoLesson && !lesson.textLesson && lesson.type !== 'quiz' && (
-                                                <span className="text-[8px] bg-white/5 text-gray-600 px-1 py-0.5 rounded border border-white/5 font-bold uppercase ml-auto">Soon</span>
-                                            )}
-                                            {isLocked ? <Lock size={10} className="text-gray-700" /> : null}
-                                        </Link>
-                                    );
-                                })}
+                                        return (
+                                            <Link
+                                                key={lesson.id}
+                                                href={isLocked ? "#" : `/course/${courseSlug}/lesson/${lesson.slug}`}
+                                                className={`flex items-center gap-3 px-8 py-2.5 text-xs transition-colors ${isActive
+                                                    ? 'bg-purple-500/10 text-purple-400 border-l-2 border-purple-500'
+                                                    : isLocked
+                                                        ? 'text-gray-600 cursor-not-allowed'
+                                                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                                    }`}
+                                            >
+                                                {getLessonIcon(lesson.type)}
+                                                <span className="truncate flex-1">{lesson.title}</span>
+                                                {!lesson.videoLesson && !lesson.textLesson && lesson.type !== 'quiz' && (
+                                                    <span className="text-[8px] bg-white/5 text-gray-600 px-1 py-0.5 rounded border border-white/5 font-bold uppercase ml-auto">Soon</span>
+                                                )}
+                                                {isLocked ? <Lock size={10} className="text-gray-700" /> : null}
+                                            </Link>
+                                        );
+                                    })
+                                ) : (
+                                    <div className="px-8 py-4 text-[10px] text-gray-500 italic">
+                                        No lessons available
+                                    </div>
+                                )}
                             </div>
                         ) : null}
                     </div>

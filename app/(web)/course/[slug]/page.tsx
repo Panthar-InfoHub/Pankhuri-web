@@ -35,24 +35,18 @@ export default async function CoursePage({ params }: CoursePageProps) {
     <main className="bg-[#010001] min-h-screen">
       <CourseHeader course={course} />
 
-      <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="max-w-7xl mx-auto px-4 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           {/* Main Content */}
           <div className="lg:col-span-8 space-y-20">
-            <section className="relative">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-1 h-8 bg-purple-500 rounded-full" />
-                <h2 className="text-3xl font-bold text-white tracking-tight">About this course</h2>
-              </div>
+            <section>
+              <h2 className="text-2xl font-bold text-white mb-8">About this course</h2>
               <CourseDescription description={course.description} />
             </section>
 
             <section>
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-1 h-8 bg-blue-500 rounded-full" />
-                  <h2 className="text-3xl font-bold text-white tracking-tight">Course Curriculum</h2>
-                </div>
+              <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                <h2 className="text-2xl font-bold text-white tracking-tight">Curriculum</h2>
                 <p className="text-gray-500 text-sm font-medium">
                   {curriculum.length} Modules • {curriculum.reduce((acc, m) => acc + (m.lessons?.length || 0), 0)} Lessons
                 </p>
@@ -61,18 +55,15 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </section>
 
             {course.metadata?.whatYouWillLearn && (
-              <section className="bg-linear-to-br from-white/5 to-transparent rounded-3xl p-10 border border-white/10 shadow-2xl">
-                <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-                  <Award className="text-purple-400 w-6 h-6" />
-                  What you'll learn
-                </h2>
+              <section className="bg-white/3 border border-white/5 rounded-3xl p-10">
+                <h2 className="text-xl font-bold text-white mb-8">What you&apos;ll learn</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {course.metadata.whatYouWillLearn.map((item: string, idx: number) => (
-                    <div key={idx} className="flex gap-4 text-gray-300 group">
-                      <div className="shrink-0 w-6 h-6 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
-                        <Check className="w-3.5 h-3.5" />
+                    <div key={idx} className="flex gap-4 group">
+                      <div className="shrink-0 w-5 h-5 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                        <Check className="w-3 h-3" />
                       </div>
-                      <p className="leading-relaxed">{item}</p>
+                      <p className="text-gray-400 text-sm leading-relaxed">{item}</p>
                     </div>
                   ))}
                 </div>
@@ -80,21 +71,20 @@ export default async function CoursePage({ params }: CoursePageProps) {
             )}
           </div>
 
-          {/* Sidebar - Quick Access / Extra Info */}
-          <div className="lg:col-span-4 space-y-8">
+          {/* Sidebar */}
+          <div className="lg:col-span-4 self-start">
             <div className="sticky top-24 space-y-8">
-              {/* This area can be used for extra course info like skills, requirements, etc. */}
               {course.metadata?.prerequisites && (
                 <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6">
-                  <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-blue-400" />
+                  <h3 className="text-white font-bold mb-6 flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-blue-500" />
                     Prerequisites
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {course.metadata.prerequisites.map((item, idx) => (
-                      <li key={idx} className="text-gray-400 text-sm flex gap-2">
-                        <span className="text-blue-500">•</span>
-                        {item}
+                      <li key={idx} className="flex gap-3">
+                        <span className="text-blue-500 font-bold text-sm">•</span>
+                        <span className="text-gray-400 text-sm leading-relaxed">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -107,8 +97,9 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
       {/* Related Courses */}
       {relatedCourses.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 py-24 border-t border-white/5">
-          <CourseGrid title="Related Courses" courses={relatedCourses} />
+        <section className="max-w-7xl mx-auto px-4 py-20 border-t border-white/5">
+          <h2 className="text-2xl font-bold text-white mb-10 text-center">Related Courses</h2>
+          <CourseGrid title="" courses={relatedCourses} />
         </section>
       )}
     </main>

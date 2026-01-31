@@ -1,9 +1,9 @@
 "use client"
 
-import Link from "next/link"
-import { ChevronDown, Lock, PlayCircle, FileText, HelpCircle, CheckCircle } from "lucide-react"
 import { useState } from "react"
-import { Module, Lesson } from "@/types/course"
+import { ChevronDown, Lock, PlayCircle, FileText, HelpCircle } from "lucide-react"
+import { Module } from "@/types/course"
+import Link from "next/link"
 
 interface CourseCurriculumProps {
   curriculum: Module[]
@@ -24,79 +24,97 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
     switch (type) {
       case 'video': return <PlayCircle size={18} className="text-purple-400" />;
       case 'text': return <FileText size={18} className="text-blue-400" />;
-      default: return <HelpCircle size={18} className="text-gray-400" />;
+      default: return <HelpCircle size={18} className="text-white/20" />;
     }
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {curriculum.map((module) => (
-        <div key={module.id} className="group border border-white/5 rounded-2xl overflow-hidden bg-[#0A0A0A] hover:border-white/10 transition-all">
+        <div
+          key={module.id}
+          className={`overflow-hidden rounded-2xl border transition-all duration-300 ${expandedSections.includes(module.id) ? 'bg-[#0A0A0A] border-white/10' : 'bg-transparent border-white/5 hover:border-white/10'}`}
+        >
           <button
             onClick={() => toggleSection(module.id)}
-            className="w-full px-6 py-5 flex items-center justify-between text-white text-left"
+            className="w-full px-6 py-5 flex items-center justify-between text-white text-left group"
           >
-            <div className="flex items-center gap-4">
-              <div className={`w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-xs font-bold transition-colors ${expandedSections.includes(module.id) ? 'bg-purple-500 border-purple-500' : 'bg-white/5'}`}>
+            <div className="flex items-center gap-5">
+              <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${expandedSections.includes(module.id) ? 'bg-purple-600' : 'bg-white/5 text-white/40 group-hover:bg-white/10'}`}>
                 {module.sequence}
               </div>
+
               <div>
-                <h3 className="font-bold text-lg">{module.title}</h3>
-                <p className="text-gray-500 text-xs">
-                  {(module.lessons?.length || 0)} lessons • {module.duration} min
+                <h3 className="text-lg font-bold text-white leading-tight">{module.title}</h3>
+                <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-1">
+                  {module.lessons?.length || 0} Lessons • {module.duration} min
                 </p>
               </div>
             </div>
-            <ChevronDown
-              size={20}
-              className={`text-gray-500 transition-transform duration-300 ${expandedSections.includes(module.id) ? "rotate-180 text-white" : ""}`}
-            />
+
+            <div className={`transition-transform duration-300 ${expandedSections.includes(module.id) ? 'rotate-180' : ''}`}>
+              <ChevronDown size={20} className="text-gray-500 group-hover:text-white" />
+            </div>
           </button>
 
-          {expandedSections.includes(module.id) ? (
-            <div className="px-6 pb-6 space-y-2">
-              {module.lessons?.map((lesson) => {
-                const isLocked = !hasAccess && !lesson.isFree;
+          <div className={`grid transition-all duration-300 ease-in-out ${expandedSections.includes(module.id) ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 pointer-events-none'}`}>
+            <div className="overflow-hidden">
+              <div className="px-6 pb-6 space-y-2">
+                {module.lessons && module.lessons.length > 0 ? (
+                  module.lessons.map((lesson) => {
+                    const isLocked = !hasAccess && !lesson.isFree;
+                    const lessonLink = `/course/${courseSlug}/lesson/${lesson.slug || lesson.id}`;
 
-                return (
-                  <div key={lesson.id} className={`flex items-center justify-between p-4 rounded-xl border border-white/5 transition-all ${isLocked ? 'opacity-50 grayscale' : 'hover:bg-white/5 hover:border-white/10'}`}>
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="flex-shrink-0">
-                        {getLessonIcon(lesson.type)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <p className="text-sm font-medium text-gray-200">{lesson.title}</p>
-                          {!lesson.videoLesson && !lesson.textLesson && lesson.type !== 'quiz' && (
-                            <span className="text-[9px] bg-white/5 text-gray-500 px-1.5 py-0.5 rounded border border-white/10 font-bold uppercase">Coming Soon</span>
+                    const content = (
+                      <div
+                        key={lesson.id}
+                        className={`flex items-center justify-between p-4 rounded-xl border border-transparent transition-all duration-200 ${isLocked ? 'opacity-40 grayscale' : 'hover:bg-white/5 hover:border-white/5 cursor-pointer'}`}
+                      >
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="shrink-0 text-gray-500">
+                            {getLessonIcon(lesson.type)}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-200 truncate">{lesson.title}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter">{lesson.duration}m</span>
+                              {lesson.isFree && (
+                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-green-500/10 text-green-400 border border-green-500/20 font-bold uppercase">Preview</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center ml-4">
+                          {isLocked ? (
+                            <Lock size={14} className="text-gray-600" />
+                          ) : (
+                            <div className="hidden md:block text-[11px] font-bold text-purple-400 uppercase tracking-widest hover:text-white transition-colors">
+                              Start
+                            </div>
                           )}
                         </div>
-                        <div className="flex items-center gap-3 mt-1">
-                          <span className="text-[10px] text-gray-500 uppercase tracking-tighter">{lesson.duration} min</span>
-                          {lesson.isFree ? <span className="text-[10px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded border border-green-500/20 font-bold uppercase">Free Preview</span> : null}
-                        </div>
                       </div>
-                    </div>
+                    );
 
-                    <div className="flex items-center">
-                      {isLocked ? (
-                        <Lock size={16} className="text-gray-600" />
-                      ) : (
-                        <Link
-                          href={`/course/${courseSlug}/lesson/${lesson.slug || lesson.id}`}
-                          className="text-[11px] font-bold text-purple-400 uppercase tracking-widest hover:text-purple-300 transition-colors"
-                        >
-                          Start
-                        </Link>
-                      )}
-                    </div>
+                    return isLocked ? (
+                      <div key={lesson.id}>{content}</div>
+                    ) : (
+                      <Link key={lesson.id} href={lessonLink}>
+                        {content}
+                      </Link>
+                    );
+                  })
+                ) : (
+                  <div className="text-center py-6 text-gray-500 text-sm border border-white/5 rounded-xl bg-white/5 italic">
+                    No lessons available in this module
                   </div>
-                );
-              })}
+                )}
+              </div>
             </div>
-          ) : null}
+          </div>
         </div>
       ))}
     </div>
-  )
+  );
 }

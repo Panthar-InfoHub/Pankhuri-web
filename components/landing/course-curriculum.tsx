@@ -322,12 +322,12 @@ export function CourseCurriculum() {
   const [openSubcategory, setOpenSubcategory] = useState<string | null>(null)
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-b from-background to-pink-50/50">
+    <section className="py-20 md:py-28 bg-linear-to-b from-background to-pink-50/50">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Course{" "}
-            <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
               Curriculum
             </span>
           </h2>
@@ -345,9 +345,8 @@ export function CourseCurriculum() {
               >
                 <span className="text-lg font-bold text-purple-700">{category.category}</span>
                 <ChevronDown
-                  className={`h-5 w-5 text-purple-600 transition-transform ${
-                    openCategory === category.category ? "rotate-180" : ""
-                  }`}
+                  className={`h-5 w-5 text-purple-600 transition-transform ${openCategory === category.category ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
@@ -363,20 +362,25 @@ export function CourseCurriculum() {
                       >
                         <span className="text-base font-semibold text-purple-700">{subcategory.name}</span>
                         <ChevronDown
-                          className={`h-4 w-4 text-purple-600 transition-transform ${
-                            openSubcategory === subcategory.name ? "rotate-180" : ""
-                          }`}
+                          className={`h-4 w-4 text-purple-600 transition-transform ${openSubcategory === subcategory.name ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
 
                       {openSubcategory === subcategory.name && (
                         <div className="bg-white p-4 space-y-2">
-                          {subcategory.courses.map((course, idx) => (
-                            <div key={idx} className="flex items-center gap-3 py-2 px-3 hover:bg-purple-50/50 rounded">
-                              <Video className="h-4 w-4 text-purple-600 flex-shrink-0" />
-                              <span className="text-sm text-gray-700">{course}</span>
+                          {subcategory.courses && subcategory.courses.length > 0 ? (
+                            subcategory.courses.map((course, idx) => (
+                              <div key={idx} className="flex items-center gap-3 py-2 px-3 hover:bg-purple-50/50 rounded">
+                                <Video className="h-4 w-4 text-purple-600 shrink-0" />
+                                <span className="text-sm text-gray-700">{course}</span>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="py-2 px-3 text-xs text-muted-foreground italic">
+                              No courses available in this section
                             </div>
-                          ))}
+                          )}
                         </div>
                       )}
                     </div>

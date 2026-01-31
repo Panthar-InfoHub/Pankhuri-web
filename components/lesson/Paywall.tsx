@@ -6,34 +6,56 @@ import Link from "next/link"
 interface PaywallProps {
     title: string
     courseId: string
+    slug?: string
+    lessonSlug?: string
+    mode?: 'auth' | 'subscribe'
 }
 
-export function Paywall({ title, courseId }: PaywallProps) {
+export function Paywall({ title, courseId, slug, lessonSlug, mode = 'subscribe' }: PaywallProps) {
+    const isAuth = mode === 'auth';
+    const callbackUrl = slug && lessonSlug ? `/course/${slug}/lesson/${lessonSlug}` : `/course/${courseId}`;
+
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm">
             <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-6 border border-purple-500/20">
                 <Lock className="w-10 h-10 text-purple-400" />
             </div>
 
-            <h2 className="text-3xl font-bold text-white mb-4">Unlock This Lesson</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">
+                {isAuth ? "Login to Continue" : "Unlock This Lesson"}
+            </h2>
             <p className="text-gray-400 max-w-md mb-8">
-                "{title}" is only available to subscribers. Join our community to get full access to all lessons, resources, and more.
+                {isAuth
+                    ? `Please sign in to access "${title}" and continue your learning journey.`
+                    : `"${title}" is only available to subscribers. Join our community to get full access to all lessons.`
+                }
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                    href={`/course/${courseId}/checkout`}
-                    className="px-8 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-bold hover:opacity-90 transition-all flex items-center gap-2"
-                >
-                    <Crown className="w-5 h-5" />
-                    Subscribe Now
-                </Link>
-                <Link
-                    href="/pricing"
-                    className="px-8 py-3 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-all border border-white/10"
-                >
-                    View Plans
-                </Link>
+                {isAuth ? (
+                    <Link
+                        href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+                        className="px-8 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-bold hover:opacity-90 transition-all flex items-center gap-2"
+                    >
+                        Sign In Now
+                    </Link>
+                ) : (
+                    <>
+                        <Link
+                            href={`/course/${courseId}/checkout`}
+                            className="px-8 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-bold hover:opacity-90 transition-all flex items-center gap-2"
+                        >
+                            <Crown className="w-5 h-5" />
+                            Subscribe Now
+                        </Link>
+                        <Link
+                            href="/pricing"
+                            className="px-8 py-3 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-all border border-white/10"
+                        >
+                            View Plans
+                        </Link>
+                    </>
+                )}
             </div>
         </div>
     )

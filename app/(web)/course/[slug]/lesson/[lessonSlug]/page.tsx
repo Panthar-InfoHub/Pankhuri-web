@@ -27,13 +27,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
     // 2. Get lesson details
     const lessonResponse = await getLessonBySlug(course.id, lessonSlug);
 
-    // Handle Unauthenticated error
-    if (!lessonResponse.success && (lessonResponse.code === 'NO_TOKEN' || lessonResponse.code === 'UNAUTHORIZED')) {
-        redirect(`/login?callbackUrl=${encodeURIComponent(`/course/${slug}/lesson/${lessonSlug}`)}`);
-    }
+    // Handle Unauthenticated or SUBSCRIPTION_REQUIRED errors
+    if (!lessonResponse.success && (lessonResponse.code === 'NO_TOKEN' || lessonResponse.code === 'UNAUTHORIZED' || lessonResponse.code === 'SUBSCRIPTION_REQUIRED')) {
+        const isAuthError = lessonResponse.code === 'NO_TOKEN' || lessonResponse.code === 'UNAUTHORIZED';
 
-    // Handle SUBSCRIPTION_REQUIRED error
-    if (!lessonResponse.success && lessonResponse.code === 'SUBSCRIPTION_REQUIRED') {
         return (
             <div className="bg-[#010001] min-h-screen py-12 px-4">
                 <div className="max-w-4xl mx-auto">
@@ -44,7 +41,13 @@ export default async function LessonPage({ params }: LessonPageProps) {
                         <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                         Back to Course
                     </Link>
-                    <Paywall title={lessonResponse.data?.title || "Premium Lesson"} courseId={course.id} />
+                    <Paywall
+                        title={lessonResponse.data?.title || "Premium Lesson"}
+                        courseId={course.id}
+                        slug={slug}
+                        lessonSlug={lessonSlug}
+                        mode={isAuthError ? 'auth' : 'subscribe'}
+                    />
                 </div>
             </div>
         );
