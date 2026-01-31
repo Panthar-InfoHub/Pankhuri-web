@@ -6,6 +6,9 @@ import { PopularCategories } from "@/components/home/PopularCategories"
 import { FeaturedCourses } from "@/components/home/FeaturedCourses"
 import { TrendingCourses } from "@/components/home/TrendingCourses"
 
+export const dynamic = 'force-dynamic'
+
+
 export default function HomePage() {
   return (
     <main className="bg-[#010001] min-h-screen">

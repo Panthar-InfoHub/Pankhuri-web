@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import Image from "next/image"
 import { Category } from "@/types/category"
@@ -25,9 +23,9 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
               <h3 className="text-white font-bold text-center text-sm md:text-base group-hover:text-purple-400 transition-colors">
                 {category.name}
               </h3>
-              <p className="text-[10px] text-gray-400 text-center mt-1">
+              {/* <p className="text-[10px] text-gray-400 text-center mt-1">
                 {category._count.courses} Courses
-              </p>
+              </p> */}
             </div>
           </div>
         </Link>
