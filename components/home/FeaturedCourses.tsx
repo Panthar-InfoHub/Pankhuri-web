@@ -1,6 +1,6 @@
 // components/home/FeaturedCourses.tsx
 
-import { getAllCourses } from "@/api/courses";
+import { getAllCourses } from "@/lib/api/courses";
 import { CourseGrid } from "./CourseGrid";
 import { ErrorState } from "@/components/shared/error-state";
 import { GridSkeleton } from "@/components/shared/skeletons";

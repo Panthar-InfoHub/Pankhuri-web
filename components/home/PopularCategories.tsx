@@ -1,6 +1,6 @@
 // components/home/PopularCategories.tsx
 
-import { getCategories } from "@/api/categories";
+import { getCategories } from "@/lib/api/categories";
 import { CategoryGrid } from "./CategoryGrid";
 import { ErrorState } from "@/components/shared/error-state";
 import { CategorySkeleton } from "@/components/shared/skeletons";

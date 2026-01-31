@@ -5,7 +5,14 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pankhuri-v3.blr1.digitaloceanspaces.com",
+        pathname: "/**",
+      },
+    ],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

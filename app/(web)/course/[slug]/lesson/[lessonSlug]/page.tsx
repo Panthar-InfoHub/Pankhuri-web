@@ -1,5 +1,5 @@
-import { getCourseBySlug } from "@/api/courses"
-import { getLessonBySlug } from "@/api/lessons"
+import { getCourseBySlug } from "@/lib/api/courses"
+import { getLessonBySlug } from "@/lib/api/lessons"
 import { notFound, redirect } from "next/navigation"
 import { VideoPlayer } from "@/components/video/VideoPlayer"
 import { Paywall } from "@/components/lesson/Paywall"

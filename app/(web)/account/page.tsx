@@ -1,122 +1,203 @@
-"use client"
+"use client";
 
-// import { useAuth } from "@/hooks/useAuth"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-// import { useCourse } from "@/hooks/useCourse"
-import { courses } from "@/data/courses"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import Link from "next/link"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { User, getCurrentUser } from "@/lib/api/user";
+import { logoutCurrentSession } from "@/lib/api/session";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, User as UserIcon, Shield, CreditCard, LogOut, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { AvatarUpload } from "./_components/AvatarUpload";
+import { ProfileForm } from "./_components/ProfileForm";
+import { SessionsList } from "./_components/SessionsList";
+import { SubscriptionsInfo } from "./_components/SubscriptionsInfo";
+import { toast } from "sonner";
+import { parseJwt } from "@/lib/utils";
 
 export default function AccountPage() {
-  // const { isLoggedIn, user, logout } = useAuth()
-  // const { purchasedCourses } = useCourse()
-  const router = useRouter()
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     router.push("/login")
-  //   }
-  // }, [isLoggedIn, router])
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login?callbackUrl=/account");
+    }
+  }, [status, router]);
 
-  const myCourses = courses.filter((course) => true)
+  const fetchUserData = async () => {
+    try {
+      const { data } = await getCurrentUser();
 
-  const handleLogout = () => {
-    // logout()
-    router.push("/")
-  }
+      console.log("👤 [Account Page] Fetched user data:", data);
+      setUser(data);
+    } catch (error) {
+      console.error("Failed to fetch user data", error);
+      toast.error("Failed to load account details");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // if (!isLoggedIn || !user) {
-  //   return null
-  // }
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchUserData();
+    }
+  }, [status]);
 
-  return (
-    <main className="bg-black min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Profile Section */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 mb-12">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-4xl font-bold flex-shrink-0">
-              {/* {user.name.charAt(0).toUpperCase()} */}
-            </div>
-            <div className="flex-1">
-              {/* <h1 className="text-3xl font-bold text-white mb-2">{user.name}</h1> */}
-              {/* <p className="text-gray-400 mb-4">{user.email}</p> */}
-              {/* TODO: Fetch real user data from auth.service.ts */}
-            </div>
-          </div>
+  // Extract sessionId from JWT if available
+  const currentSessionId = (session as any)?.accessToken
+    ? parseJwt((session as any).accessToken as string)?.sessionId ||
+      parseJwt((session as any).accessToken as string)?.jti
+    : null;
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-gray-950 rounded p-4">
-              <p className="text-gray-400 text-sm">Courses Enrolled</p>
-              <p className="text-3xl font-bold text-white">{myCourses.length}</p>
-            </div>
-            <div className="bg-gray-950 rounded p-4">
-              <p className="text-gray-400 text-sm">Total Spending</p>
-              <p className="text-3xl font-bold text-white">
-                ₹{myCourses.reduce((sum, course) => sum + course.price, 0)}
-              </p>
-            </div>
-            <div className="bg-gray-950 rounded p-4">
-              <p className="text-gray-400 text-sm">Member Since</p>
-              <p className="text-3xl font-bold text-white">2024</p>
-            </div>
-          </div>
+  const handleLogout = async () => {
+    try {
+      // First try to logout the session on the backend
+      await logoutCurrentSession();
+    } catch (error) {
+      console.error("Backend logout failed, proceeding with local logout", error);
+    } finally {
+      // Always sign out locally
+      signOut({ callbackUrl: "/" });
+    }
+  };
 
-          <Button
-            onClick={handleLogout}
-            variant="destructive"
-            className="bg-red-600 hover:bg-red-700 text-white border-0"
-          >
-            Logout
-          </Button>
-        </div>
-
-        {/* My Courses Section */}
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-6">My Courses ({myCourses.length})</h2>
-          {myCourses.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {myCourses.map((course) => (
-                <Link key={course.id} href={`/course/${course.id}`}>
-                  <div className="group cursor-pointer">
-                    <div className="relative overflow-hidden rounded-lg mb-3 aspect-video bg-gray-900">
-                      <Image
-                        src={course.thumbnail || "/placeholder.svg"}
-                        alt={course.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center">
-                            <span className="text-black font-bold ml-1">▶</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <h3 className="text-white font-semibold line-clamp-2 group-hover:text-purple-400 transition-colors">
-                      {course.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm mt-1">{course.instructor.name}</p>
-                    <p className="text-white font-bold mt-2">₹{course.price}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-gray-900 rounded-lg border border-gray-800">
-              <p className="text-gray-400 text-lg mb-6">You haven't enrolled in any courses yet.</p>
-              <Link href="/">
-                <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-80 text-white border-0">
-                  Explore Courses
-                </Button>
-              </Link>
-            </div>
-          )}
+  if (status === "loading" || loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-10 h-10 animate-spin text-white mx-auto" />
+          <p className="text-zinc-400 text-sm">Loading your account...</p>
         </div>
       </div>
+    );
+  }
+
+  if (!user) return null;
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950 text-white pb-20">
+      {/* Minimalist Header */}
+      <div className="border-b border-white/5 bg-black/50 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="relative">
+              <AvatarUpload
+                currentImage={user.profileImage}
+                displayName={user.displayName}
+                onUploadSuccess={(url) => setUser({ ...user, profileImage: url })}
+              />
+              <div
+                className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 rounded-full border-2 border-black"
+                title="Active"
+              />
+            </div>
+
+            <div className="flex-1 space-y-1">
+              <h1 className="text-3xl font-semibold tracking-tight text-white">
+                {user.displayName}
+              </h1>
+              <p className="text-sm text-zinc-400">{user.email || user.phone}</p>
+              <div className="flex items-center gap-2 pt-1">
+                <Badge
+                  variant="outline"
+                  className="text-xs font-normal border-white/10 text-zinc-300"
+                >
+                  {user.role}
+                </Badge>
+              </div>
+            </div>
+
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="text-zinc-400 hover:text-white hover:bg-white/5 border border-white/10 h-10 px-4"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        <Tabs defaultValue="profile" className="space-y-6">
+          {/* Premium Tabs */}
+          <TabsList className="bg-white/[0.03] border border-white/10 rounded-xl p-1 h-12 w-full md:w-auto inline-flex backdrop-blur-sm">
+            <TabsTrigger
+              value="profile"
+              className="data-[state=active]:bg-white data-[state=active]:text-black rounded-lg px-6 text-zinc-400 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
+            >
+              <UserIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">Profile</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="subscriptions"
+              className="data-[state=active]:bg-white data-[state=active]:text-black rounded-lg px-6 text-zinc-400 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
+            >
+              <CreditCard className="w-4 h-4" />
+              <span className="hidden sm:inline">Subscriptions</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="security"
+              className="data-[state=active]:bg-white data-[state=active]:text-black rounded-lg px-6 text-zinc-400 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
+            >
+              <Shield className="w-4 h-4" />
+              <span className="hidden sm:inline">Security</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="profile" className="mt-6 outline-none">
+            <Card className="bg-white/[0.02] border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden">
+              <CardHeader className="border-b border-white/5 px-6 sm:px-8 py-5">
+                <CardTitle className="text-lg font-semibold text-white">
+                  Personal Information
+                </CardTitle>
+                <CardDescription className="text-zinc-400 text-sm">
+                  Manage your account details and preferences
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6 sm:p-8">
+                <ProfileForm user={user} onUpdate={(updated) => setUser(updated)} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="subscriptions" className="mt-6 outline-none">
+            <Card className="bg-white/[0.02] border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden">
+              <CardHeader className="border-b border-white/5 px-6 sm:px-8 py-5">
+                <CardTitle className="text-lg font-semibold text-white">Subscriptions</CardTitle>
+                <CardDescription className="text-zinc-400 text-sm">
+                  View and manage your active memberships
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6 sm:p-8">
+                <SubscriptionsInfo />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="security" className="mt-6 outline-none">
+            <Card className="bg-white/[0.02] border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden">
+              <CardHeader className="border-b border-white/5 px-6 sm:px-8 py-5">
+                <CardTitle className="text-lg font-semibold text-white">Active Sessions</CardTitle>
+                <CardDescription className="text-zinc-400 text-sm">
+                  Monitor your device access and security
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6 sm:p-8">
+                <SessionsList currentSessionId={currentSessionId} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </main>
-  )
+  );
 }

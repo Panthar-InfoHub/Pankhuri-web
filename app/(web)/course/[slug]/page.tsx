@@ -1,4 +1,4 @@
-import { getCourseBySlug } from "@/api/courses"
+import { getCourseBySlug } from "@/lib/api/courses"
 import { CourseHeader } from "@/components/course/CourseHeader"
 import { CourseCurriculum } from "@/components/course/CourseCurriculum"
 import { RelatedCourses } from "@/components/course/RelatedCourses"
