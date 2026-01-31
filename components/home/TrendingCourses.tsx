@@ -17,7 +17,7 @@ async function TrendingCoursesContent() {
         // Bridge new API course type to the existing CourseGrid expectation 
         // (assuming we want to keep using CourseGrid for now, or we'll refactor it later)
         // For now, I'll pass the real data.
-        return <CourseGrid title="Trending Now" courses={response.data as any} />;
+        return <CourseGrid title="Trending Now" courses={response.data} />;
     } catch (error) {
         console.error("TrendingCoursesContent Error:", error);
         return <ErrorState message="An unexpected error occurred." />;

@@ -33,3 +33,8 @@ export async function getCourseBySlug(slug: string): Promise<ApiResponse<Course>
 export async function getCourseById(id: string): Promise<ApiResponse<Course>> {
     return serverApi(`/api/courses/${id}`);
 }
+
+export async function getRelatedCourses(courseId: string, limit: number = 6): Promise<ApiResponse<Course[]>> {
+    return serverApi(`/api/courses/${courseId}/related?limit=${limit}`);
+}
+
