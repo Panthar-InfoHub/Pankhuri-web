@@ -1,10 +1,9 @@
-import { getCourseBySlug } from "@/lib/api/course.server";
 import { getLessonBySlug } from "@/lib/api/lessons";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { VideoPlayer } from "@/components/video/VideoPlayer";
 import { Paywall } from "@/components/lesson/Paywall";
 import { ContentPlaceholder } from "@/components/lesson/ContentPlaceholder";
-import { LessonCurriculumSidebar } from "@/components/lesson/LessonCurriculumSidebar";
+import { CurriculumSidebarWrapper } from "@/components/lesson/CurriculumSidebarWrapper";
 import { ChevronLeft, ChevronRight, BookOpen, Clock, BarChart, FileText } from "lucide-react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
@@ -17,17 +16,10 @@ interface LessonPageProps {
 export default async function LessonPage({ params }: LessonPageProps) {
   const { slug, lessonSlug } = await params;
 
-  // 1. Get course to get the courseId
-  const courseResponse = await getCourseBySlug(slug);
-  if (!courseResponse?.success || !courseResponse.data) {
-    notFound();
-  }
-  const course = courseResponse.data;
+  // 1. Get lesson details directly using course slug and lesson slug
+  const lessonResponse = await getLessonBySlug(slug, lessonSlug);
 
-  // 2. Get lesson details
-  const lessonResponse = await getLessonBySlug(course.id, lessonSlug);
-
-  // Handle Unauthenticated or SUBSCRIPTION_REQUIRED errors
+  // 2. Handle Unauthenticated or SUBSCRIPTION_REQUIRED errors
   if (
     !lessonResponse.success &&
     (lessonResponse.code === "NO_TOKEN" ||
@@ -49,7 +41,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           </Link>
           <Paywall
             title={lessonResponse.data?.title || "Premium Lesson"}
-            courseId={course.id}
+            courseId={lessonResponse.data?.courseId || ""}
             slug={slug}
             lessonSlug={lessonSlug}
             mode={isAuthError ? "auth" : "subscribe"}
@@ -75,7 +67,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
           >
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">{course.title}</span>
+            <span className="font-medium">{lesson.course.title}</span>
           </Link>
 
           <div className="flex items-center gap-4 text-sm text-gray-500">
@@ -195,14 +187,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
           {/* Sidebar / More Info */}
           <div className="space-y-8">
-            {course.curriculum && (
-              <LessonCurriculumSidebar
-                curriculum={course.curriculum}
-                courseSlug={slug}
-                currentLessonSlug={lessonSlug}
-                hasAccess={course.hasAccess}
-              />
-            )}
+            <CurriculumSidebarWrapper
+              slug={slug}
+              lessonSlug={lessonSlug}
+            />
 
             <div className="bg-white/5 rounded-2xl border border-white/10 p-6">
               <h3 className="text-lg font-bold text-white mb-6">Lesson Info</h3>
@@ -234,7 +222,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </div>
 
             {/* Quick tips or CTA */}
-            <div className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/20 p-6">
+            <div className="bg-linear-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/20 p-6">
               <h3 className="font-bold text-white mb-2">Need Help?</h3>
               <p className="text-sm text-gray-400 mb-4">
                 If you have questions about this lesson, join our community discussion.
