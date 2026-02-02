@@ -4,6 +4,7 @@ import { VideoPlayer } from "@/components/video/VideoPlayer";
 import { Paywall } from "@/components/lesson/Paywall";
 import { ContentPlaceholder } from "@/components/lesson/ContentPlaceholder";
 import { CurriculumSidebarWrapper } from "@/components/lesson/CurriculumSidebarWrapper";
+import { MarkCompleteButton } from "@/components/lesson/MarkCompleteButton";
 import { ChevronLeft, ChevronRight, BookOpen, Clock, BarChart, FileText } from "lucide-react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
@@ -140,48 +141,67 @@ export default async function LessonPage({ params }: LessonPageProps) {
               ) : null}
             </div>
             {/* Navigation Buttons */}
-            <div className="flex items-center justify-between pt-12 border-t border-white/5">
-              {lesson.navigation.previous ? (
-                <Link
-                  href={`/course/${slug}/lesson/${lesson.navigation.previous.slug}`}
-                  className="flex flex-col gap-1 text-left group"
-                >
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Previous Lesson
-                  </span>
-                  <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors font-medium">
-                    <ChevronLeft className="w-5 h-5" />
-                    {lesson.navigation.previous.title}
-                  </div>
-                </Link>
-              ) : (
-                <div />
-              )}
+            <div className="pt-12 border-t border-white/5">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
+                {/* Previous */}
+                <div className="w-full sm:w-1/3 flex justify-start order-2 sm:order-1">
+                  {lesson.navigation.previous && (
+                    <Link
+                      href={`/course/${slug}/lesson/${lesson.navigation.previous.slug}`}
+                      className="group flex flex-col gap-1 items-start"
+                    >
+                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                        Previous
+                      </span>
+                      <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors">
+                        <ChevronLeft className="w-4 h-4" />
+                        <span className="font-bold text-sm truncate max-w-[150px]">
+                          {lesson.navigation.previous.title}
+                        </span>
+                      </div>
+                    </Link>
+                  )}
+                </div>
 
-              {lesson.navigation.next ? (
-                <Link
-                  href={`/course/${slug}/lesson/${lesson.navigation.next.slug}`}
-                  className="flex flex-col gap-1 text-right group"
-                >
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Next Lesson
-                  </span>
-                  <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors font-medium">
-                    {lesson.navigation.next.title}
-                    <ChevronRight className="w-5 h-5" />
-                  </div>
-                </Link>
-              ) : (
-                <Link href={`/course/${slug}`} className="flex flex-col gap-1 text-right group">
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Finish
-                  </span>
-                  <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors font-medium">
-                    Back to Course
-                    <ChevronRight className="w-5 h-5" />
-                  </div>
-                </Link>
-              )}
+                {/* Mark Complete - Center */}
+                <div className="w-full sm:w-auto flex justify-center order-1 sm:order-2">
+                  <MarkCompleteButton
+                    lessonId={lesson.id}
+                    courseSlug={slug}
+                    nextLessonSlug={lesson.navigation.next?.slug}
+                  />
+                </div>
+
+                {/* Next / Finish */}
+                <div className="w-full sm:w-1/3 flex justify-end order-3">
+                  {lesson.navigation.next ? (
+                    <Link
+                      href={`/course/${slug}/lesson/${lesson.navigation.next.slug}`}
+                      className="group flex flex-col gap-1 items-end text-right"
+                    >
+                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                        Up Next
+                      </span>
+                      <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors">
+                        <span className="font-bold text-sm truncate max-w-[150px]">
+                          {lesson.navigation.next.title}
+                        </span>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                    </Link>
+                  ) : (
+                    <Link href={`/course/${slug}`} className="group flex flex-col gap-1 items-end text-right">
+                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                        End of Course
+                      </span>
+                      <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors font-bold text-sm">
+                        Course Home
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                    </Link>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 

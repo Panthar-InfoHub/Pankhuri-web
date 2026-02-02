@@ -18,7 +18,7 @@ export interface Lesson {
     moduleId: string;
     title: string;
     slug: string;
-    type: 'video' | 'text' | 'quiz';
+    type: 'video' | 'text' | 'quiz' | 'lesson';
     description: string;
     sequence: number;
     duration: number;
@@ -32,6 +32,7 @@ export interface Lesson {
     textLesson: any;
     thumbnail: string | null;
     isLocked: boolean;
+    itemType?: 'lesson';
 }
 
 export interface Module {
@@ -48,6 +49,7 @@ export interface Module {
     updatedAt: string;
     lessons: Lesson[];
     type: 'module';
+    itemType?: 'module';
 }
 
 export interface Course {
@@ -95,7 +97,7 @@ export interface Course {
     isPaid: boolean;
     hasAccess: boolean;
     pricing: CategoryPricing | null;
-    curriculum?: Module[];
+    curriculum?: (Module | Lesson)[];
     certificateInfo?: {
         hasCertificate: boolean;
         isClaimable: boolean;
