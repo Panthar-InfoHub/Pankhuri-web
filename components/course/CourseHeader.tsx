@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Star, Clock, Globe, Shield, Award, PlayCircle } from "lucide-react";
 import { BuyCourseButton } from "./BuyCourseButton";
 import { Course } from "@/types/course";
@@ -70,8 +71,11 @@ export function CourseHeader({ course }: CourseHeaderProps) {
               </div>
 
               {/* Trainer */}
-              <div className="flex items-center gap-4">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 shadow-sm">
+              <Link
+                href={`/trainer/${course.trainer.id}`}
+                className="group/trainer flex items-center gap-4 w-fit"
+              >
+                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 shadow-sm transition-transform duration-300 group-hover/trainer:scale-110 group-hover/trainer:border-purple-500/50">
                   <Image
                     src={course.trainer?.user?.profileImage || "/placeholder.svg"}
                     alt={course.trainer?.user?.displayName || "Instructor"}
@@ -80,12 +84,12 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                   />
                 </div>
                 <div>
-                  <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest leading-none mb-1">
+                  <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest leading-none mb-1 group-hover/trainer:text-purple-400/60 transition-colors">
                     Created by
                   </p>
-                  <p className="text-white font-bold">{course.trainer?.user?.displayName}</p>
+                  <p className="text-white font-bold group-hover/trainer:text-purple-400 transition-colors">{course.trainer?.user?.displayName}</p>
                 </div>
-              </div>
+              </Link>
             </div>
 
             {/* Enhanced Pricing Panel */}

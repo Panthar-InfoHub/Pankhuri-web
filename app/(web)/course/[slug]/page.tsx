@@ -5,6 +5,7 @@ import { RelatedCourses } from "@/components/course/RelatedCourses";
 import { notFound } from "next/navigation";
 import { Award, Check, Shield } from "lucide-react";
 import { CourseDescription } from "@/components/course/CourseDescription";
+import { TrainerSection } from "@/components/course/TrainerSection";
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
@@ -66,6 +67,8 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 </div>
               </section>
             )}
+
+            {course.trainer && <TrainerSection trainer={course.trainer} />}
           </div>
 
           {/* Sidebar */}
