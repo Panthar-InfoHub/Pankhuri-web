@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { User, LogOut, BookOpen } from "lucide-react"
+import { User, LogOut, BookOpen, Award } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 
@@ -54,6 +54,12 @@ export function AuthButton() {
             <DropdownMenuItem className="cursor-pointer gap-2 py-2">
               <BookOpen className="h-4 w-4" />
               <span>My Courses</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/certificates">
+            <DropdownMenuItem className="cursor-pointer gap-2 py-2">
+              <Award className="h-4 w-4" />
+              <span>My Certificates</span>
             </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />

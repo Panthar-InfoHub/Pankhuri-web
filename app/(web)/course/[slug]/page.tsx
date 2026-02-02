@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { Award, Check, Shield } from "lucide-react";
 import { CourseDescription } from "@/components/course/CourseDescription";
 import { TrainerSection } from "@/components/course/TrainerSection";
+import { CertificateClaim } from "@/components/course/CertificateClaim";
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
@@ -19,6 +20,8 @@ export default async function CoursePage({ params }: CoursePageProps) {
   if (!response?.success || !response.data) {
     notFound();
   }
+
+  console.log(response.data)
 
   const course = response.data;
   const curriculum = course.curriculum || [];
@@ -52,6 +55,14 @@ export default async function CoursePage({ params }: CoursePageProps) {
               />
             </section>
 
+            {course.hasCertificate && (
+              <CertificateClaim
+                courseId={course.id}
+                courseTitle={course.title}
+                certificateInfo={course.certificateInfo}
+              />
+            )}
+
             {course.metadata?.whatYouWillLearn && (
               <section className="bg-white/3 border border-white/5 rounded-3xl p-10">
                 <h2 className="text-xl font-bold text-white mb-8">What you&apos;ll learn</h2>
@@ -74,7 +85,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
           {/* Sidebar */}
           <div className="lg:col-span-4 self-start">
             <div className="sticky top-24 space-y-8">
-              {course.metadata?.prerequisites && (
+              {course.metadata?.prerequisites && (course.metadata.prerequisites as string[]).length > 0 && (
                 <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6">
                   <h3 className="text-white font-bold mb-6 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-blue-500" />
