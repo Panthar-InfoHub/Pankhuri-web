@@ -7,6 +7,7 @@ import { Award, Check, Shield } from "lucide-react";
 import { CourseDescription } from "@/components/course/CourseDescription";
 import { TrainerSection } from "@/components/course/TrainerSection";
 import { CertificateClaim } from "@/components/course/CertificateClaim";
+import { CourseReviews } from "@/components/course/CourseReviews";
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
@@ -79,6 +80,9 @@ export default async function CoursePage({ params }: CoursePageProps) {
             )}
 
             {course.trainer && <TrainerSection trainer={course.trainer} />}
+
+            {/* Reviews Section */}
+            <CourseReviews courseId={course.id} />
           </div>
 
           {/* Sidebar */}
