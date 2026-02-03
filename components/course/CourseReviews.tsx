@@ -194,21 +194,21 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
         const maxCount = Math.max(...Object.values(stats.ratingDistribution));
 
         return (
-            <div className="space-y-3">
+            <div className="space-y-2">
                 {[5, 4, 3, 2, 1].map((star) => {
                     const count = stats.ratingDistribution[star as keyof typeof stats.ratingDistribution];
                     const percentage = stats.totalReviews > 0 ? (count / stats.totalReviews) * 100 : 0;
 
                     return (
                         <div key={star} className="flex items-center gap-3">
-                            <span className="text-sm text-gray-400 w-8">{star} ★</span>
-                            <div className="flex-1 h-2 bg-gray-900 rounded-full overflow-hidden">
+                            <span className="text-xs text-gray-600 w-6">{star} ★</span>
+                            <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                                 <div
-                                    className="h-full bg-yellow-500 transition-all duration-500"
-                                    style={{ width: `${percentage}%` }}
+                                    className="h-full bg-gradient-to-r from-yellow-400 to-yellow-600 transition-all duration-500 rounded-full"
+                                    style={{ width: `${Math.min(percentage, 100)}%` }}
                                 />
                             </div>
-                            <span className="text-xs text-gray-500 w-12 text-right">{count}</span>
+                            <span className="text-xs text-gray-500 w-10 text-right">{count}</span>
                         </div>
                     );
                 })}
@@ -219,27 +219,27 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
     return (
         <section className="space-y-8">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white">Reviews & Ratings</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Reviews & Ratings</h2>
             </div>
 
             {/* Stats Overview */}
             {stats && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/3 border border-white/5 rounded-3xl p-8">
-                    <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-50 border border-gray-200 rounded-3xl p-8">
+                    <div className="space-y-4 flex flex-col justify-center">
                         <div className="text-center md:text-left">
-                            <div className="text-5xl font-bold text-white mb-2">
+                            <div className="text-6xl font-bold text-gray-900 mb-3">
                                 {stats.averageRating.toFixed(1)}
                             </div>
-                            <div className="flex justify-center md:justify-start mb-2">
+                            <div className="flex justify-center md:justify-start mb-3">
                                 {renderStars(Math.round(stats.averageRating))}
                             </div>
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-600 text-sm">
                                 Based on {stats.totalReviews} {stats.totalReviews === 1 ? 'review' : 'reviews'}
                             </p>
                         </div>
                     </div>
                     <div>
-                        <h3 className="text-sm font-semibold text-gray-400 mb-4 uppercase tracking-wider">
+                        <h3 className="text-xs font-semibold text-gray-500 mb-4 uppercase tracking-widest">
                             Rating Distribution
                         </h3>
                         {renderRatingDistribution()}
@@ -249,30 +249,30 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
 
             {/* My Review / Review Form */}
             {session && (
-                <div className="bg-gray-950 border border-gray-800 rounded-2xl p-6">
+                <div className="bg-white border border-gray-200 rounded-2xl p-6">
                     {myReview && !isEditing ? (
                         <div className="space-y-4">
                             <div className="flex items-start justify-between">
                                 <div>
                                     <div className="flex items-center gap-3 mb-2">
-                                        <Badge className="bg-primary/20 text-primary border-none">
+                                        <Badge className="bg-purple-100 text-purple-700 border-none">
                                             Your Review
                                         </Badge>
                                         {renderStars(myReview.rating)}
                                     </div>
-                                    <p className="text-gray-300 leading-relaxed">{myReview.review}</p>
-                                    <p className="text-xs text-gray-600 mt-2">
+                                    <p className="text-gray-700 leading-relaxed">{myReview.review}</p>
+                                    <p className="text-xs text-gray-500 mt-2">
                                         Posted {formatDistanceToNow(new Date(myReview.createdAt), { addSuffix: true })}
                                         {myReview.updatedAt !== myReview.createdAt && ' • Edited'}
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex gap-2 pt-4 border-t border-gray-800">
+                            <div className="flex gap-2 pt-4 border-t border-gray-200">
                                 <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={handleEditReview}
-                                    className="text-gray-400 hover:text-white"
+                                    className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                                 >
                                     <Edit2 className="w-4 h-4 mr-2" />
                                     Edit
@@ -281,7 +281,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setShowDeleteDialog(true)}
-                                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
                                 >
                                     <Trash2 className="w-4 h-4 mr-2" />
                                     Delete
@@ -290,25 +290,25 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                         </div>
                     ) : (
                         <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-white">
+                            <h3 className="text-lg font-semibold text-gray-900">
                                 {myReview ? 'Edit Your Review' : 'Write a Review'}
                             </h3>
 
                             <div>
-                                <label className="text-sm text-gray-400 mb-2 block">Your Rating</label>
+                                <label className="text-sm text-gray-700 mb-2 block">Your Rating</label>
                                 {renderStars(rating, true, "w-8 h-8")}
                             </div>
 
                             <div>
-                                <label className="text-sm text-gray-400 mb-2 block">Your Review</label>
+                                <label className="text-sm text-gray-700 mb-2 block">Your Review</label>
                                 <Textarea
                                     value={reviewText}
                                     onChange={(e) => setReviewText(e.target.value)}
                                     placeholder="Share your experience with this course..."
-                                    className="min-h-[120px] bg-gray-900 border-gray-800 text-white placeholder:text-gray-600 resize-none"
+                                    className="min-h-[120px] bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 resize-none"
                                     maxLength={1000}
                                 />
-                                <p className="text-xs text-gray-600 mt-1">
+                                <p className="text-xs text-gray-500 mt-1">
                                     {reviewText.length}/1000 characters
                                 </p>
                             </div>
@@ -317,7 +317,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                                 <Button
                                     onClick={handleSubmitReview}
                                     disabled={submitting || rating === 0 || reviewText.trim().length < 10}
-                                    className="bg-primary hover:bg-primary/90"
+                                    className="bg-purple-600 hover:bg-purple-700 text-white"
                                 >
                                     {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                                     {myReview ? 'Update Review' : 'Submit Review'}
@@ -327,7 +327,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                                         variant="ghost"
                                         onClick={handleCancelEdit}
                                         disabled={submitting}
-                                        className="text-gray-400 hover:text-white"
+                                        className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                                     >
                                         Cancel
                                     </Button>
@@ -341,7 +341,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
             {/* Sort Options */}
             {reviews.length > 0 && (
                 <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">Sort by:</span>
+                    <span className="text-sm text-gray-600">Sort by:</span>
                     <div className="flex gap-2">
                         {(['newest', 'oldest', 'highest', 'lowest'] as const).map((sortOption) => (
                             <Button
@@ -350,8 +350,8 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                                 size="sm"
                                 onClick={() => handleSortChange(sortOption)}
                                 className={`text-xs ${sort === sortOption
-                                    ? 'bg-primary/20 text-primary'
-                                    : 'text-gray-400 hover:text-white'
+                                    ? 'bg-purple-100 text-purple-700'
+                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                                     }`}
                             >
                                 {sortOption.charAt(0).toUpperCase() + sortOption.slice(1)}
@@ -366,14 +366,14 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                 {loading && page === 1 ? (
                     <div className="space-y-4">
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-32 bg-gray-900/50 rounded-xl animate-pulse border border-gray-800" />
+                            <div key={i} className="h-32 bg-gray-100 rounded-xl animate-pulse border border-gray-200" />
                         ))}
                     </div>
                 ) : reviews.length === 0 ? (
-                    <div className="text-center py-12 bg-gray-900/20 border border-dashed border-gray-800 rounded-2xl">
-                        <AlertCircle className="w-12 h-12 text-gray-700 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-400 mb-2">No reviews yet</h3>
-                        <p className="text-sm text-gray-600">
+                    <div className="text-center py-12 bg-gray-50 border border-dashed border-gray-300 rounded-2xl">
+                        <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-600 mb-2">No reviews yet</h3>
+                        <p className="text-sm text-gray-500">
                             Be the first to share your experience with this course!
                         </p>
                     </div>
@@ -382,10 +382,10 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                         {reviews.map((review) => (
                             <div
                                 key={review.id}
-                                className="bg-gray-950 border border-gray-800 rounded-2xl p-6 hover:border-gray-700 transition-colors"
+                                className="bg-white border border-gray-200 rounded-2xl p-6 hover:border-gray-300 transition-colors"
                             >
                                 <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
+                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
                                         {review.user.displayName?.[0]?.toUpperCase() || review.user.profileImage ? (
                                             review.user.profileImage ? (
                                                 <img
@@ -403,18 +403,18 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between mb-2">
                                             <div>
-                                                <h4 className="font-semibold text-white">
+                                                <h4 className="font-semibold text-gray-900">
                                                     {review.user.displayName || 'Anonymous User'}
                                                 </h4>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     {renderStars(review.rating, false, "w-4 h-4")}
-                                                    <span className="text-xs text-gray-600">
+                                                    <span className="text-xs text-gray-500">
                                                         {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <p className="text-gray-300 leading-relaxed">{review.review}</p>
+                                        <p className="text-gray-700 leading-relaxed">{review.review}</p>
                                     </div>
                                 </div>
                             </div>
@@ -426,7 +426,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                                     variant="outline"
                                     onClick={loadMore}
                                     disabled={loading}
-                                    className="border-gray-800 text-gray-400 hover:text-white hover:bg-gray-900"
+                                    className="border-gray-300 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                                 >
                                     {loading ? (
                                         <>
@@ -445,15 +445,15 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
 
             {/* Delete Confirmation Dialog */}
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-                <AlertDialogContent className="bg-gray-950 border-gray-800">
+                <AlertDialogContent className="bg-white border-gray-300">
                     <AlertDialogHeader>
-                        <AlertDialogTitle className="text-white">Delete Review?</AlertDialogTitle>
-                        <AlertDialogDescription className="text-gray-400">
+                        <AlertDialogTitle className="text-gray-900">Delete Review?</AlertDialogTitle>
+                        <AlertDialogDescription className="text-gray-600">
                             Are you sure you want to delete your review? This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-gray-900 text-gray-300 hover:bg-gray-800 hover:text-white border-gray-800">
+                        <AlertDialogCancel className="bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900 border-gray-300">
                             Cancel
                         </AlertDialogCancel>
                         <AlertDialogAction
