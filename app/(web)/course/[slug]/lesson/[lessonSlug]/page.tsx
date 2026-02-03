@@ -31,11 +31,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
       lessonResponse.code === "NO_TOKEN" || lessonResponse.code === "UNAUTHORIZED";
 
     return (
-      <div className="bg-[#010001] min-h-screen py-12 px-4">
+      <div className="bg-white min-h-screen py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <Link
             href={`/course/${slug}`}
-            className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors group"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8 transition-colors group"
           >
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             Back to Course
@@ -59,19 +59,19 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const lesson = lessonResponse.data;
 
   return (
-    <main className="bg-[#010001] min-h-screen">
+    <main className="bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Breadcrumbs / Backlink */}
         <div className="flex items-center justify-between mb-8">
           <Link
             href={`/course/${slug}`}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group"
           >
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">{lesson.course.title}</span>
           </Link>
 
-          <div className="flex items-center gap-4 text-sm text-gray-500">
+          <div className="flex items-center gap-4 text-sm text-gray-600">
             <div className="flex items-center gap-1.5">
               <BookOpen className="w-4 h-4" />
               <span>Lesson {lesson.sequence}</span>
@@ -88,7 +88,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Video Section */}
             {lesson.type === "video" && lesson.videoLesson?.video ? (
-              <div className="rounded-2xl overflow-hidden border border-white/10 bg-black aspect-video shadow-2xl shadow-purple-500/10">
+              <div className="rounded-2xl overflow-hidden border border-gray-300 bg-black aspect-video shadow-lg">
                 <VideoPlayer
                   videoId={lesson.videoLesson.video.id}
                   title={lesson.videoLesson.video.title}
@@ -105,15 +105,15 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
             {/* Text Lesson Section */}
             {lesson.type === "text" && lesson.textLesson ? (
-              <div className="bg-white/5 rounded-2xl border border-white/10 p-8 md:p-12 shadow-2xl">
-                <div className="flex items-center gap-3 mb-8 text-purple-400">
+              <div className="bg-gray-50 rounded-2xl border border-gray-300 p-8 md:p-12 shadow-sm">
+                <div className="flex items-center gap-3 mb-8 text-purple-600">
                   <FileText className="w-6 h-6" />
                   <span className="text-sm font-bold uppercase tracking-widest">
                     Reading Material • {lesson.textLesson.estimatedReadTime || lesson.duration} min
                     read
                   </span>
                 </div>
-                <div className="prose prose-invert prose-purple max-w-none">
+                <div className="prose prose-slate max-w-none">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {lesson.textLesson.content}
                   </ReactMarkdown>
@@ -129,19 +129,19 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
             {/* Title & Description */}
             <div className="space-y-6">
-              <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
                 {lesson.title}
               </h1>
 
               {lesson.lessonDescription?.textContent ? (
                 <div
-                  className="prose prose-invert prose-purple max-w-none text-gray-300 leading-relaxed"
+                  className="prose prose-slate max-w-none text-gray-700 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: lesson.lessonDescription.textContent }}
                 />
               ) : null}
             </div>
             {/* Navigation Buttons */}
-            <div className="pt-12 border-t border-white/5">
+            <div className="pt-12 border-t border-gray-300">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
                 {/* Previous */}
                 <div className="w-full sm:w-1/3 flex justify-start order-2 sm:order-1">
@@ -150,10 +150,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
                       href={`/course/${slug}/lesson/${lesson.navigation.previous.slug}`}
                       className="group flex flex-col gap-1 items-start"
                     >
-                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                      <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
                         Previous
                       </span>
-                      <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors">
+                      <div className="flex items-center gap-2 text-gray-900 group-hover:text-purple-600 transition-colors">
                         <ChevronLeft className="w-4 h-4" />
                         <span className="font-bold text-sm truncate max-w-[150px]">
                           {lesson.navigation.previous.title}
@@ -179,10 +179,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
                       href={`/course/${slug}/lesson/${lesson.navigation.next.slug}`}
                       className="group flex flex-col gap-1 items-end text-right"
                     >
-                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                      <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
                         Up Next
                       </span>
-                      <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors">
+                      <div className="flex items-center gap-2 text-gray-900 group-hover:text-purple-600 transition-colors">
                         <span className="font-bold text-sm truncate max-w-[150px]">
                           {lesson.navigation.next.title}
                         </span>
@@ -191,10 +191,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     </Link>
                   ) : (
                     <Link href={`/course/${slug}`} className="group flex flex-col gap-1 items-end text-right">
-                      <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                      <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
                         End of Course
                       </span>
-                      <div className="flex items-center gap-2 text-white group-hover:text-purple-400 transition-colors font-bold text-sm">
+                      <div className="flex items-center gap-2 text-gray-900 group-hover:text-purple-600 transition-colors font-bold text-sm">
                         Course Home
                         <ChevronRight className="w-4 h-4" />
                       </div>
@@ -212,42 +212,42 @@ export default async function LessonPage({ params }: LessonPageProps) {
               lessonSlug={lessonSlug}
             />
 
-            <div className="bg-white/5 rounded-2xl border border-white/10 p-6">
-              <h3 className="text-lg font-bold text-white mb-6">Lesson Info</h3>
+            <div className="bg-gray-50 rounded-2xl border border-gray-300 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-6">Lesson Info</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500 flex items-center gap-2">
+                  <span className="text-gray-600 flex items-center gap-2">
                     <BarChart className="w-4 h-4" />
                     Difficulty
                   </span>
-                  <span className="text-white capitalize">
+                  <span className="text-gray-900 capitalize">
                     {lesson.metadata?.difficulty || "General"}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500 flex items-center gap-2">
+                  <span className="text-gray-600 flex items-center gap-2">
                     <Clock className="w-4 h-4" />
                     Duration
                   </span>
-                  <span className="text-white">{lesson.duration} minutes</span>
+                  <span className="text-gray-900">{lesson.duration} minutes</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500 flex items-center gap-2">
+                  <span className="text-gray-600 flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />
                     Type
                   </span>
-                  <span className="text-white capitalize">{lesson.type}</span>
+                  <span className="text-gray-900 capitalize">{lesson.type}</span>
                 </div>
               </div>
             </div>
 
             {/* Quick tips or CTA */}
-            <div className="bg-linear-to-br from-purple-600/20 to-pink-600/20 rounded-2xl border border-purple-500/20 p-6">
-              <h3 className="font-bold text-white mb-2">Need Help?</h3>
-              <p className="text-sm text-gray-400 mb-4">
+            <div className="bg-purple-100 rounded-2xl border border-purple-300 p-6">
+              <h3 className="font-bold text-gray-900 mb-2">Need Help?</h3>
+              <p className="text-sm text-gray-700 mb-4">
                 If you have questions about this lesson, join our community discussion.
               </p>
-              <button className="w-full py-2.5 bg-white/10 hover:bg-white/15 text-white text-sm font-bold rounded-xl transition-colors">
+              <button className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold rounded-xl transition-colors">
                 Jump to Community
               </button>
             </div>

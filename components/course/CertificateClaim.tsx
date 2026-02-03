@@ -78,7 +78,7 @@ export function CertificateClaim({ courseId, courseTitle, certificateInfo }: Cer
 
     return (
         <section className="space-y-6">
-            <h2 className="text-2xl font-bold text-white tracking-tight">Certification</h2>
+            <h2 className="text-2xl font-bold text-black tracking-tight">Certification</h2>
 
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
@@ -86,7 +86,7 @@ export function CertificateClaim({ courseId, courseTitle, certificateInfo }: Cer
                         <Award className="w-6 h-6" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-white text-sm">Official Course Certificate</h3>
+                        <h3 className="font-bold text-black text-sm">Official Course Certificate</h3>
                         <p className="text-xs text-gray-500">Verified completion certificate for your records.</p>
                     </div>
                 </div>

@@ -11,16 +11,16 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
       {categories.map((category) => (
         <Link key={category.id} href={`/category/${category.slug}`} className="group">
-          <div className="relative aspect-square rounded-2xl overflow-hidden cursor-pointer border border-white/5 bg-[#0A0A0A] hover:border-purple-500/30 transition-all duration-300">
+          <div className="relative aspect-square rounded-2xl overflow-hidden cursor-pointer border border-gray-200 bg-gray-100 hover:border-purple-500 transition-all duration-300 shadow-sm hover:shadow-md">
             <Image
               src={category.icon || "/placeholder.svg"}
               alt={category.name}
               fill
-              className="object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 group-hover:opacity-80"
+              className="object-cover group-hover:scale-110 transition-transform duration-500 opacity-70 group-hover:opacity-90"
               sizes="(max-width: 768px) 50vw, 25vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-4">
-              <h3 className="text-white font-bold text-center text-sm md:text-base group-hover:text-purple-400 transition-colors">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent flex flex-col justify-end p-4">
+              <h3 className="text-white font-bold text-center text-sm md:text-base group-hover:text-purple-300 transition-colors drop-shadow-lg">
                 {category.name}
               </h3>
               {/* <p className="text-[10px] text-gray-400 text-center mt-1">

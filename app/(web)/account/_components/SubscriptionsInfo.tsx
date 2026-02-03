@@ -57,7 +57,7 @@ export function SubscriptionsInfo() {
         return (
             <div className="grid gap-4">
                 {[1, 2].map((i) => (
-                    <div key={i} className="h-40 bg-gray-900/50 rounded-xl animate-pulse border border-gray-800" />
+                    <div key={i} className="h-40 bg-gray-200 rounded-xl animate-pulse border border-gray-300" />
                 ))}
             </div>
         );
@@ -74,9 +74,9 @@ export function SubscriptionsInfo() {
 
 
             {allSubscriptions.length === 0 && status?.hasActiveSubscription === false ? (
-                <div className="text-center py-12 border border-dashed border-gray-800 rounded-2xl">
-                    <AlertCircle className="w-12 h-12 text-gray-700 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-400">No active subscriptions</h3>
+                <div className="text-center py-12 border border-dashed border-gray-300 rounded-2xl bg-gray-50">
+                    <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900">No active subscriptions</h3>
                     <p className="text-sm text-gray-600">When you subscribe to a plan, it will appear here.</p>
                 </div>
             ) : (
@@ -84,26 +84,26 @@ export function SubscriptionsInfo() {
                     {allSubscriptions.map((sub) => (
                         <div
                             key={sub.id}
-                            className="bg-gray-950 border border-gray-800 rounded-2xl overflow-hidden group hover:border-gray-700 transition-colors"
+                            className="bg-white border border-gray-300 rounded-2xl overflow-hidden group hover:border-purple-300 transition-colors"
                         >
                             <div className="p-6">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                                        <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 border border-purple-300">
                                             <Crown className="w-6 h-6" />
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-2">
-                                                <h3 className="font-bold text-lg text-white">{sub.planName}</h3>
-                                                <Badge className={`${sub.status === 'active' ? 'bg-green-500/10 text-green-400' :
-                                                        sub.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400' :
-                                                            'bg-gray-500/10 text-gray-400'
+                                                <h3 className="font-bold text-lg text-gray-900">{sub.planName}</h3>
+                                                <Badge className={`${sub.status === 'active' ? 'bg-green-100 text-green-700' :
+                                                        sub.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                                                            'bg-gray-200 text-gray-700'
                                                     } border-none`}>
                                                     {sub.status}
                                                 </Badge>
                                             </div>
-                                            <p className="text-sm text-gray-500 flex items-center gap-1 mt-0.5">
-                                                <span className="uppercase tracking-tighter text-[10px] font-bold py-0.5 px-2 bg-gray-900 rounded-md border border-gray-800 mr-2">
+                                            <p className="text-sm text-gray-600 flex items-center gap-1 mt-0.5">
+                                                <span className="uppercase tracking-tighter text-[10px] font-bold py-0.5 px-2 bg-gray-100 rounded-md border border-gray-300 mr-2">
                                                     {sub.planType.replace('_', ' ')}
                                                 </span>
                                                 Managed via {sub.provider}
@@ -111,45 +111,45 @@ export function SubscriptionsInfo() {
                                         </div>
                                     </div>
                                     <div className="text-left md:text-right">
-                                        <p className="text-xs text-gray-500 uppercase font-bold tracking-widest">Billing Cycle</p>
-                                        <p className="text-white font-medium capitalize">{sub.subscriptionType}</p>
+                                        <p className="text-xs text-gray-600 uppercase font-bold tracking-widest">Billing Cycle</p>
+                                        <p className="text-gray-900 font-medium capitalize">{sub.subscriptionType}</p>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-900/40 rounded-xl p-4 border border-gray-900">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-50 rounded-xl p-4 border border-gray-200">
                                     <div className="space-y-1">
-                                        <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest flex items-center gap-1">
+                                        <p className="text-[10px] text-gray-600 uppercase font-bold tracking-widest flex items-center gap-1">
                                             <Calendar className="w-3 h-3" />
                                             Next Renewal
                                         </p>
-                                        <p className="text-sm font-semibold text-gray-200">
+                                        <p className="text-sm font-semibold text-gray-900">
                                             {sub.currentPeriodEnd ? format(new Date(sub.currentPeriodEnd), 'MMMM dd, yyyy') : 'N/A'}
                                         </p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest flex items-center gap-1">
+                                        <p className="text-[10px] text-gray-600 uppercase font-bold tracking-widest flex items-center gap-1">
                                             <CreditCard className="w-3 h-3" />
                                             Payment Method
                                         </p>
-                                        <p className="text-sm font-semibold text-gray-200 capitalize">
+                                        <p className="text-sm font-semibold text-gray-900 capitalize">
                                             {sub.provider} Checkout
                                         </p>
                                     </div>
                                     {sub.isTrial && (
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-purple-400 uppercase font-bold tracking-widest flex items-center gap-1">
+                                            <p className="text-[10px] text-purple-600 uppercase font-bold tracking-widest flex items-center gap-1">
                                                 <Sparkles className="w-3 h-3" />
                                                 Trial Status
                                             </p>
-                                            <p className="text-sm font-semibold text-purple-300">Active Free Trial</p>
+                                            <p className="text-sm font-semibold text-purple-700">Active Free Trial</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
 
                             {sub.planType === 'WHOLE_APP' && sub.status !== 'cancelled' && (
-                                <div className="bg-gray-900/50 px-6 py-4 border-t border-gray-900 flex flex-col sm:flex-row justify-between items-center gap-4">
-                                    <p className="text-xs text-gray-500 max-w-xs text-center sm:text-left">
+                                <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                    <p className="text-xs text-gray-600 max-w-xs text-center sm:text-left">
                                         You can manage your subscription preferences here.
                                     </p>
                                     <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -158,7 +158,7 @@ export function SubscriptionsInfo() {
                                             size="sm"
                                             onClick={() => handleCancel(sub.id, false)}
                                             disabled={!!actionLoading}
-                                            className="text-gray-400 hover:text-white hover:bg-gray-800 text-xs h-9 flex-1 sm:flex-none"
+                                            className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 text-xs h-9 flex-1 sm:flex-none"
                                         >
                                             End at period
                                         </Button>
@@ -167,7 +167,7 @@ export function SubscriptionsInfo() {
                                             size="sm"
                                             onClick={() => handleCancel(sub.id, true)}
                                             disabled={!!actionLoading}
-                                            className="bg-red-500/5 text-red-500 hover:bg-red-600 hover:text-white border-red-500/20 text-xs h-9 flex-1 sm:flex-none"
+                                            className="bg-red-100 text-red-600 hover:bg-red-600 hover:text-white border-red-300 text-xs h-9 flex-1 sm:flex-none"
                                         >
                                             {actionLoading === sub.id ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <XCircle className="w-3 h-3 mr-2" />}
                                             Cancel Now

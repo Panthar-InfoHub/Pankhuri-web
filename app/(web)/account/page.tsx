@@ -68,10 +68,10 @@ export default function AccountPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center space-y-4">
-          <Loader2 className="w-10 h-10 animate-spin text-white mx-auto" />
-          <p className="text-zinc-400 text-sm">Loading your account...</p>
+          <Loader2 className="w-10 h-10 animate-spin text-gray-900 mx-auto" />
+          <p className="text-gray-600 text-sm">Loading your account...</p>
         </div>
       </div>
     );
@@ -80,9 +80,9 @@ export default function AccountPage() {
   if (!user) return null;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950 text-white pb-20">
+    <main className="min-h-screen bg-white text-gray-900 pb-20">
       {/* Minimalist Header */}
-      <div className="border-b border-white/5 bg-black/50 backdrop-blur-xl">
+      <div className="border-b border-gray-200 bg-gray-50 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="relative">
@@ -92,20 +92,20 @@ export default function AccountPage() {
                 onUploadSuccess={(url) => setUser({ ...user, profileImage: url })}
               />
               <div
-                className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 rounded-full border-2 border-black"
+                className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"
                 title="Active"
               />
             </div>
 
             <div className="flex-1 space-y-1">
-              <h1 className="text-3xl font-semibold tracking-tight text-white">
+              <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
                 {user.displayName}
               </h1>
-              <p className="text-sm text-zinc-400">{user.email || user.phone}</p>
+              <p className="text-sm text-gray-600">{user.email || user.phone}</p>
               <div className="flex items-center gap-2 pt-1">
                 <Badge
                   variant="outline"
-                  className="text-xs font-normal border-white/10 text-zinc-300"
+                  className="text-xs font-normal border-gray-300 text-gray-700 bg-gray-100"
                 >
                   {user.role}
                 </Badge>
@@ -115,7 +115,7 @@ export default function AccountPage() {
             <Button
               variant="ghost"
               onClick={handleLogout}
-              className="text-zinc-400 hover:text-white hover:bg-white/5 border border-white/10 h-10 px-4"
+              className="text-gray-600 hover:text-gray-900 hover:bg-gray-200 border border-gray-300 h-10 px-4"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -127,24 +127,24 @@ export default function AccountPage() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         <Tabs defaultValue="profile" className="space-y-6">
           {/* Premium Tabs */}
-          <TabsList className="bg-white/[0.03] border border-white/10 rounded-xl p-1 h-12 w-full md:w-auto inline-flex backdrop-blur-sm">
+          <TabsList className="bg-gray-100 border border-gray-300 rounded-xl p-1 h-12 w-full md:w-auto inline-flex backdrop-blur-sm">
             <TabsTrigger
               value="profile"
-              className="data-[state=active]:bg-white data-[state=active]:text-black rounded-lg px-6 text-zinc-400 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
+              className="data-[state=active]:bg-purple-600 data-[state=active]:text-white rounded-lg px-6 text-gray-600 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
             >
               <UserIcon className="w-4 h-4" />
               <span className="hidden sm:inline">Profile</span>
             </TabsTrigger>
             <TabsTrigger
               value="subscriptions"
-              className="data-[state=active]:bg-white data-[state=active]:text-black rounded-lg px-6 text-zinc-400 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
+              className="data-[state=active]:bg-purple-600 data-[state=active]:text-white rounded-lg px-6 text-gray-600 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
             >
               <CreditCard className="w-4 h-4" />
               <span className="hidden sm:inline">Subscriptions</span>
             </TabsTrigger>
             <TabsTrigger
               value="security"
-              className="data-[state=active]:bg-white data-[state=active]:text-black rounded-lg px-6 text-zinc-400 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
+              className="data-[state=active]:bg-purple-600 data-[state=active]:text-white rounded-lg px-6 text-gray-600 data-[state=active]:shadow-lg transition-all duration-200 h-10 font-medium flex items-center gap-2"
             >
               <Shield className="w-4 h-4" />
               <span className="hidden sm:inline">Security</span>
@@ -152,12 +152,12 @@ export default function AccountPage() {
           </TabsList>
 
           <TabsContent value="profile" className="mt-6 outline-none">
-            <Card className="bg-white/[0.02] border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden">
-              <CardHeader className="border-b border-white/5 px-6 sm:px-8 py-5">
-                <CardTitle className="text-lg font-semibold text-white">
+            <Card className="bg-gray-50 border border-gray-300 backdrop-blur-sm rounded-2xl overflow-hidden">
+              <CardHeader className="border-b border-gray-200 px-6 sm:px-8 py-5">
+                <CardTitle className="text-lg font-semibold text-gray-900">
                   Personal Information
                 </CardTitle>
-                <CardDescription className="text-zinc-400 text-sm">
+                <CardDescription className="text-gray-600 text-sm">
                   Manage your account details and preferences
                 </CardDescription>
               </CardHeader>
@@ -168,10 +168,10 @@ export default function AccountPage() {
           </TabsContent>
 
           <TabsContent value="subscriptions" className="mt-6 outline-none">
-            <Card className="bg-white/[0.02] border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden">
-              <CardHeader className="border-b border-white/5 px-6 sm:px-8 py-5">
-                <CardTitle className="text-lg font-semibold text-white">Subscriptions</CardTitle>
-                <CardDescription className="text-zinc-400 text-sm">
+            <Card className="bg-gray-50 border border-gray-300 backdrop-blur-sm rounded-2xl overflow-hidden">
+              <CardHeader className="border-b border-gray-200 px-6 sm:px-8 py-5">
+                <CardTitle className="text-lg font-semibold text-gray-900">Subscriptions</CardTitle>
+                <CardDescription className="text-gray-600 text-sm">
                   View and manage your active memberships
                 </CardDescription>
               </CardHeader>
@@ -182,10 +182,10 @@ export default function AccountPage() {
           </TabsContent>
 
           <TabsContent value="security" className="mt-6 outline-none">
-            <Card className="bg-white/[0.02] border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden">
-              <CardHeader className="border-b border-white/5 px-6 sm:px-8 py-5">
-                <CardTitle className="text-lg font-semibold text-white">Active Sessions</CardTitle>
-                <CardDescription className="text-zinc-400 text-sm">
+            <Card className="bg-gray-50 border border-gray-300 backdrop-blur-sm rounded-2xl overflow-hidden">
+              <CardHeader className="border-b border-gray-200 px-6 sm:px-8 py-5">
+                <CardTitle className="text-lg font-semibold text-gray-900">Active Sessions</CardTitle>
+                <CardDescription className="text-gray-600 text-sm">
                   Monitor your device access and security
                 </CardDescription>
               </CardHeader>
