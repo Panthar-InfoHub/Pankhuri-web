@@ -6,7 +6,7 @@ import { useState } from "react"
 import { Module } from "@/types/course"
 
 interface LessonCurriculumSidebarProps {
-    curriculum: Module[]
+    curriculum: any[]
     courseSlug: string
     currentLessonSlug: string
     hasAccess: boolean
@@ -22,7 +22,7 @@ const getLessonIcon = (type: string) => {
 
 export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonSlug, hasAccess }: LessonCurriculumSidebarProps) {
     const [expandedSections, setExpandedSections] = useState<string[]>([
-        curriculum.find(m => m.lessons?.some(l => l.slug === currentLessonSlug))?.id || curriculum[0]?.id || ""
+        curriculum.find(m => m.lessons?.some((l: any) => l.slug === currentLessonSlug))?.id || curriculum[0]?.id || ""
     ])
 
     const toggleSection = (sectionId: string) => {
@@ -52,11 +52,11 @@ export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonS
                                 className={`text-gray-600 transition-transform ${expandedSections.includes(module.id) ? "rotate-180" : ""}`}
                             />
                         </button>
-
+                    
                         {expandedSections.includes(module.id) ? (
                             <div className="bg-gray-100">
                                 {module.lessons && module.lessons.length > 0 ? (
-                                    module.lessons.map((lesson) => {
+                                    module.lessons.map((lesson: any) => {
                                         const isLocked = !hasAccess && !lesson.isFree;
                                         const isActive = lesson.slug === currentLessonSlug;
 
