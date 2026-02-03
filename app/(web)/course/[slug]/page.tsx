@@ -7,7 +7,6 @@ import { Award, Check, Shield } from "lucide-react";
 import { CourseDescription } from "@/components/course/CourseDescription";
 import { TrainerSection } from "@/components/course/TrainerSection";
 import { CertificateClaim } from "@/components/course/CertificateClaim";
-import { ProgressDebugger } from "@/components/course/ProgressDebugger";
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
@@ -62,9 +61,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 certificateInfo={course.certificateInfo}
               />
             )}
-
-            {/* Debug Section */}
-            <ProgressDebugger courseId={course.id} />
 
             {course.metadata?.whatYouWillLearn && (
               <section className="bg-white/3 border border-white/5 rounded-3xl p-10">

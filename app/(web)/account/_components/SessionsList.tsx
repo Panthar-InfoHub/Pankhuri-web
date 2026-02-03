@@ -4,6 +4,16 @@ import { useState, useEffect } from "react";
 import { Session, getAllSessions, logoutSession, logoutAllSessions, logoutCurrentSession } from "@/lib/api/session";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Monitor, Smartphone, Globe, LogOut, Loader2, ShieldCheck, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
@@ -17,6 +27,7 @@ export function SessionsList({ currentSessionId }: SessionsListProps) {
     const [sessions, setSessions] = useState<Session[]>([]);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
+    const [showLogoutAllDialog, setShowLogoutAllDialog] = useState(false);
 
     const fetchSessions = async () => {
         try {
@@ -52,9 +63,9 @@ export function SessionsList({ currentSessionId }: SessionsListProps) {
         }
     };
 
-    const handleLogoutAll = async () => {
-        if (!confirm("Are you sure you want to log out from all devices? This will include your current session.")) return;
 
+    const handleLogoutAll = async () => {
+        setShowLogoutAllDialog(false);
         setActionLoading("all");
         try {
             await logoutAllSessions();
@@ -87,7 +98,7 @@ export function SessionsList({ currentSessionId }: SessionsListProps) {
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleLogoutAll}
+                    onClick={() => setShowLogoutAllDialog(true)}
                     disabled={actionLoading === "all" || sessions.length === 0}
                     className="text-red-500 hover:text-white hover:bg-red-500/10 border-red-500/20 hover:border-red-500 transition-all text-xs font-semibold uppercase tracking-wider h-10 px-4"
                 >
@@ -163,6 +174,27 @@ export function SessionsList({ currentSessionId }: SessionsListProps) {
                 )}
             </div>
 
+            <AlertDialog open={showLogoutAllDialog} onOpenChange={setShowLogoutAllDialog}>
+                <AlertDialogContent className="bg-gray-950 border-gray-800">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-white">Terminate All Sessions?</AlertDialogTitle>
+                        <AlertDialogDescription className="text-gray-400">
+                            Are you sure you want to log out from all devices? This will include your current session and you will be redirected to the login page.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel className="bg-gray-900 text-gray-300 hover:bg-gray-800 hover:text-white border-gray-800">
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleLogoutAll}
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                        >
+                            Terminate All
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

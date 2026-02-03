@@ -1,10 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SubscriptionStatus, getSubscriptionStatus, cancelSubscription, cancelSubscriptionImmediately } from "@/lib/api/subscription";
+import { SubscriptionStatus, getSubscriptionStatus, cancelSubscription, cancelSubscriptionImmediately, deletePendingSubscription, deleteAllPendingSubscriptions } from "@/lib/api/subscription";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Crown, Calendar, XCircle, AlertCircle, Loader2, Sparkles, ChevronRight, CreditCard } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -14,6 +24,19 @@ export function SubscriptionsInfo() {
     const [status, setStatus] = useState<SubscriptionStatus | null>(null);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
+    const [dialogState, setDialogState] = useState<{
+        open: boolean;
+        type: 'cancel' | 'cancel-immediate' | 'delete-pending' | null;
+        subscriptionId: string | null;
+        title: string;
+        description: string;
+    }>({
+        open: false,
+        type: null,
+        subscriptionId: null,
+        title: '',
+        description: '',
+    });
 
     const fetchStatus = async () => {
         try {
@@ -30,24 +53,54 @@ export function SubscriptionsInfo() {
         fetchStatus();
     }, []);
 
-    const handleCancel = async (id: string, immediately: boolean) => {
-        const message = immediately
-            ? "Are you sure you want to cancel immediately? You will lose access to premium features right away."
-            : "Are you sure you want to cancel? You will keep access until the end of the current period.";
 
-        if (!confirm(message)) return;
+    const handleCancel = (id: string, immediately: boolean) => {
+        setDialogState({
+            open: true,
+            type: immediately ? 'cancel-immediate' : 'cancel',
+            subscriptionId: id,
+            title: immediately ? 'Cancel Subscription Immediately?' : 'Cancel Subscription?',
+            description: immediately
+                ? 'Are you sure you want to cancel immediately? You will lose access to premium features right away.'
+                : 'Are you sure you want to cancel? You will keep access until the end of the current period.',
+        });
+    };
 
+    const handleDeletePending = (id: string) => {
+        setDialogState({
+            open: true,
+            type: 'delete-pending',
+            subscriptionId: id,
+            title: 'Delete Pending Subscription?',
+            description: 'Are you sure you want to delete this pending subscription? This action cannot be undone.',
+        });
+    };
+
+    const confirmAction = async () => {
+        if (!dialogState.subscriptionId) return;
+
+        const id = dialogState.subscriptionId;
         setActionLoading(id);
+        setDialogState({ ...dialogState, open: false });
+
         try {
-            if (immediately) {
-                await cancelSubscriptionImmediately(id);
-            } else {
-                await cancelSubscription(id);
+            switch (dialogState.type) {
+                case 'cancel':
+                    await cancelSubscription(id);
+                    toast.success("Subscription will be cancelled at the end of the period");
+                    break;
+                case 'cancel-immediate':
+                    await cancelSubscriptionImmediately(id);
+                    toast.success("Subscription cancelled immediately");
+                    break;
+                case 'delete-pending':
+                    const result = await deletePendingSubscription(id);
+                    toast.success(result.message || "Pending subscription cancelled successfully");
+                    break;
             }
-            toast.success("Subscription updated");
             fetchStatus();
-        } catch (error) {
-            toast.error("Failed to cancel subscription");
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || "Failed to perform action");
         } finally {
             setActionLoading(null);
         }
@@ -96,8 +149,8 @@ export function SubscriptionsInfo() {
                                             <div className="flex items-center gap-2">
                                                 <h3 className="font-bold text-lg text-white">{sub.planName}</h3>
                                                 <Badge className={`${sub.status === 'active' ? 'bg-green-500/10 text-green-400' :
-                                                        sub.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400' :
-                                                            'bg-gray-500/10 text-gray-400'
+                                                    sub.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400' :
+                                                        'bg-gray-500/10 text-gray-400'
                                                     } border-none`}>
                                                     {sub.status}
                                                 </Badge>
@@ -147,7 +200,28 @@ export function SubscriptionsInfo() {
                                 </div>
                             </div>
 
-                            {sub.planType === 'WHOLE_APP' && sub.status !== 'cancelled' && (
+
+                            {sub.status === 'pending' && (
+                                <div className="bg-yellow-500/5 px-6 py-4 border-t border-yellow-500/20 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                    <p className="text-xs text-yellow-400 max-w-xs text-center sm:text-left flex items-center gap-2">
+                                        <AlertCircle className="w-4 h-4" />
+                                        This subscription is pending. You can cancel it.                                    </p>
+                                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={() => handleDeletePending(sub.id)}
+                                            disabled={!!actionLoading}
+                                            className="bg-red-500/10 text-red-400 hover:bg-red-600 hover:text-white border-red-500/20 text-xs h-9 flex-1 sm:flex-none"
+                                        >
+                                            {actionLoading === sub.id ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <XCircle className="w-3 h-3 mr-2" />}
+                                            Delete Pending
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {sub.planType === 'WHOLE_APP' && sub.status !== 'cancelled' && sub.status !== 'pending' && (
                                 <div className="bg-gray-900/50 px-6 py-4 border-t border-gray-900 flex flex-col sm:flex-row justify-between items-center gap-4">
                                     <p className="text-xs text-gray-500 max-w-xs text-center sm:text-left">
                                         You can manage your subscription preferences here.
@@ -179,6 +253,32 @@ export function SubscriptionsInfo() {
                     ))}
                 </div>
             )}
+
+            <AlertDialog open={dialogState.open} onOpenChange={(open) => setDialogState({ ...dialogState, open })}>
+                <AlertDialogContent className="bg-gray-950 border-gray-800">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-white">{dialogState.title}</AlertDialogTitle>
+                        <AlertDialogDescription className="text-gray-400">
+                            {dialogState.description}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel className="bg-gray-900 text-gray-300 hover:bg-gray-800 hover:text-white border-gray-800">
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmAction}
+                            className={
+                                dialogState.type === 'cancel-immediate' || dialogState.type === 'delete-pending'
+                                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                                    : 'bg-primary hover:bg-primary/90'
+                            }
+                        >
+                            {dialogState.type === 'delete-pending' ? 'Delete' : 'Confirm'}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
