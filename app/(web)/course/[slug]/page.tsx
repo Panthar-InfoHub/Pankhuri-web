@@ -7,7 +7,7 @@ import { Award, Check, Shield } from "lucide-react";
 import { CourseDescription } from "@/components/course/CourseDescription";
 import { TrainerSection } from "@/components/course/TrainerSection";
 import { CertificateClaim } from "@/components/course/CertificateClaim";
-import { ProgressDebugger } from "@/components/course/ProgressDebugger";
+import { CourseReviews } from "@/components/course/CourseReviews";
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
@@ -63,9 +63,6 @@ export default async function CoursePage({ params }: CoursePageProps) {
               />
             )}
 
-            {/* Debug Section */}
-            <ProgressDebugger courseId={course.id} />
-
             {course.metadata?.whatYouWillLearn && (
               <section className="bg-gray-50 border border-gray-200 rounded-3xl p-10">
                 <h2 className="text-xl font-bold text-gray-900 mb-8">What you&apos;ll learn</h2>
@@ -83,6 +80,9 @@ export default async function CoursePage({ params }: CoursePageProps) {
             )}
 
             {course.trainer && <TrainerSection trainer={course.trainer} />}
+
+            {/* Reviews Section */}
+            <CourseReviews courseId={course.id} />
           </div>
 
           {/* Sidebar */}

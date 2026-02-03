@@ -35,3 +35,13 @@ export const cancelSubscriptionImmediately = async (id: string) => {
     const response = await apiClient.post<{ success: boolean }>(`/api/subscriptions/${id}/cancel-immediately`);
     return response.data;
 };
+
+export const deletePendingSubscription = async (id: string) => {
+    const response = await apiClient.delete<{ success: boolean; message: string }>(`/api/subscriptions/${id}/pending`);
+    return response.data;
+};
+
+export const deleteAllPendingSubscriptions = async () => {
+    const response = await apiClient.delete<{ success: boolean; message: string }>(`/api/subscriptions/pending`);
+    return response.data;
+};
