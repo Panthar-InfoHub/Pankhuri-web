@@ -18,7 +18,7 @@ export function Navbar() {
 
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#010001]/95 backdrop-blur-md border-b border-gray-800 shadow-sm">
+    <nav className="sticky top-0 z-50 backdrop-blur-md border-b border-gray-800 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
@@ -32,23 +32,29 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/"
-              className="text-sm text-gray-200 hover:text-purple-400 transition-colors duration-200 font-medium"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
             >
               Home
             </Link>
             <Link
               href="/categories"
-              className="text-sm text-gray-200 hover:text-purple-400 transition-colors duration-200 font-medium"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
             >
               Categories
             </Link>
             <Link
               href="/courses"
-              className="text-sm text-gray-200 hover:text-purple-400 transition-colors duration-200 font-medium"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 font-medium"
             >
               Courses
             </Link>
 
+            <Link
+              href="/landing"
+              className="text-sm text-muted-foreground hover:text-primarytransition-colors duration-200 font-medium"
+            >
+              Premium
+            </Link>
             {/* {isLoggedIn && (
               <Link
                 href="/?section=my-courses"
@@ -76,23 +82,30 @@ export function Navbar() {
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm text-gray-200 hover:text-purple-400 font-medium"
+              className="block text-sm text-muted-foreground hover:text-primary font-medium"
             >
               Home
             </Link>
             <Link
               href="/categories"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm text-gray-200 hover:text-purple-400 font-medium"
+              className="block text-sm text-muted-foreground hover:text-primary font-medium"
             >
               Categories
             </Link>
             <Link
               href="/courses"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm text-gray-200 hover:text-purple-400 font-medium"
+              className="block text-sm text-muted-foreground hover:text-primary font-medium"
             >
               Courses
+            </Link>
+            <Link
+              href="/landing"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-sm text-muted-foreground hover:text-primary font-medium"
+            >
+              Premium 
             </Link>
             <div className="pt-2">
               <AuthButton />

@@ -25,6 +25,12 @@ export function Header() {
 
         <nav className="hidden md:flex items-center gap-8">
           <Link
+            href="/"
+            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+          >
+            Home
+          </Link>
+          <Link
             href="#courses"
             className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
           >

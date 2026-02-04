@@ -45,7 +45,7 @@ export function MarkCompleteButton({ lessonId, courseSlug, nextLessonSlug }: Mar
         <Button
             onClick={handleComplete}
             disabled={loading}
-            className="h-14 px-8 bg-white/10 hover:bg-white/15 text-white border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all min-w-[200px]"
+            className="h-14 px-8 bg-white/10 hover:bg-white/15 text-black border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all min-w-[200px]"
         >
             {loading ? (
                 <>

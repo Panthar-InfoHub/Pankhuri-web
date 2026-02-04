@@ -26,7 +26,7 @@ export function FeaturedCourses() {
     <Suspense
       fallback={
         <div>
-          <h2 className="text-2xl font-bold text-white mb-6">Featured Courses</h2>
+          <h2 className="text-2xl font-bold text-black mb-6">Featured Courses</h2>
           <GridSkeleton count={3} />
         </div>
       }

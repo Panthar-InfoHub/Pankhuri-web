@@ -18,7 +18,7 @@ export function ContentPlaceholder({ type, courseSlug, nextLesson }: ContentPlac
                 <AlertCircle className="w-10 h-10 text-purple-400" />
             </div>
 
-            <h2 className="text-2xl font-bold text-white mb-3">
+            <h2 className="text-2xl font-bold text-black mb-3">
                 {typeLabel} Content Coming Soon
             </h2>
 
@@ -30,7 +30,7 @@ export function ContentPlaceholder({ type, courseSlug, nextLesson }: ContentPlac
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                     href={`/course/${courseSlug}`}
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all border border-white/10 group w-full sm:w-auto justify-center"
+                    className="flex items-center gap-2 px-6 py-3 bg-black/5 hover:bg-black/10 text-black rounded-xl transition-all border border-white/10 group w-full sm:w-auto justify-center"
                 >
                     <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                     Back to Course

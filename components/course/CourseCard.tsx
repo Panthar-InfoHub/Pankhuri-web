@@ -15,7 +15,7 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
 
   return (
     <Link href={`/course/${course.slug || course.id}`}>
-      <div className="group cursor-pointer bg-[#0A0A0A] rounded-xl shadow-sm hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 overflow-hidden border border-white/5 hover:border-purple-500/30">
+      <div className="group cursor-pointer  rounded-xl shadow-sm hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 overflow-hidden border border-white/5 hover:border-purple-500/30">
         <div className="relative overflow-hidden aspect-video bg-white/5">
           <Image
             src={course.thumbnailImage || "/placeholder.svg"}
@@ -38,7 +38,7 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
           </div>
           {course.level && (
             <div className="absolute top-2 left-2">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-white px-2 py-1 bg-black/60 backdrop-blur-md rounded border border-white/10">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-white px-2 py-1 bg-purple-600 backdrop-blur-md rounded border border-white/10">
                 {course.level}
               </span>
             </div>
@@ -57,17 +57,17 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
               {course.category?.name}
             </span>
           </div>
-          <h3 className="text-white font-bold line-clamp-2 group-hover:text-purple-400 transition-colors text-base leading-snug">
+          <h3 className="text-black font-bold line-clamp-2 group-hover:text-purple-400 transition-colors text-base leading-snug">
             {course.title}
           </h3>
           <p className="text-gray-500 text-xs mt-2 flex items-center gap-1">
-            By <span className="text-gray-300">{course.trainer?.user?.displayName}</span>
+            By <span className="text-muted-foreground ">{course.trainer?.user?.displayName}</span>
           </p>
 
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
             <div className="flex items-center gap-1.5">
               <Star size={14} className="text-yellow-500 fill-yellow-500" />
-              <span className="text-white font-bold text-sm">
+              <span className="text-black font-bold text-sm">
                 {course.averageRating || course.rating}
               </span>
               <span className="text-gray-500 text-xs">({course.totalReviews})</span>
@@ -76,7 +76,7 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
               {!hasAccess ? (
                 <p className="text-yellow-400 font-bold text-sm uppercase tracking-tight">Locked</p>
               ) : price > 0 ? (
-                <p className="text-white font-bold text-lg">₹{price / 100}</p>
+                <p className="text-black/75 font-bold text-lg">₹{price / 100}</p>
               ) : (
                 <p className="text-green-400 font-bold text-sm uppercase tracking-tight">Free</p>
               )}

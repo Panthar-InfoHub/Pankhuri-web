@@ -22,9 +22,9 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
 
   const getLessonIcon = (type: string) => {
     switch (type) {
-      case 'video': return <PlayCircle size={18} className="text-purple-400" />;
-      case 'text': return <FileText size={18} className="text-blue-400" />;
-      default: return <HelpCircle size={18} className="text-white/20" />;
+      case 'video': return <PlayCircle size={18} className="text-purple-600" />;
+      case 'text': return <FileText size={18} className="text-blue-600" />;
+      default: return <HelpCircle size={18} className="text-gray-300" />;
     }
   }
 
@@ -34,18 +34,18 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
 
     const content = (
       <div
-        className={`flex items-center justify-between p-4 rounded-xl border border-transparent transition-all duration-200 ${isLocked ? 'opacity-40 grayscale' : 'hover:bg-white/5 hover:border-white/5 cursor-pointer'}`}
+        className={`flex items-center justify-between p-4 rounded-xl border border-transparent transition-all duration-200 ${isLocked ? 'opacity-40 grayscale' : 'hover:bg-gray-100 hover:border-gray-300 cursor-pointer'}`}
       >
         <div className="flex items-center gap-4 flex-1">
           <div className="shrink-0 text-gray-500">
             {getLessonIcon(lesson.type)}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-200 truncate">{lesson.title}</p>
+            <p className="text-sm font-medium text-gray-900 truncate">{lesson.title}</p>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter">{lesson.duration}m</span>
+              <span className="text-[10px] text-gray-600 font-medium uppercase tracking-tighter">{lesson.duration}m</span>
               {lesson.isFree && (
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-green-500/10 text-green-400 border border-green-500/20 font-bold uppercase">Preview</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-green-100 text-green-700 border border-green-300 font-bold uppercase">Preview</span>
               )}
             </div>
           </div>
@@ -53,9 +53,9 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
 
         <div className="flex items-center ml-4">
           {isLocked ? (
-            <Lock size={14} className="text-gray-600" />
+            <Lock size={14} className="text-gray-400" />
           ) : (
-            <div className="hidden md:block text-[11px] font-bold text-purple-400 uppercase tracking-widest hover:text-white transition-colors">
+            <div className="hidden md:block text-[11px] font-bold text-purple-600 uppercase tracking-widest hover:text-purple-700 transition-colors">
               Start
             </div>
           )}
@@ -89,27 +89,27 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
         return (
           <div
             key={module.id}
-            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${isExpanded ? 'bg-[#0A0A0A] border-white/10' : 'bg-transparent border-white/5 hover:border-white/10'}`}
+            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${isExpanded ? 'bg-gray-50 border-gray-300' : 'bg-white border-gray-200 hover:border-gray-300'}`}
           >
             <button
               onClick={() => toggleSection(module.id)}
-              className="w-full px-6 py-5 flex items-center justify-between text-white text-left group"
+              className="w-full px-6 py-5 flex items-center justify-between text-gray-900 text-left group"
             >
               <div className="flex items-center gap-5">
-                <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${isExpanded ? 'bg-purple-600' : 'bg-white/5 text-white/40 group-hover:bg-white/10'}`}>
+                <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${isExpanded ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700 group-hover:bg-gray-300'}`}>
                   {module.sequence}
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-white leading-tight">{module.title}</h3>
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-1">
+                  <h3 className="text-lg font-bold text-gray-900 leading-tight">{module.title}</h3>
+                  <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest mt-1">
                     {module.lessons?.length || 0} Lessons • {module.duration} min
                   </p>
                 </div>
               </div>
 
               <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-                <ChevronDown size={20} className="text-gray-500 group-hover:text-white" />
+                <ChevronDown size={20} className="text-gray-600 group-hover:text-gray-900" />
               </div>
             </button>
 
@@ -119,7 +119,7 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
                   {module.lessons && module.lessons.length > 0 ? (
                     module.lessons.map((lesson) => renderLessonCard(lesson))
                   ) : (
-                    <div className="text-center py-6 text-gray-500 text-sm border border-white/5 rounded-xl bg-white/5 italic">
+                    <div className="text-center py-6 text-gray-600 text-sm border border-gray-300 rounded-xl bg-gray-100 italic">
                       No lessons available in this module
                     </div>
                   )}
