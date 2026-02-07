@@ -242,7 +242,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </div>
 
             {/* Quick tips or CTA */}
-            <div className="bg-purple-100 rounded-2xl border border-purple-300 p-6">
+            {/* <div className="bg-purple-100 rounded-2xl border border-purple-300 p-6">
               <h3 className="font-bold text-gray-900 mb-2">Need Help?</h3>
               <p className="text-sm text-gray-700 mb-4">
                 If you have questions about this lesson, join our community discussion.
@@ -250,7 +250,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
               <button className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold rounded-xl transition-colors">
                 Jump to Community
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

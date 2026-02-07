@@ -217,14 +217,14 @@ export default function PlansPage() {
         </div>
 
         {/* FAQ or Additional Info */}
-        <div className="mt-16 text-center">
+        {/* <div className="mt-16 text-center">
           <p className="text-zinc-500 text-sm bg-white border border-zinc-200 inline-block px-6 py-2 rounded-full shadow-sm">
             All plans include a 7-day money-back guarantee. Questions?{" "}
             <a href="#" className="text-purple-600 font-semibold hover:underline">
               Contact support
             </a>
           </p>
-        </div>
+        </div> */}
       </div>
     </main>
   );

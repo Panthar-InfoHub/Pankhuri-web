@@ -198,11 +198,11 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                         )}
                       </div>
 
-                      {!course.hasAccess && (
+                      {/* {!course.hasAccess && (
                         <p className="text-center text-[10px] text-gray-500 font-medium uppercase tracking-[0.3em]">
                           Enrollment processing in 256-bit AES
                         </p>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
