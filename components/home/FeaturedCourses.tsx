@@ -14,6 +14,8 @@ async function FeaturedCoursesContent() {
       return <ErrorState message={response.message || "Failed to load featured courses."} />;
     }
 
+    console.log(response.data);
+
     return <CourseGrid title="Featured Courses" courses={response.data as any} />;
   } catch (error) {
     console.error("FeaturedCoursesContent Error:", error);

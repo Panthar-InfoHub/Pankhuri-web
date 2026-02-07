@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star, Clock, Globe, Shield, Award, PlayCircle } from "lucide-react";
 import { BuyCourseButton } from "./BuyCourseButton";
+import { Button } from "@/components/ui/button";
 import { Course } from "@/types/course";
 import { DemoVideoPlayer } from "@/components/video/DemoVideoPlayer";
 
@@ -15,6 +16,7 @@ interface CourseHeaderProps {
 export function CourseHeader({ course }: CourseHeaderProps) {
   const [isPlayingDemo, setIsPlayingDemo] = useState(false);
   const price = course.pricing?.discountedPrice || course.pricing?.price || 0;
+  const isPremium = course.isPaid && price === 0;
 
   return (
     <>
@@ -118,7 +120,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                       {(course.demoVideo?.playbackUrl || course.demoVideoId) && (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="w-16 h-16 rounded-full bg-gray-900/20 backdrop-blur-xl border border-gray-900/30 flex items-center justify-center text-gray-900 ring-8 ring-gray-900/10 transition-transform duration-300 group-hover/media:scale-110">
-                            <PlayCircle size={36} strokeWidth={1.5} className="fill-gray-900/20" /> 
+                            <PlayCircle size={36} strokeWidth={1.5} className="fill-gray-900/20" />
                           </div>
                         </div>
                       )}
@@ -128,50 +130,68 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                     <div className="space-y-6">
                       {!course.hasAccess && (
                         <>
-                          <div className="flex items-center justify-between">
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-green-600" />
-                                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-600">
-                                  Lifetime Access
-                                </span>
-                              </div>
-                              <div className="flex items-baseline gap-3">
-                                <span className="text-5xl font-extrabold text-gray-900 tracking-tighter">
-                                  ₹{price / 100}
-                                </span>
-                                {course.pricing?.price && course.pricing?.price > price && (
-                                  <span className="text-lg font-light text-gray-400 line-through">
-                                    ₹{course.pricing.price / 100}
+                          {(price > 0 || !course.isPaid) && (
+                            <div className="flex items-center justify-between">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-green-600" />
+                                  <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-600">
+                                    {course.isPaid ? "Lifetime Access" : "Free Access"}
                                   </span>
-                                )}
+                                </div>
+                                <div className="flex items-baseline gap-3">
+                                  <span className="text-5xl font-extrabold text-gray-900 tracking-tighter">
+                                    {price > 0 ? `₹${price / 100}` : "Free"}
+                                  </span>
+                                  {course.pricing?.price && course.pricing?.price > price && (
+                                    <span className="text-lg font-light text-gray-400 line-through">
+                                      ₹{course.pricing.price / 100}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {course.pricing?.price && course.pricing?.price > price && (
+                                <div className="px-3 py-1 rounded-lg bg-green-100 border border-green-300 text-green-700 text-[10px] font-black uppercase tracking-wider">
+                                  Save{" "}
+                                  {Math.round(
+                                    ((course.pricing.price - price) / course.pricing.price) * 100,
+                                  )}
+                                  %
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          {course.isPaid && price === 0 && (
+                            <div className="flex items-center gap-2 mb-4">
+                              <div className="px-4 py-2 rounded-xl bg-purple-50 border w-full border-purple-100 text-purple-700">
+                                <p className="text-xs font-bold uppercase tracking-widest mb-1">Premium Course</p>
+                                <p className="text-[10px] text-purple-600/70 font-medium">Available via Subscription</p>
                               </div>
                             </div>
-
-                            {course.pricing?.price && course.pricing?.price > price && (
-                              <div className="px-3 py-1 rounded-lg bg-green-100 border border-green-300 text-green-700 text-[10px] font-black uppercase tracking-wider">
-                                Save{" "}
-                                {Math.round(
-                                  ((course.pricing.price - price) / course.pricing.price) * 100,
-                                )}
-                                %
-                              </div>
-                            )}
-                          </div>
+                          )}
                         </>
                       )}
 
                       <div className="space-y-4">
                         {course.hasAccess ? (
-                          <div className="p-4 rounded-2xl bg-green-100 border border-green-300 text-center">
-                            <div className="flex items-center justify-center gap-2 text-green-700 font-bold">
-                              <Award size={20} />
-                              <span>Already Purchased</span>
+                          !isPremium && (
+                            <div className="p-4 rounded-2xl bg-green-100 border border-green-300 text-center">
+                              <div className="flex items-center justify-center gap-2 text-green-700 font-bold">
+                                <Award size={20} />
+                                <span>Already Purchased</span>
+                              </div>
+                              <p className="text-green-600 text-xs mt-2">
+                                You have full access to this course
+                              </p>
                             </div>
-                            <p className="text-green-600 text-xs mt-2">
-                              You have full access to this course
-                            </p>
-                          </div>
+                          )
+                        ) : isPremium ? (
+                          <Link href="/plans" className="block w-full">
+                            <Button className="w-full bg-linear-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white transition-all shadow-lg hover:shadow-xl font-bold py-6 rounded-xl">
+                              Subscribe to Unlock
+                            </Button>
+                          </Link>
                         ) : (
                           <BuyCourseButton
                             courseId={course.id}

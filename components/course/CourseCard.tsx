@@ -31,7 +31,7 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
               </div>
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
             <span className="text-white text-xs font-medium px-2 py-1 bg-purple-600 rounded">
               {hasAccess ? "View Course" : "Unlock Course"}
             </span>
@@ -57,7 +57,7 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
               {course.category?.name}
             </span>
           </div>
-          <h3 className="text-zinc-900 font-bold line-clamp-2 group-hover:text-purple-600 transition-colors text-base leading-snug min-h-[2.5rem]">
+          <h3 className="text-zinc-900 font-bold line-clamp-2 group-hover:text-purple-600 transition-colors text-base leading-snug min-h-10">
             {course.title}
           </h3>
           <p className="text-zinc-500 text-xs mt-2 flex items-center gap-1">
@@ -78,6 +78,8 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
                   <p className="text-yellow-600 font-bold text-sm uppercase tracking-tight">Locked</p>
                 ) : price > 0 ? (
                   <p className="text-zinc-900 font-bold text-lg">₹{price / 100}</p>
+                ) : course.isPaid ? (
+                  <p className="text-purple-600 font-bold text-sm uppercase tracking-tight">Premium</p>
                 ) : (
                   <p className="text-emerald-600 font-bold text-sm uppercase tracking-tight">Free</p>
                 )}
