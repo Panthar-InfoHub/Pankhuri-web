@@ -14,9 +14,9 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
   const price = course.pricing?.discountedPrice || course.pricing?.price || 0;
 
   return (
-    <Link href={`/course/${course.slug || course.id}`}>
-      <div className="group cursor-pointer  rounded-xl shadow-sm hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 overflow-hidden border border-white/5 hover:border-purple-500/30">
-        <div className="relative overflow-hidden aspect-video bg-white/5">
+    <Link href={`/course/${course.slug || course.id}`} className="block h-full">
+      <div className="group cursor-pointer rounded-xl shadow-sm hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 overflow-hidden border border-zinc-100 hover:border-purple-500/30 flex flex-col h-full bg-white">
+        <div className="relative overflow-hidden aspect-video bg-zinc-100">
           <Image
             src={course.thumbnailImage || "/placeholder.svg"}
             alt={course.title}
@@ -51,45 +51,47 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
             </div>
           )}
         </div>
-        <div className="p-4">
+        <div className="p-4 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] text-purple-400 font-semibold uppercase tracking-widest">
+            <span className="text-[10px] text-purple-600 font-semibold uppercase tracking-widest">
               {course.category?.name}
             </span>
           </div>
-          <h3 className="text-black font-bold line-clamp-2 group-hover:text-purple-400 transition-colors text-base leading-snug">
+          <h3 className="text-zinc-900 font-bold line-clamp-2 group-hover:text-purple-600 transition-colors text-base leading-snug min-h-[2.5rem]">
             {course.title}
           </h3>
-          <p className="text-gray-500 text-xs mt-2 flex items-center gap-1">
-            By <span className="text-muted-foreground ">{course.trainer?.user?.displayName}</span>
+          <p className="text-zinc-500 text-xs mt-2 flex items-center gap-1">
+            By <span className="text-zinc-600 font-medium">{course.trainer?.user?.displayName}</span>
           </p>
 
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
-            <div className="flex items-center gap-1.5">
-              <Star size={14} className="text-yellow-500 fill-yellow-500" />
-              <span className="text-black font-bold text-sm">
-                {course.averageRating || course.rating}
-              </span>
-              <span className="text-gray-500 text-xs">({course.totalReviews})</span>
+          <div className="mt-auto pt-4 border-t border-zinc-100">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-1.5">
+                <Star size={14} className="text-yellow-500 fill-yellow-500" />
+                <span className="text-zinc-900 font-bold text-sm">
+                  {course.averageRating || course.rating}
+                </span>
+                <span className="text-zinc-400 text-xs">({course.totalReviews})</span>
+              </div>
+              <div className="text-right">
+                {!hasAccess ? (
+                  <p className="text-yellow-600 font-bold text-sm uppercase tracking-tight">Locked</p>
+                ) : price > 0 ? (
+                  <p className="text-zinc-900 font-bold text-lg">₹{price / 100}</p>
+                ) : (
+                  <p className="text-emerald-600 font-bold text-sm uppercase tracking-tight">Free</p>
+                )}
+              </div>
             </div>
-            <div className="text-right">
-              {!hasAccess ? (
-                <p className="text-yellow-400 font-bold text-sm uppercase tracking-tight">Locked</p>
-              ) : price > 0 ? (
-                <p className="text-black/75 font-bold text-lg">₹{price / 100}</p>
-              ) : (
-                <p className="text-green-400 font-bold text-sm uppercase tracking-tight">Free</p>
-              )}
-            </div>
-          </div>
 
-          <div className="flex items-center gap-3 mt-3 text-[10px] text-gray-500">
-            <span className="flex items-center gap-1">
-              <Clock size={10} /> {Math.floor(course.duration / 60)}h {course.duration % 60}m
-            </span>
-            <span className="flex items-center gap-1 uppercase">
-              <Globe size={10} /> {course.language}
-            </span>
+            <div className="flex items-center gap-3 text-[10px] text-zinc-500">
+              <span className="flex items-center gap-1">
+                <Clock size={10} className="text-zinc-400" /> {Math.floor(course.duration / 60)}h {course.duration % 60}m
+              </span>
+              <span className="flex items-center gap-1 uppercase">
+                <Globe size={10} className="text-zinc-400" /> {course.language}
+              </span>
+            </div>
           </div>
         </div>
       </div>

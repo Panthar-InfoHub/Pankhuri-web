@@ -18,7 +18,7 @@ export function Navbar() {
 
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md border-b border-gray-800 shadow-sm">
+    <nav className="sticky top-0 z-50 bg-white">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
@@ -50,10 +50,10 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/landing"
+              href="/plans"
               className="text-sm text-muted-foreground hover:text-primarytransition-colors duration-200 font-medium"
             >
-              Premium
+              Plans
             </Link>
             {/* {isLoggedIn && (
               <Link
@@ -108,9 +108,9 @@ export function Navbar() {
               Premium 
             </Link>
             <div className="pt-2">
-              <AuthButton />
+              <AuthButton /> 
             </div>
-          </div>
+          </div>  
         )}
       </div>
     </nav>

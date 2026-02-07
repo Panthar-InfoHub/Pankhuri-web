@@ -91,7 +91,7 @@ export function PhoneSignIn() {
                         onChange={(e) => setOtp(e.target.value)}
                         disabled={loading}
                         maxLength={6}
-                        className="h-16 text-center text-3xl tracking-[0.5em] font-bold rounded-2xl border-white/10 focus:ring-rose-500 bg-white/5 text-white placeholder:text-gray-700 transition-all focus:bg-white/10"
+                        className="h-16 text-center text-3xl tracking-[0.5em] font-bold rounded-2xl border-zinc-200 focus:ring-rose-500 bg-zinc-50 text-zinc-900 placeholder:text-zinc-400 transition-all focus:bg-white"
                     />
                     <p className="text-sm text-gray-500 mt-4">
                         Didn't receive code? {" "}
@@ -119,11 +119,11 @@ export function PhoneSignIn() {
     return (
         <form onSubmit={handleSendOtp} className="space-y-6">
             <div className="space-y-3">
-                <Label htmlFor="phone" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">
+                <Label htmlFor="phone" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 ml-1">
                     Phone Number
                 </Label>
                 <div className="relative group">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-rose-500 transition-colors" />
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400 group-focus-within:text-rose-500 transition-colors" />
                     <Input
                         id="phone"
                         placeholder="Enter 10-digit number"
@@ -131,14 +131,14 @@ export function PhoneSignIn() {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         disabled={loading}
-                        className="pl-12 h-14 rounded-2xl border-white/10 focus:ring-rose-500 focus:border-rose-500 transition-all bg-white/5 text-white placeholder:text-gray-600 focus:bg-white/10"
+                        className="pl-12 h-14 rounded-2xl border-zinc-200 focus:ring-rose-500 focus:border-rose-500 transition-all bg-zinc-50 text-zinc-900 placeholder:text-zinc-400 focus:bg-white"
                     />
                 </div>
             </div>
             <Button
                 type="submit"
                 disabled={loading || !phoneNumber}
-                className="w-full h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white text-lg font-bold shadow-xl shadow-pink-500/20 transition-all duration-300 transform active:scale-[0.98]"
+                className="w-full h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white text-lg font-bold shadow-lg shadow-pink-500/10 transition-all duration-300 transform active:scale-[0.98]"
             >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Request OTP"}
                 {!loading && <ArrowRight className="ml-2 h-5 w-5" />}

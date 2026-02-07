@@ -57,12 +57,12 @@ export function CategorySubscriptionButton({
 
   if (hasAccess) {
     return (
-      <Card className="bg-green-500/10 border-green-500/20 p-6">
-        <div className="flex items-center justify-center gap-3 text-green-400">
+      <Card className="bg-emerald-50 border-emerald-200 p-6 shadow-sm">
+        <div className="flex items-center justify-center gap-3 text-emerald-700">
           <Check size={24} className="flex-shrink-0" />
           <div className="text-center">
             <p className="font-bold text-lg">Subscribed</p>
-            <p className="text-sm text-green-400/70">You have full access to this category</p>
+            <p className="text-sm text-emerald-600/80">You have full access to this category</p>
           </div>
         </div>
       </Card>
@@ -92,15 +92,14 @@ export function CategorySubscriptionButton({
         return (
           <Card
             key={plan.id}
-            className={`relative overflow-hidden transition-all ${
-              isYearly
-                ? "bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30 hover:border-purple-500/50"
-                : "bg-white/5 border-white/10 hover:border-white/20"
-            }`}
+            className={`relative overflow-hidden transition-all shadow-sm ${isYearly
+                ? "bg-gradient-to-br from-purple-50 via-white to-pink-50 border-purple-200 hover:border-purple-300"
+                : "bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-md"
+              }`}
           >
             {isYearly && (
               <div className="absolute top-0 right-0">
-                <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg flex items-center gap-1">
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg flex items-center gap-1 shadow-sm">
                   <Sparkles size={12} />
                   Best Value
                 </div>
@@ -109,25 +108,25 @@ export function CategorySubscriptionButton({
 
             <div className="p-6 space-y-4">
               <div className="flex items-center gap-2">
-                <Crown size={20} className={isYearly ? "text-purple-400" : "text-zinc-400"} />
-                <h3 className="text-white font-bold text-lg capitalize">{plan.subscriptionType}</h3>
+                <Crown size={20} className={isYearly ? "text-purple-600" : "text-zinc-500"} />
+                <h3 className="text-zinc-900 font-bold text-lg capitalize">{plan.subscriptionType}</h3>
               </div>
 
               <div className="space-y-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-extrabold text-white">
+                  <span className="text-4xl font-extrabold text-zinc-900">
                     ₹{Math.round(monthlyPrice / 100)}
                   </span>
                   <span className="text-zinc-500 text-sm">/month</span>
                 </div>
                 {isYearly && (
-                  <p className="text-zinc-400 text-xs">
+                  <p className="text-zinc-500 text-xs">
                     ₹{Math.round(finalPrice / 100)} billed annually
                   </p>
                 )}
                 {savings > 0 && (
-                  <div className="inline-block px-2 py-1 rounded bg-green-500/10 border border-green-500/20">
-                    <span className="text-green-400 text-xs font-bold">Save {savingsPercent}%</span>
+                  <div className="inline-block px-2 py-1 rounded bg-emerald-50 border border-emerald-100">
+                    <span className="text-emerald-700 text-xs font-bold uppercase tracking-wider">Save {savingsPercent}%</span>
                   </div>
                 )}
               </div>
@@ -135,23 +134,23 @@ export function CategorySubscriptionButton({
               <div className="space-y-2">
                 {plan.features && Array.isArray(plan.features) && plan.features.length > 0 ? (
                   plan.features.map((feature: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm text-zinc-400">
-                      <Check size={16} className="text-green-400 flex-shrink-0" />
+                    <div key={idx} className="flex items-center gap-2 text-sm text-zinc-600">
+                      <Check size={16} className="text-emerald-600 flex-shrink-0" />
                       <span>{feature}</span>
                     </div>
                   ))
                 ) : (
                   <>
-                    <div className="flex items-center gap-2 text-sm text-zinc-400">
-                      <Check size={16} className="text-green-400 flex-shrink-0" />
+                    <div className="flex items-center gap-2 text-sm text-zinc-600">
+                      <Check size={16} className="text-emerald-600 flex-shrink-0" />
                       <span>Access to all courses in {categoryName}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-zinc-400">
-                      <Check size={16} className="text-green-400 flex-shrink-0" />
+                    <div className="flex items-center gap-2 text-sm text-zinc-600">
+                      <Check size={16} className="text-emerald-600 flex-shrink-0" />
                       <span>Unlimited learning</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-zinc-400">
-                      <Check size={16} className="text-green-400 flex-shrink-0" />
+                    <div className="flex items-center gap-2 text-sm text-zinc-600">
+                      <Check size={16} className="text-emerald-600 flex-shrink-0" />
                       <span>Certificate of completion</span>
                     </div>
                   </>
@@ -161,11 +160,10 @@ export function CategorySubscriptionButton({
               <Button
                 onClick={() => handleSubscribe(plan)}
                 disabled={isProcessing}
-                className={`w-full h-12 font-semibold rounded-xl transition-all ${
-                  isYearly
-                    ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white"
-                    : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
-                }`}
+                className={`w-full h-12 font-semibold rounded-xl transition-all ${isYearly
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-95 text-white shadow-lg shadow-purple-100"
+                    : "bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm"
+                  }`}
               >
                 {isProcessing && selectedPlanId === plan.id ? (
                   <>
