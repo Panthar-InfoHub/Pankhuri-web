@@ -30,17 +30,19 @@ export function HeroSection() {
             master your craft.
           </p>
           <div className="flex gap-4">
-            <Link href="/course/1">
+            <Link href="/courses">
               <Button className="bg-gradient-to-r from-purple-600 to-pink-500 hover:opacity-80 text-white border-0 px-8 py-6 text-lg">
                 Explore Course
               </Button>
             </Link>
-            <Button
+            <Link href="/landing">
+              <Button
               variant="outline"
               className="px-8 py-6 text-lg border-purple-500 text-purple-400 hover:bg-purple-500/10 bg-transparent"
             >
               Learn More
             </Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ export function GoogleSignIn() {
             type="button"
             disabled={loading}
             onClick={handleLogin}
-            className="h-14 w-full rounded-2xl bg-black border-white/10 text-white hover:bg-neutral-900 hover:border-white/20 transition-all duration-300 group flex items-center justify-center gap-3 text-lg font-medium"
+            className="h-14 w-full rounded-2xl bg-white border-zinc-200 text-zinc-900 hover:bg-zinc-50 hover:border-zinc-300 transition-all duration-300 group flex items-center justify-center gap-3 text-lg font-medium shadow-sm"
         >
             {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

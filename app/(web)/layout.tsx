@@ -1,4 +1,4 @@
-import { Footer } from "@/components/common/Footer"
+import { Footer } from "@/components/landing/footer"
 import { Navbar } from "@/components/common/Navbar"
 
 

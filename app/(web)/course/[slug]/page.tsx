@@ -37,7 +37,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-8">About this course</h2>
               <CourseDescription description={course.description} />
-            </section>
+            </section>  
 
             <section>
               <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">

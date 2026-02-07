@@ -18,28 +18,28 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <Link
-                href="#"
+                href="https://www.facebook.com/AskPankhuri/"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-pink-500 transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
               </Link>
               <Link
-                href="#"
+                href="https://www.instagram.com/askpankhuri"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-pink-500 transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </Link>
               <Link
-                href="#"
+                href="https://x.com/askpankhuri"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-pink-500 transition-colors"
                 aria-label="Twitter"
               >
                 <Twitter className="h-5 w-5" />
               </Link>
               <Link
-                href="#"
+                href="http://youtube.com/c/AskPankhuri"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-pink-500 transition-colors"
                 aria-label="YouTube"
               >
@@ -52,28 +52,28 @@ export function Footer() {
             <h4 className="font-bold text-lg mb-6">Quick Links</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="#" className="text-purple-200 hover:text-pink-400 transition-colors">
-                  All Courses
+                <Link href="/" className="text-purple-200 hover:text-pink-400 transition-colors">
+                  Home
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-purple-200 hover:text-pink-400 transition-colors">
-                  Live Sessions
+                <Link href="/courses" className="text-purple-200 hover:text-pink-400 transition-colors">
+                  Courses
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-purple-200 hover:text-pink-400 transition-colors">
-                  Success Stories
+                <Link href="/categories" className="text-purple-200 hover:text-pink-400 transition-colors">
+                  Category
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-purple-200 hover:text-pink-400 transition-colors">
-                  Become an Instructor
+                <Link href="/plans" className="text-purple-200 hover:text-pink-400 transition-colors">
+                  Plans
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-purple-200 hover:text-pink-400 transition-colors">
-                  Community
+                <Link href="/landing" className="text-purple-200 hover:text-pink-400 transition-colors">
+                  About
                 </Link>
               </li>
             </ul>

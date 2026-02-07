@@ -309,7 +309,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                                     maxLength={1000}
                                 />
                                 <p className="text-xs text-gray-500 mt-1">
-                                    {reviewText.length}/1000 characters
+                                    minimum 10 characters, {reviewText.length}/1000 characters
                                 </p>
                             </div>
 
@@ -339,7 +339,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
             )}
 
             {/* Sort Options */}
-            {reviews.length > 0 && (
+            {/* {reviews.length > 0 && (
                 <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-600">Sort by:</span>
                     <div className="flex gap-2">
@@ -359,7 +359,7 @@ export function CourseReviews({ courseId }: CourseReviewsProps) {
                         ))}
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* Reviews List */}
             <div className="space-y-4">

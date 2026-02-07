@@ -118,7 +118,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                       {(course.demoVideo?.playbackUrl || course.demoVideoId) && (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="w-16 h-16 rounded-full bg-gray-900/20 backdrop-blur-xl border border-gray-900/30 flex items-center justify-center text-gray-900 ring-8 ring-gray-900/10 transition-transform duration-300 group-hover/media:scale-110">
-                            <PlayCircle size={36} strokeWidth={1.5} className="fill-gray-900/20" />
+                            <PlayCircle size={36} strokeWidth={1.5} className="fill-gray-900/20" /> 
                           </div>
                         </div>
                       )}
@@ -198,11 +198,11 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                         )}
                       </div>
 
-                      {!course.hasAccess && (
+                      {/* {!course.hasAccess && (
                         <p className="text-center text-[10px] text-gray-500 font-medium uppercase tracking-[0.3em]">
                           Enrollment processing in 256-bit AES
                         </p>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
