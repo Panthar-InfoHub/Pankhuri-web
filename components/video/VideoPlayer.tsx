@@ -11,9 +11,11 @@ interface VideoPlayerProps {
   videoId: string
   title: string
   thumbnailUrl?: string
+  initialTimestamp?: number
+  lessonId?: string
 }
 
-export function VideoPlayer({ videoId, title, thumbnailUrl }: VideoPlayerProps) {
+export function VideoPlayer({ videoId, title, thumbnailUrl, initialTimestamp = 0, lessonId }: VideoPlayerProps) {
   const playerRef = useRef<any>(null)
   const [streamUrl, setStreamUrl] = useState<string | null>(null)
   const [token, setToken] = useState<string | null>(null)
@@ -27,6 +29,11 @@ export function VideoPlayer({ videoId, title, thumbnailUrl }: VideoPlayerProps) 
   const [currentQuality, setCurrentQuality] = useState<number>(-1) // -1 is Auto
   const [showQualityMenu, setShowQualityMenu] = useState(false)
   const [hlsInstance, setHlsInstance] = useState<any>(null)
+
+  // Progress Tracking Refs
+  const lastSavedTimeRef = useRef(0)
+  const isSavingRef = useRef(false)
+  const hasSeekedInitial = useRef(false)
 
   useEffect(() => {
     setIsMounted(true)
@@ -42,25 +49,24 @@ export function VideoPlayer({ videoId, title, thumbnailUrl }: VideoPlayerProps) 
   useEffect(() => {
     const fetchStream = async () => {
       if (!videoId) return;
-
       try {
         setLoading(true)
         setError(null)
 
-        // Fetch video details and stream URL directly from the backend API
-        // This avoids using any local proxy actions
+        // Fetch stream URL from our API
         const response = await apiClient.get(`/api/videos/${videoId}`)
+        const data = response.data?.data
 
-        if (response.data?.success && response.data?.data?.streamUrl) {
-          setStreamUrl(response.data.data.streamUrl)
+        if (response.data?.success && data?.streamUrl) {
+          setStreamUrl(data.streamUrl)
+          // Use provided token or session token
+          if (data.token) setToken(data.token)
         } else {
-          throw new Error(response.data?.message || "Could not retrieve playback URL")
+          setError(response.data?.message || "Video stream not available")
         }
       } catch (err: any) {
-        console.error("Video player error:", err)
-        const errorMessage = err.response?.data?.message || err.message || "Failed to load video"
-        setError(errorMessage)
-        toast.error(errorMessage)
+        console.error("Video Load Error:", err)
+        setError(err.response?.data?.message || err.message || "Failed to load video stream")
       } finally {
         setLoading(false)
       }
@@ -68,6 +74,33 @@ export function VideoPlayer({ videoId, title, thumbnailUrl }: VideoPlayerProps) 
 
     fetchStream()
   }, [videoId])
+
+  const saveProgress = async (currentTime: number) => {
+    if (!lessonId || isSavingRef.current) return;
+
+    // Safety check: Don't save if we haven't actually moved 25s since last save
+    if (Math.abs(currentTime - lastSavedTimeRef.current) < 25) return;
+
+    isSavingRef.current = true;
+    try {
+      console.log(`[Video] Saving progress: ${Math.floor(currentTime)}s`);
+      await apiClient.post(`/api/progress/lessons/${lessonId}/complete`, {
+        currentTimestamp: Math.floor(currentTime)
+      });
+      lastSavedTimeRef.current = currentTime;
+    } catch (error) {
+      console.error("Failed to auto-save progress", error);
+    } finally {
+      isSavingRef.current = false;
+    }
+  };
+
+  const onProgress = (state: { playedSeconds: number }) => {
+    // Save progress periodically (every 30s)
+    if (Math.abs(state.playedSeconds - lastSavedTimeRef.current) >= 30) {
+      saveProgress(state.playedSeconds);
+    }
+  };
 
   if (!isMounted) return null;
 
@@ -96,53 +129,92 @@ export function VideoPlayer({ videoId, title, thumbnailUrl }: VideoPlayerProps) 
         <div className="w-full h-full relative group/player">
           <ReactPlayer
             ref={playerRef}
-            {...({
-              url: streamUrl,
-              controls: true,
-              playing: hasStarted,
-              width: "100%",
-              height: "100%",
-              onStart: () => setHasStarted(true),
-              onReady: () => {
-                const hls = playerRef.current?.getInternalPlayer("hls")
-                if (hls) {
-                  setHlsInstance(hls)
+            url={streamUrl}
+            controls={true}
+            playing={hasStarted}
+            width="100%"
+            height="100%"
+            onStart={() => {
+              setHasStarted(true);
+              const hls = playerRef.current?.getInternalPlayer("hls")
+              if (hls && !hls.autoStartLoad) {
+                console.log("[Video] Intentional Play: Starting segment download...");
+                hls.startLoad();
+              }
+              if (!hasSeekedInitial.current && initialTimestamp > 0) {
+                playerRef.current?.seekTo(initialTimestamp, 'seconds');
+                hasSeekedInitial.current = true;
+              }
+            }}
+            onProgress={onProgress}
+            onError={(e: any) => {
+              console.error("Video Player Error:", e)
+              if (!error) setError("Video playback was interrupted. Please check your connection.")
+            }}
+            onBuffer={() => console.log("Video is buffering...")}
+            onReady={() => {
+              const hls = playerRef.current?.getInternalPlayer("hls")
+              if (hls) {
+                setHlsInstance(hls)
 
-                  const updateLevels = () => {
-                    if (hls.levels && hls.levels.length > 0) {
-                      const levels = hls.levels.map((level: any, index: number) => ({
-                        id: index,
-                        height: level.height ? `${level.height}p` : `Level ${index}`,
-                      }))
-                      setQualities(levels)
+                const updateLevels = () => {
+                  if (hls.levels && hls.levels.length > 0) {
+                    const levels = hls.levels.map((level: any, index: number) => ({
+                      id: index,
+                      height: level.height ? `${level.height}p` : `Level ${index}`,
+                    }))
+                    setQualities(levels)
+                  }
+                }
+
+                updateLevels()
+                hls.on("hlsManifestParsed", updateLevels)
+
+                // Graceful HLS Error Handling
+                hls.on("hlsError", (event: any, data: any) => {
+                  if (data.fatal) {
+                    switch (data.type) {
+                      case "networkError":
+                        console.warn("Fatal network error, attempting recovery...");
+                        hls.startLoad();
+                        break;
+                      case "mediaError":
+                        console.warn("Fatal media error, attempting recovery...");
+                        hls.recoverMediaError();
+                        break;
+                      default:
+                        console.error("Unrecoverable HLS error:", data);
+                        setError("A playback error occurred. Please try refreshing.");
+                        hls.destroy();
+                        break;
                     }
                   }
-
-                  // If levels are already there (manifest parsed before onReady)
-                  updateLevels()
-
-                  // Otherwise listen for the event
-                  hls.on("hlsManifestParsed", updateLevels)
-                }
-              },
-              config: {
-                file: {
-                  attributes: {
-                    controlsList: 'nodownload',
-                    crossOrigin: 'anonymous',
-                    poster: thumbnailUrl,
-                  },
-                  forceHLS: true,
-                  hlsOptions: {
-                    xhrSetup: (xhr: any) => {
-                      if (token) {
-                        xhr.setRequestHeader("Authorization", `Bearer ${token}`)
-                      }
-                    },
+                })
+              }
+            }}
+            config={{
+              file: {
+                attributes: {
+                  controlsList: 'nodownload',
+                  crossOrigin: 'anonymous',
+                  poster: thumbnailUrl,
+                },
+                forceHLS: true,
+                hlsOptions: {
+                  enableWorker: true,
+                  autoStartLoad: false, // Don't download segments until play
+                  lowLatencyMode: false,
+                  backBufferLength: 30,
+                  maxBufferLength: 30,
+                  maxMaxBufferLength: 60,
+                  xhrSetup: (xhr: any) => {
+                    if (token) {
+                      xhr.setRequestHeader("Authorization", `Bearer ${token}`)
+                    }
                   },
                 },
-              }
-            } as any)}
+              },
+            }}
           />
 
           {/* Quality Selector UI */}

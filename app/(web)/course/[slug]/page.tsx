@@ -8,6 +8,8 @@ import { CourseDescription } from "@/components/course/CourseDescription";
 import { TrainerSection } from "@/components/course/TrainerSection";
 import { CertificateClaim } from "@/components/course/CertificateClaim";
 import { CourseReviews } from "@/components/course/CourseReviews";
+import { getCourseProgressServer } from "@/lib/api/progress.server";
+import { Progress } from "@/components/ui/progress";
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
@@ -24,7 +26,20 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
 
   const course = response.data;
+
   const curriculum = course.curriculum || [];
+
+  let progressData = null;
+  if (course.hasAccess) {
+    const progressResponse = await getCourseProgressServer(course.id);
+    if (progressResponse.success) {
+      progressData = progressResponse.data;
+    }
+  }
+
+  const completedLessonIds = progressData?.lessonProgress
+    ?.filter(lp => lp.isCompleted)
+    ?.map(lp => lp.lessonId) || [];
 
   return (
     <main className="bg-white min-h-screen">
@@ -37,21 +52,44 @@ export default async function CoursePage({ params }: CoursePageProps) {
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-8">About this course</h2>
               <CourseDescription description={course.description} />
-            </section>  
+            </section>
 
             <section>
               <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
                 <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Curriculum</h2>
-                <p className="text-gray-600 text-sm font-medium">
-                  {curriculum.length} Modules •{" "}
-                  {curriculum.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0)}{" "}
-                  Lessons
-                </p>
+                <div className="text-right">
+                  <p className="text-gray-600 text-sm font-medium">
+                    {curriculum.length} Modules •{" "}
+                    {curriculum.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0)}{" "}
+                    Lessons
+                  </p>
+                  {progressData && (
+                    <p className="text-purple-600 text-xs font-bold mt-1">
+                      {progressData.completedLessons} / {progressData.totalLessons} Lessons Completed
+                    </p>
+                  )}
+                </div>
               </div>
+
+              {progressData?.courseProgress && (
+                <div className="mb-8 p-6 bg-purple-50 border border-purple-100 rounded-3xl">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm font-bold text-gray-900">Your Progress</span>
+                    <span className="text-sm font-bold text-purple-600">
+                      {typeof progressData.courseProgress.progress === 'number'
+                        ? progressData.courseProgress.progress.toFixed(2)
+                        : progressData.courseProgress.progress}%
+                    </span>
+                  </div>
+                  <Progress value={progressData.courseProgress.progress} className="h-2 bg-purple-100" />
+                </div>
+              )}
+
               <CourseCurriculum
                 curriculum={curriculum}
                 courseSlug={course.slug}
                 hasAccess={course.hasAccess}
+                completedLessonIds={completedLessonIds}
               />
             </section>
 

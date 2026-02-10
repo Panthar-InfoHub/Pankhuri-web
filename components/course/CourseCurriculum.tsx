@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronDown, Lock, PlayCircle, FileText, HelpCircle } from "lucide-react"
+import { ChevronDown, Lock, PlayCircle, FileText, HelpCircle, CheckCircle } from "lucide-react"
 import { Module, Lesson } from "@/types/course"
 import Link from "next/link"
 
@@ -9,9 +9,10 @@ interface CourseCurriculumProps {
   curriculum: (Module | Lesson)[]
   courseSlug: string
   hasAccess: boolean
+  completedLessonIds?: string[]
 }
 
-export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCurriculumProps) {
+export function CourseCurriculum({ curriculum, courseSlug, hasAccess, completedLessonIds = [] }: CourseCurriculumProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([curriculum[0]?.id || ""])
 
   const toggleSection = (sectionId: string) => {
@@ -30,6 +31,7 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
 
   const renderLessonCard = (lesson: Lesson) => {
     const isLocked = !hasAccess && !lesson.isFree;
+    const isCompleted = completedLessonIds.includes(lesson.id);
     const lessonLink = `/course/${courseSlug}/lesson/${lesson.slug || lesson.id}`;
 
     const content = (
@@ -41,9 +43,16 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
             {getLessonIcon(lesson.type)}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{lesson.title}</p>
+            <div className="flex items-center gap-2">
+              <p className={`text-sm font-medium truncate ${isCompleted ? 'text-gray-500' : 'text-gray-900'}`}>{lesson.title}</p>
+              {isCompleted && (
+                <CheckCircle size={14} className="text-green-500 shrink-0" />
+              )}
+            </div>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-[10px] text-gray-600 font-medium uppercase tracking-tighter">{lesson.duration}m</span>
+              {lesson.duration > 0 && (
+                <span className="text-[10px] text-gray-600 font-medium uppercase tracking-tighter">{lesson.duration}m</span>
+              )}
               {lesson.isFree && (
                 <span className="text-[9px] px-1.5 py-0.5 rounded bg-green-100 text-green-700 border border-green-300 font-bold uppercase">Preview</span>
               )}
@@ -55,8 +64,8 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
           {isLocked ? (
             <Lock size={14} className="text-gray-400" />
           ) : (
-            <div className="hidden md:block text-[11px] font-bold text-purple-600 uppercase tracking-widest hover:text-purple-700 transition-colors">
-              Start
+            <div className={`hidden md:block text-[11px] font-bold uppercase tracking-widest transition-colors ${isCompleted ? 'text-green-600 hover:text-green-700' : 'text-purple-600 hover:text-purple-700'}`}>
+              {isCompleted ? 'Review' : 'Start'}
             </div>
           )}
         </div>
@@ -103,7 +112,7 @@ export function CourseCurriculum({ curriculum, courseSlug, hasAccess }: CourseCu
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 leading-tight">{module.title}</h3>
                   <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest mt-1">
-                    {module.lessons?.length || 0} Lessons • {module.duration} min
+                    {module.lessons?.length || 0} Lessons {module.duration > 0 ? `• ${module.duration} min` : ''}
                   </p>
                 </div>
               </div>

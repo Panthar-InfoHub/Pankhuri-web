@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight, BookOpen, Clock, BarChart, FileText } from "
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { getLessonProgressServer } from "@/lib/api/progress.server";
 
 interface LessonPageProps {
   params: Promise<{ slug: string; lessonSlug: string }>;
@@ -58,6 +59,17 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const lesson = lessonResponse.data;
 
+  // 3. Get lesson progress if available (authenticated)
+  let lessonProgress = null;
+  try {
+    const progressResponse = await getLessonProgressServer(lesson.id);
+    if (progressResponse.success) {
+      lessonProgress = progressResponse.data;
+    }
+  } catch (error) {
+    console.error("Failed to fetch lesson progress", error);
+  }
+
   return (
     <main className="bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -71,16 +83,14 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <span className="font-medium">{lesson.course.title}</span>
           </Link>
 
-          <div className="flex items-center gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-1.5">
-              <BookOpen className="w-4 h-4" />
-              <span>Lesson {lesson.sequence}</span>
+          {lesson.duration > 0 && (
+            <div className="flex items-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" />
+                <span>{lesson.duration} min</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              <span>{lesson.duration} min</span>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -93,6 +103,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
                   videoId={lesson.videoLesson.video.id}
                   title={lesson.videoLesson.video.title}
                   thumbnailUrl={lesson.videoLesson.video.thumbnailUrl}
+                  initialTimestamp={lessonProgress?.currentTimestamp || 0}
+                  lessonId={lesson.id}
                 />
               </div>
             ) : lesson.type === "video" ? (
@@ -169,6 +181,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     lessonId={lesson.id}
                     courseSlug={slug}
                     nextLessonSlug={lesson.navigation.next?.slug}
+                    isCompleted={lessonProgress?.isCompleted || false}
                   />
                 </div>
 
@@ -224,13 +237,15 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     {lesson.metadata?.difficulty || "General"}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    Duration
-                  </span>
-                  <span className="text-gray-900">{lesson.duration} minutes</span>
-                </div>
+                {lesson.duration > 0 && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600 flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      Duration
+                    </span>
+                    <span className="text-gray-900">{lesson.duration} minutes</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600 flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />

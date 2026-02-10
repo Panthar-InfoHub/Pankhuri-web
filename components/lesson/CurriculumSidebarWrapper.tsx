@@ -1,6 +1,7 @@
 import { getCourseBySlug } from "@/lib/api/course.server";
 import { LessonCurriculumSidebar } from "./LessonCurriculumSidebar";
 import { Suspense } from "react";
+import { getCourseProgressServer } from "@/lib/api/progress.server";
 
 interface CurriculumSidebarWrapperProps {
     slug: string;
@@ -18,12 +19,23 @@ async function CurriculumSidebar({ slug, lessonSlug }: CurriculumSidebarWrapperP
         );
     }
 
+    let completedLessonIds: string[] = [];
+    if (courseResponse.data.hasAccess) {
+        const progressResponse = await getCourseProgressServer(courseResponse.data.id);
+        if (progressResponse.success) {
+            completedLessonIds = progressResponse.data.lessonProgress
+                ?.filter(lp => lp.isCompleted)
+                ?.map(lp => lp.lessonId) || [];
+        }
+    }
+
     return (
         <LessonCurriculumSidebar
             curriculum={courseResponse.data.curriculum}
             courseSlug={slug}
             currentLessonSlug={lessonSlug}
             hasAccess={courseResponse.data.hasAccess}
+            completedLessonIds={completedLessonIds}
         />
     );
 }

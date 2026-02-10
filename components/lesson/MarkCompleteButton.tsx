@@ -11,18 +11,29 @@ interface MarkCompleteButtonProps {
     lessonId: string
     courseSlug: string
     nextLessonSlug?: string
+    isCompleted?: boolean
 }
 
-export function MarkCompleteButton({ lessonId, courseSlug, nextLessonSlug }: MarkCompleteButtonProps) {
+export function MarkCompleteButton({ lessonId, courseSlug, nextLessonSlug, isCompleted = false }: MarkCompleteButtonProps) {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
 
     const handleComplete = async () => {
+        if (isCompleted) {
+            if (nextLessonSlug) {
+                router.push(`/course/${courseSlug}/lesson/${nextLessonSlug}`)
+            } else {
+                router.push(`/course/${courseSlug}`)
+            }
+            return
+        }
+
         setLoading(true)
         try {
             const response = await markLessonComplete(lessonId)
+            console.log("Lesson Progress Update Response:", response)
             if (response.success) {
-                toast.success("Progress saved!")
+                toast.success(isCompleted ? "Progress updated!" : "Lesson completed!")
 
                 if (nextLessonSlug) {
                     router.push(`/course/${courseSlug}/lesson/${nextLessonSlug}`)
@@ -44,8 +55,8 @@ export function MarkCompleteButton({ lessonId, courseSlug, nextLessonSlug }: Mar
     return (
         <Button
             onClick={handleComplete}
-            disabled={loading}
-            className="h-14 px-8 bg-white/10 hover:bg-white/15 text-black border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all min-w-[200px]"
+            disabled={loading || isCompleted}
+            className={`h-14 px-8 bg-white/10 hover:bg-white/15 text-black border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all min-w-[200px] ${isCompleted ? 'opacity-80 cursor-not-allowed' : 'cursor-pointer'}`}
         >
             {loading ? (
                 <>
@@ -54,8 +65,10 @@ export function MarkCompleteButton({ lessonId, courseSlug, nextLessonSlug }: Mar
                 </>
             ) : (
                 <>
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span className="text-sm">Mark as Completed</span>
+                    <CheckCircle2 className={`w-5 h-5 ${isCompleted ? 'text-gray-400' : 'text-green-500'}`} />
+                    <span className={`text-sm ${isCompleted ? 'text-gray-500' : ''}`}>
+                        {isCompleted ? 'Already Completed' : 'Mark as Completed'}
+                    </span>
                 </>
             )}
         </Button>

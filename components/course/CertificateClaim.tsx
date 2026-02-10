@@ -46,7 +46,6 @@ export function CertificateClaim({ courseId, courseTitle, certificateInfo }: Cer
 
         try {
             const response = await createCertificate(courseId, phone)
-            console.log("Certificate API Response:", response)
 
             if (response.success) {
                 toast.success("Certificate Generated!", {

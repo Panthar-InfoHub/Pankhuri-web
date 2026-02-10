@@ -23,7 +23,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     }
 
     const category = response.data;
-    console.log("cat data ",category)
 
     return (
       <main className="bg-white min-h-screen">

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronDown, Lock, PlayCircle, FileText, HelpCircle } from "lucide-react"
+import { ChevronDown, Lock, PlayCircle, FileText, HelpCircle, CheckCircle } from "lucide-react"
 import { useState } from "react"
 import { Module } from "@/types/course"
 
@@ -10,6 +10,7 @@ interface LessonCurriculumSidebarProps {
     courseSlug: string
     currentLessonSlug: string
     hasAccess: boolean
+    completedLessonIds?: string[]
 }
 
 const getLessonIcon = (type: string) => {
@@ -20,7 +21,7 @@ const getLessonIcon = (type: string) => {
     }
 }
 
-export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonSlug, hasAccess }: LessonCurriculumSidebarProps) {
+export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonSlug, hasAccess, completedLessonIds = [] }: LessonCurriculumSidebarProps) {
     const [expandedSections, setExpandedSections] = useState<string[]>([
         curriculum.find(m => m.lessons?.some((l: any) => l.slug === currentLessonSlug))?.id || curriculum[0]?.id || ""
     ])
@@ -52,13 +53,14 @@ export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonS
                                 className={`text-gray-600 transition-transform ${expandedSections.includes(module.id) ? "rotate-180" : ""}`}
                             />
                         </button>
-                    
+
                         {expandedSections.includes(module.id) ? (
                             <div className="bg-gray-100">
                                 {module.lessons && module.lessons.length > 0 ? (
                                     module.lessons.map((lesson: any) => {
                                         const isLocked = !hasAccess && !lesson.isFree;
                                         const isActive = lesson.slug === currentLessonSlug;
+                                        const isCompleted = completedLessonIds.includes(lesson.id);
 
                                         return (
                                             <Link
@@ -72,7 +74,10 @@ export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonS
                                                     }`}
                                             >
                                                 {getLessonIcon(lesson.type)}
-                                                <span className="truncate flex-1">{lesson.title}</span>
+                                                <span className={`truncate flex-1 ${isCompleted ? 'text-gray-400' : ''}`}>{lesson.title}</span>
+                                                {isCompleted && (
+                                                    <CheckCircle size={10} className="text-green-500 shrink-0 ml-1" />
+                                                )}
                                                 {!lesson.videoLesson && !lesson.textLesson && lesson.type !== 'quiz' && (
                                                     <span className="text-[8px] bg-gray-200 text-gray-700 px-1 py-0.5 rounded border border-gray-300 font-bold uppercase ml-auto">Soon</span>
                                                 )}
