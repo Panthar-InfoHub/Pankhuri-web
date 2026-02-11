@@ -7,6 +7,7 @@ import { PopularCategories } from "@/components/home/PopularCategories"
 import { FeaturedCourses } from "@/components/home/FeaturedCourses"
 import { TrendingCourses } from "@/components/home/TrendingCourses"
 import { CourseUtilizationGuide } from "@/components/home/CourseUtilizationGuide"
+import { ServiceSection } from "@/components/home/ServiceSection"
 
 export const dynamic = 'force-dynamic'
 
@@ -16,6 +17,14 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <HeroSection />
+      </section>
+
+      {/* Trending Courses Section */}
+      <section className="pt-24 md:pt-32 pb-12 relative">
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-100/20 to-pink-100/20 blur-[120px] -z-10 rounded-full" />
+        <div className="max-w-7xl mx-auto px-6">
+          <TrendingCourses />
+        </div>
       </section>
 
       {/* Stats Section */}
@@ -40,22 +49,14 @@ export default function HomePage() {
         <PopularCategories />
       </section>
 
+      {/* Services Section */}
+      <ServiceSection />
+
       {/* Featured Courses Section */}
-      <section className="relative py-24 md:py-32 overflow-hidden bg-white/50 backdrop-blur-sm border-y border-zinc-100/80">
+      <section className="relative pt-24 pb-12 md:pt-32 md:pb-16 overflow-hidden bg-white/50 backdrop-blur-sm border-y border-zinc-100/80">
         <div className="absolute inset-0 bg-gradient-to-tr from-purple-50/40 via-transparent to-pink-50/40 -z-10" />
         <div className="max-w-7xl mx-auto px-6">
           <FeaturedCourses />
-        </div>
-      </section>
-
-      {/* Course Utilization Guide Section */}
-      <CourseUtilizationGuide />
-
-      {/* Trending Courses Section */}
-      <section className="py-24 md:py-32 relative">
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-100/20 to-pink-100/20 blur-[120px] -z-10 rounded-full" />
-        <div className="max-w-7xl mx-auto px-6">
-          <TrendingCourses />
         </div>
       </section>
 
@@ -63,6 +64,9 @@ export default function HomePage() {
       <section className="py-24 md:py-32 bg-zinc-50/30">
         <TestimonialSection />
       </section>
+
+      {/* Course Utilization Guide Section */}
+      <CourseUtilizationGuide />
     </main>
   )
 }

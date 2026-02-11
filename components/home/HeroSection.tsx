@@ -27,13 +27,13 @@ export function HeroSection() {
         <div className="max-w-5xl flex flex-col items-center">
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-white text-[10px] font-bold tracking-[0.2em] mb-10 uppercase shadow-2xl">
             <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse shadow-[0_0_10px_rgba(236,72,153,0.8)]" />
-            Empowering Your Creative Journey
+            The Expert Learning Platform for Women
           </div>
 
           <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-[0.95] tracking-tight">
-            Elevate Your{" "}
+            Where Women Learn,{" "}
             <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-              Artistry
+              Create & Grow
             </span>
           </h1>
 

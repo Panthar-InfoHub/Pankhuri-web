@@ -1,193 +1,231 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Check, Crown, Zap, Loader2 } from "lucide-react"
-import { useSession } from "next-auth/react"
-import { useRouter, usePathname } from "next/navigation"
-import { useState } from "react"
-import apiClient from "@/lib/api-client"
-import { toast } from "sonner"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { getPlans, initiateSubscription, Plan } from "@/lib/api/plan";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, Check, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+import { formatPrice } from "@/lib/razorpay";
 
-const plans = [
-  {
-    id: "cmkp30f4b0002s61wh7clpglh",
-    name: "Monthly",
-    price: "₹140",
-    originalPrice: "₹349",
-    period: "/month",
-    description: "Perfect for trying out",
-    features: ["Access to all courses", "Certificates included", "Recording access", "Community access"],
-    popular: false,
-  },
-  {
-    id: "cmkp32skx0003s61w7ggh60q1",
-    name: "Yearly",
-    price: "₹1,400",
-    originalPrice: "₹1,999",
-    period: "/year",
-    description: "Best value - Save 50%",
-    features: [
-      "Everything in Monthly",
-      "Priority mentor support",
-      "Exclusive workshops",
-      "Early access to new courses",
-      "1-on-1 career guidance",
-    ],
-    popular: true,
-  },
-]
+export default function PlansPage() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [processingPlanId, setProcessingPlanId] = useState<string | null>(null);
 
-export function SubscriptionPricing() {
-  const { data: session } = useSession()
-  const router = useRouter()
-  const pathname = usePathname()
-  const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const { data } = await getPlans("whole_app");
+        setPlans(data.filter((plan) => plan.isActive));
+      } catch (error) {
+        console.error("Failed to fetch plans", error);
+        toast.error("Failed to load plans");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleSubscribe = async (planId: string) => {
-    if (!session) {
-      // Redirect to login with callbackUrl
-      router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
-      return
+    fetchPlans();
+  }, []);
+
+  const handleSubscribe = async (plan: Plan) => {
+    if (status === "unauthenticated") {
+      toast.error("Please login to subscribe");
+      router.push("/login?callbackUrl=/plans");
+      return;
     }
 
-    setLoadingPlan(planId)
+    setProcessingPlanId(plan.id);
+
     try {
-      const response = await apiClient.post("/api/subscriptions", {
-        planId: planId,
-      })
+      const { data } = await initiateSubscription(plan.id);
 
-      const { success, data, message } = response.data
+      toast.success("Redirecting to payment...");
 
-      if (success && data.shortUrl) {
-        toast.success(message || "Redirecting to payment...")
-        // Redirect to Razorpay short URL
-        window.location.href = data.shortUrl
-      } else {
-        toast.error(message || "Failed to initiate subscription")
-      }
+      // Redirect to Razorpay short URL
+      window.location.href = data.shortUrl;
     } catch (error: any) {
-      // Better error logging for debugging
-      if (error.response) {
-        // The server responded with a status code outside the range of 2xx
-        console.error("Backend Error:", error.response.data);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error("Network Error (No response):", error.request);
-        toast.error("Network error: Please check if the backend server is running.");
-      } else {
-        // Something happened in setting up the request
-        console.error("Request Setup Error:", error.message);
-      }
-
-      const errorMessage = error.response?.data?.message || error.message || "Failed to connect to the server";
-      if (!error.request) toast.error(errorMessage);
+      console.error("❌ [Subscription] Failed:", error);
+      toast.error(error?.response?.data?.message || "Failed to initiate subscription");
     } finally {
-      setLoadingPlan(null)
+      setProcessingPlanId(null);
     }
+  };
+
+  if (loading) {
+    return (
+      <main className="bg-zinc-50 min-h-screen flex items-center justify-center">
+        <Loader2 className="w-10 h-10 animate-spin text-zinc-900" />
+      </main>
+    );
   }
 
+  const monthlyPlan = plans.find((p) => p.subscriptionType === "monthly");
+  const yearlyPlan = plans.find((p) => p.subscriptionType === "yearly");
+
   return (
-    <section className="py-20" id="pricing">
-      <div className="container mx-auto px-4">
-        <div className="mb-12 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-pink-100 px-4 py-2 text-sm font-medium text-pink-700">
-            <Zap className="h-4 w-4" />
-            Choose Your Plan
-          </div>
-          <h2 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">Start Learning Today</h2>
-          <h3 className="mb-4 text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent animate-pulse">
-            Valentine's Special Offer 💖
-          </h3>
-          <p className="mx-auto max-w-2xl text-muted-foreground">
-            Select the plan that works best for you and unlock your potential
+    <main className="bg-zinc-50 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <Badge className="mb-4 bg-zinc-100 text-zinc-900 border-zinc-200 px-3 py-1">
+            <Sparkles className="w-3 h-3 mr-1 text-purple-600" />
+            Premium Access
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 mb-4 tracking-tight">Choose Your Plan</h1>
+          <p className="text-zinc-600 text-lg max-w-2xl mx-auto">
+            Get unlimited access to all courses and features. Cancel anytime.
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:px-20">
-          {plans.map((plan, index) => (
-            <div
-              key={plan.id}
-              className={`relative flex flex-col rounded-2xl border-2 p-6 transition-all hover:-translate-y-1 hover:shadow-xl ${plan.popular
-                ? "border-pink-500 bg-gradient-to-b from-pink-50 to-white shadow-lg shadow-pink-500/10"
-                : "border-pink-100 bg-white shadow-sm"
-                }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <div className="flex items-center gap-1 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-4 py-1.5 text-sm font-semibold text-white shadow-lg">
-                    <Crown className="h-4 w-4" />
-                    Most Popular
-                  </div>
+        {/* Plans Grid */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Monthly Plan */}
+          {monthlyPlan && (
+            <Card className="bg-white border-zinc-200 rounded-3xl overflow-hidden hover:border-zinc-300 transition-all shadow-sm hover:shadow-md">
+              <CardHeader className="border-b border-zinc-100 px-8 py-10">
+                <CardTitle className="text-2xl font-bold text-zinc-900">
+                  {monthlyPlan.name}
+                </CardTitle>
+                <CardDescription className="text-zinc-500 mt-2">
+                  {monthlyPlan.description}
+                </CardDescription>
+                <div className="mt-8">
+                  <span className="text-5xl font-extrabold text-zinc-900 tracking-tight">
+                    {formatPrice(monthlyPlan.price)}
+                  </span>
+                  <span className="text-zinc-500 text-lg">/month</span>
                 </div>
-              )}
-
-              <div className="mb-6 text-center">
-                <h3 className="mb-1 text-xl font-bold text-foreground">{plan.name}</h3>
-                <p className="text-sm text-muted-foreground">{plan.description}</p>
-              </div>
-
-              <div className="mb-6 text-center">
-                <div className="flex items-center justify-center gap-2">
-                  {/* @ts-ignore */}
-                  {plan.originalPrice && (
-                    <span className="text-xl font-medium text-muted-foreground line-through">
-                      {/* @ts-ignore */}
-                      {plan.originalPrice}
-                    </span>
-                  )}
-                  <span className="text-4xl font-extrabold text-foreground">{plan.price}</span>
-                </div>
-                <span className="text-muted-foreground">{plan.period}</span>
-              </div>
-
-              <ul className="mb-8 flex-1 space-y-3">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center gap-3 text-sm text-foreground">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-100">
-                      <Check className="h-3 w-3 text-green-600" />
-                    </div>
-                    {feature}
+              </CardHeader>
+              <CardContent className="p-8">
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-3 text-zinc-600">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    Access to all courses
                   </li>
-                ))}
-              </ul>
+                  <li className="flex items-center gap-3 text-zinc-600">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    HD video quality
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-600">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    Cancel anytime
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-600">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    Download resources
+                  </li>
+                </ul>
+                <Button
+                  onClick={() => handleSubscribe(monthlyPlan)}
+                  disabled={processingPlanId === monthlyPlan.id}
+                  className="w-full bg-zinc-900 text-white hover:bg-zinc-800 h-14 text-lg font-semibold rounded-2xl transition-all shadow-sm"
+                >
+                  {processingPlanId === monthlyPlan.id ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    "Subscribe Monthly"
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
-              <Button
-                onClick={() => handleSubscribe(plan.id)}
-                disabled={loadingPlan === plan.id}
-                className={`w-full py-6 font-semibold transition-all ${plan.popular
-                  ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/30"
-                  : "bg-pink-100 text-pink-700 hover:bg-pink-200"
-                  }`}
-              >
-                {loadingPlan === plan.id ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  "Get Started"
-                )}
-              </Button>
-            </div>
-          ))}
+          {/* Yearly Plan */}
+          {yearlyPlan && (
+            <Card className="bg-gradient-to-br from-purple-50 via-white to-pink-50 border-purple-200 rounded-3xl overflow-hidden relative hover:border-purple-300 transition-all shadow-md hover:shadow-xl">
+              <div className="absolute top-6 right-6">
+                <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-3 py-1 shadow-sm">
+                  Best Value
+                </Badge>
+              </div>
+              <CardHeader className="border-b border-purple-100/50 px-8 py-10">
+                <CardTitle className="text-2xl font-bold text-zinc-900">
+                  {yearlyPlan.name}
+                </CardTitle>
+                <CardDescription className="text-zinc-600 mt-2">
+                  {yearlyPlan.description}
+                </CardDescription>
+                <div className="mt-8">
+                  <span className="text-5xl font-extrabold text-zinc-900 tracking-tight">
+                    {formatPrice(yearlyPlan.price)}
+                  </span>
+                  <span className="text-zinc-600 text-lg">/year</span>
+                  {monthlyPlan && (
+                    <div className="inline-block px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 mt-4">
+                      <p className="text-sm font-bold text-emerald-700">
+                        Save{" "}
+                        {Math.round(
+                          ((monthlyPlan.price * 12 - yearlyPlan.price) / (monthlyPlan.price * 12)) *
+                          100,
+                        )}
+                        % compared to monthly
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="p-8">
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    Access to all courses
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    HD video quality
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    Priority support
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    Early access to new courses
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    Download resources
+                  </li>
+                </ul>
+                <Button
+                  onClick={() => handleSubscribe(yearlyPlan)}
+                  disabled={processingPlanId === yearlyPlan.id}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-95 h-14 text-lg font-semibold rounded-2xl shadow-lg shadow-purple-100 transition-all"
+                >
+                  {processingPlanId === yearlyPlan.id ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    "Subscribe Yearly"
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
-        {/* Trust indicators */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" />
-            Cancel anytime
-          </div>
-          <div className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" />
-            Secure payment
-          </div>
-          <div className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" />
-            7-day money back guarantee
-          </div>
-        </div>
+        {/* FAQ or Additional Info */}
+        {/* <div className="mt-16 text-center">
+          <p className="text-zinc-500 text-sm bg-white border border-zinc-200 inline-block px-6 py-2 rounded-full shadow-sm">
+            All plans include a 7-day money-back guarantee. Questions?{" "}
+            <a href="#" className="text-purple-600 font-semibold hover:underline">
+              Contact support
+            </a>
+          </p>
+        </div> */}
       </div>
-    </section>
-  )
+    </main>
+  );
 }
