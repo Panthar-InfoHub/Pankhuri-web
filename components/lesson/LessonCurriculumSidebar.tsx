@@ -13,11 +13,13 @@ interface LessonCurriculumSidebarProps {
     completedLessonIds?: string[]
 }
 
-const getLessonIcon = (type: string) => {
+const getLessonIcon = (type: string, isActive: boolean) => {
+    const iconClass = isActive ? "text-white" : type === 'video' ? "text-purple-600" : type === 'text' ? "text-blue-600" : "text-gray-500";
+
     switch (type) {
-        case 'video': return <PlayCircle size={14} className="text-purple-600" />;
-        case 'text': return <FileText size={14} className="text-blue-600" />;
-        default: return <HelpCircle size={14} className="text-gray-500" />;
+        case 'video': return <PlayCircle size={14} className={iconClass} />;
+        case 'text': return <FileText size={14} className={iconClass} />;
+        default: return <HelpCircle size={14} className={iconClass} />;
     }
 }
 
@@ -33,68 +35,68 @@ export function LessonCurriculumSidebar({ curriculum, courseSlug, currentLessonS
     }
 
     return (
-        <div className="bg-gray-50 rounded-2xl border border-gray-300 overflow-hidden">
-            <div className="p-4 border-b border-gray-300 bg-gray-100">
-                <h3 className="font-bold text-gray-900 text-sm">Course Curriculum</h3>
-            </div>
-            <div className="max-h-[60vh] overflow-y-auto">
-                {curriculum.map((module) => (
-                    <div key={module.id} className="border-b border-gray-200 last:border-0">
-                        <button
-                            onClick={() => toggleSection(module.id)}
-                            className="w-full px-4 py-3 flex items-center justify-between text-gray-900 hover:bg-gray-200 transition-colors"
-                        >
-                            <div className="flex items-center gap-3">
-                                <span className="text-[10px] font-bold text-gray-600 w-4">{module.sequence}</span>
-                                <span className="font-semibold text-xs truncate max-w-[150px]">{module.title}</span>
-                            </div>
-                            <ChevronDown
-                                size={14}
-                                className={`text-gray-600 transition-transform ${expandedSections.includes(module.id) ? "rotate-180" : ""}`}
-                            />
-                        </button>
+        <div className="w-full">
+            {curriculum.map((module) => (
+                <div key={module.id} className="mb-2">
+                    <button
+                        onClick={() => toggleSection(module.id)}
+                        className={`w-full px-4 py-4 flex items-center justify-between text-gray-900 rounded-2xl transition-all ${expandedSections.includes(module.id) ? "bg-gray-50 shadow-sm" : "hover:bg-gray-50"
+                            }`}
+                    >
+                        <div className="flex items-center gap-3">
+                            
+                            <span className="font-bold capitalize text-[13px] tracking-tight text-gray-900 text-left">{module.title}</span>
+                        </div>
+                        <ChevronDown
+                            size={16}
+                            className={`text-gray-400 transition-transform duration-300 ${expandedSections.includes(module.id) ? "rotate-180" : ""}`}
+                        />
+                    </button>
 
-                        {expandedSections.includes(module.id) ? (
-                            <div className="bg-gray-100">
-                                {module.lessons && module.lessons.length > 0 ? (
-                                    module.lessons.map((lesson: any) => {
-                                        const isLocked = !hasAccess && !lesson.isFree;
-                                        const isActive = lesson.slug === currentLessonSlug;
-                                        const isCompleted = completedLessonIds.includes(lesson.id);
+                    {expandedSections.includes(module.id) ? (
+                        <div className="mt-1 space-y-1">
+                            {module.lessons && module.lessons.length > 0 ? (
+                                module.lessons.map((lesson: any) => {
+                                    const isLocked = !hasAccess && !lesson.isFree;
+                                    const isActive = lesson.slug === currentLessonSlug;
+                                    const isCompleted = completedLessonIds.includes(lesson.id);
 
-                                        return (
-                                            <Link
-                                                key={lesson.id}
-                                                href={isLocked ? "#" : `/course/${courseSlug}/lesson/${lesson.slug}`}
-                                                className={`flex items-center gap-3 px-8 py-2.5 text-xs transition-colors ${isActive
-                                                    ? 'bg-purple-100 text-purple-700 border-l-2 border-purple-400'
-                                                    : isLocked
-                                                        ? 'text-gray-500 cursor-not-allowed'
-                                                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'
-                                                    }`}
-                                            >
-                                                {getLessonIcon(lesson.type)}
-                                                <span className={`truncate flex-1 ${isCompleted ? 'text-gray-400' : ''}`}>{lesson.title}</span>
-                                                {isCompleted && (
-                                                    <CheckCircle size={10} className="text-green-500 shrink-0 ml-1" />
-                                                )}
-                                                {!lesson.videoLesson && !lesson.textLesson && lesson.type !== 'quiz' && (
-                                                    <span className="text-[8px] bg-gray-200 text-gray-700 px-1 py-0.5 rounded border border-gray-300 font-bold uppercase ml-auto">Soon</span>
-                                                )}
-                                                {isLocked ? <Lock size={10} className="text-gray-400" /> : null}
-                                            </Link>
-                                        );
-                                    })
-                                ) : (
-                                    <div className="px-8 py-4 text-[10px] text-gray-600 italic">
-                                        No lessons available
-                                    </div>
-                                )}
-                            </div>
-                        ) : null}
-                    </div>
-                ))}
-            </div>
+                                    return (
+                                        <Link
+                                            key={lesson.id}
+                                            href={isLocked ? "#" : `/course/${courseSlug}/lesson/${lesson.slug}`}
+                                            className={`flex items-center gap-3 px-4 py-3 text-[13px] rounded-xl transition-all group ${isActive
+                                                ? 'bg-purple-600 text-white shadow-lg shadow-purple-200 font-bold'
+                                                : isLocked
+                                                    ? 'text-gray-400 cursor-not-allowed grayscale'
+                                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                                }`}
+                                        >
+                                            <div className={`p-1.5 rounded-lg shrink-0 ${isActive ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-white transition-colors'}`}>
+                                                {getLessonIcon(lesson.type, isActive)}
+                                            </div>
+                                            <span className="truncate flex-1">{lesson.title}</span>
+                                            {isCompleted && (
+                                                <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${isActive ? 'bg-white/20' : 'bg-green-50'}`}>
+                                                    <CheckCircle className={`w-3 h-3 ${isActive ? 'text-white' : 'text-green-500'}`} />
+                                                </div>
+                                            )}
+                                            {!lesson.videoLesson && !lesson.textLesson && lesson.type !== 'quiz' && (
+                                                <span className="text-[8px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full border border-purple-200 font-black uppercase ml-auto">Soon</span>
+                                            )}
+                                            {isLocked ? <Lock size={12} className="text-gray-400" /> : null}
+                                        </Link>
+                                    );
+                                })
+                            ) : (
+                                <div className="px-8 py-4 text-[10px] text-gray-500 font-bold uppercase tracking-widest italic opacity-50">
+                                    No lessons
+                                </div>
+                            )}
+                        </div>
+                    ) : null}
+                </div>
+            ))}
         </div>
     )
 }
