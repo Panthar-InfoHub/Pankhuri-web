@@ -5,7 +5,8 @@ import { CourseCurriculum } from "@/components/landing/course-curriculum"
 import { HowItWorks } from "@/components/landing/how-it-works"
 import { CertificateSection } from "@/components/landing/certificate-section"
 import { Testimonials } from "@/components/landing/testimonials"
-import { SubscriptionPricing } from "@/components/landing/subscription-pricing"
+// import { SubscriptionPricing } from "@/components/landing/subscription-pricing"
+import PlansPage from "@/components/landing/subscription-pricing"
 import { FinalCTA } from "@/components/landing/final-cta"
 import { Footer } from "@/components/landing/footer"
 
@@ -18,7 +19,8 @@ export default function Home() {
             <CourseCurriculum />
             <HowItWorks />
             <CertificateSection />
-            <SubscriptionPricing />
+            {/* <SubscriptionPricing /> */}
+            <PlansPage />
             <Testimonials />
             <FinalCTA />
             <Footer />

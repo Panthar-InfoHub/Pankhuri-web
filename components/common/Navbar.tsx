@@ -16,6 +16,7 @@ export function Navbar() {
     { name: "Categories", href: "/categories" },
     { name: "Courses", href: "/courses" },
     { name: "Plans", href: "/plans" },
+    { name: "About", href: "/about" },
   ]
 
   const isActive = (path: string) => {

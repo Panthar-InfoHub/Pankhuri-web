@@ -34,7 +34,7 @@ export function StatsSection() {
     ];
 
     return (
-        <section className="relative pt-32 pb-16 px-6 overflow-hidden bg-white/40">
+        <section className="relative pt-12 pb-16 px-6 overflow-hidden bg-white/40">
             {/* Architectural Grid Background */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                 style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
@@ -60,10 +60,10 @@ export function StatsSection() {
 
                             {/* Stat Value */}
                             <div className="text-center space-y-2">
-                                <h3 className="text-6xl md:text-7xl font-bold text-zinc-900 tracking-tighter transition-all duration-500 group-hover:scale-105">
+                                <h3 className="text-4xl md:text-5xl font-semibold text-zinc-800 tracking-tight transition-all duration-500 group-hover:scale-105">
                                     {stat.value}
                                 </h3>
-                                <p className="text-xs font-bold text-zinc-500 uppercase tracking-[0.3em] leading-none">
+                                <p className="text-xs font-medium text-zinc-500 uppercase tracking-[0.2em] leading-none">
                                     {stat.label}
                                 </p>
                             </div>
