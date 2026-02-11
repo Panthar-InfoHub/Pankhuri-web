@@ -31,7 +31,7 @@ export function HeroSection() {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-              1000+ Courses, 18+ Categories, ₹2.5 Lakh worth Courses.
+              250+ Courses, 18+ Categories, ₹2.5 Lakh worth Courses.
             </p>
 
             <div className="space-y-4 max-w-md">
@@ -43,11 +43,11 @@ export function HeroSection() {
                     <div className="flex items-center gap-2 mb-1">
                       <Sparkles className="h-5 w-5 text-pink-500 fill-pink-500" />
                       <span className="text-sm font-semibold text-pink-600 uppercase tracking-wide">
-                        Valentine’s Week offer
+                        Valentine's Week offer
                       </span>
                     </div>
                     <p className="text-[10px] md:text-xs text-pink-500 font-medium leading-tight">
-                      limited time offer avail now, only valid for 14th feb 2025
+                      limited time offer avail now, only valid for 14th feb 2026
                     </p>
                   </div>
 
@@ -68,7 +68,7 @@ export function HeroSection() {
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Yearly</p>
                       <div className="flex flex-col">
                         <span className="text-sm text-muted-foreground line-through opacity-70">₹1,999</span>
-                        <span className="text-3xl font-extrabold text-foreground">₹1,400</span>
+                        <span className="text-3xl font-extrabold text-foreground">₹1,402</span>
                       </div>
                       <p className="text-[10px] text-muted-foreground mt-1">₹116/month</p>
                     </div>

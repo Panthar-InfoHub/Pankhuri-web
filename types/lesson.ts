@@ -2,13 +2,32 @@
 
 import { Course } from "./course";
 
+export interface VideoProduct {
+    url: string;
+    name: string;
+    image: string;
+}
+
+export interface VideoTimestamp {
+    time_content: string;
+    time_interval: string;
+}
+
+export interface VideoDescriptionDetail {
+    products: VideoProduct[];
+    disclaimer: string;
+    timestamps: VideoTimestamp[];
+    description: string;
+}
+
 export interface VideoDetail {
     id: string;
     title: string;
-    videoDescription: string | null;
+    videoDescription: VideoDescriptionDetail | null;
     thumbnailUrl: string;
     storageKey: string;
     playbackUrl: string;
+    externalUrl: string;
     status: string;
     duration: number;
     metadata: {
