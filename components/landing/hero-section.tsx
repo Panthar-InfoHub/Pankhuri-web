@@ -31,7 +31,7 @@ export function HeroSection() {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-              1000+ Courses, 18+ Categories, ₹2.5 Lakh worth Courses.
+              250+ Courses, 18+ Categories, ₹2.5 Lakh worth Courses.
             </p>
 
             <div className="space-y-4 max-w-md">

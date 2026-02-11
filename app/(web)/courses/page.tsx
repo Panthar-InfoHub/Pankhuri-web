@@ -1,5 +1,5 @@
-  import { getAllCourses } from "@/lib/api/course.server";
-import { CourseGrid } from "@/components/home/CourseGrid";
+import { CourseCard } from "@/components/course/CourseCard";
+import { getAllCourses } from "@/lib/api/course.server";
 
 export const dynamic = "force-dynamic";
 
@@ -18,11 +18,16 @@ export default async function CoursesPage() {
               <p className="text-gray-600 text-lg">No courses available at the moment.</p>
             </div>
           ) : (
-            <CourseGrid title="" courses={courses} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {courses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
           )}
         </section>
       </main>
     );
+
   } catch (error) {
     throw new Error("Failed to load courses. Please try again later.");
   }
