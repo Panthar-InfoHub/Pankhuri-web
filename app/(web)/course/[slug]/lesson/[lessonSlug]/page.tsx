@@ -117,6 +117,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                   thumbnailUrl={lesson.videoLesson.video.thumbnailUrl}
                   initialTimestamp={lessonProgress?.currentTimestamp || 0}
                   lessonId={lesson.id}
+                  externalUrl={lesson.videoLesson.video.externalUrl}
                 />
               </div>
             ) : lesson.type === "text" && lesson.textLesson ? (
