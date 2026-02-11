@@ -8,7 +8,7 @@ import { Suspense } from "react";
 
 async function CategoriesContent() {
   try {
-    const response = await getCategories({ status: "active", limit: 8 });
+    const response = await getCategories({ status: "active", limit: 4 });
 
     if (!response.success || !response.data) {
       return <ErrorState message={response.message || "Failed to load categories."} />;
@@ -25,9 +25,11 @@ export function PopularCategories() {
   return (
     <Suspense
       fallback={
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <CategorySkeleton key={i} />
+        <div className="flex gap-4 md:gap-6 overflow-hidden px-4 md:px-12">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/5 shrink-0">
+              <CategorySkeleton />
+            </div>
           ))}
         </div>
       }

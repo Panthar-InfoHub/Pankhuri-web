@@ -39,16 +39,16 @@ export function FinalCTA() {
               Subscribe now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button
+            {/* <Button
               size="lg"
               variant="outline"
               className="rounded-full px-10 h-14 text-lg border-2 border-pink-300 text-pink-600 hover:bg-pink-50 bg-transparent"
             >
               Download App
-            </Button>
+            </Button> */}
           </div>
 
-          <div className="flex justify-center">
+          {/* <div className="flex justify-center">
             <Image
               src="/landing/logo.png"
               alt="Download on App Store or Get it on Google Play"
@@ -56,7 +56,7 @@ export function FinalCTA() {
               height={150}
               className="w-64 h-auto"
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

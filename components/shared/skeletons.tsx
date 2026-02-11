@@ -2,14 +2,19 @@
 
 export function CourseCardSkeleton() {
     return (
-        <div className="bg-[#0A0A0A] rounded-xl overflow-hidden animate-pulse border border-white/5">
-            <div className="aspect-video bg-white/5" />
-            <div className="p-4 space-y-3">
-                <div className="h-4 bg-white/10 rounded w-3/4" />
-                <div className="h-3 bg-white/5 rounded w-1/2" />
-                <div className="flex justify-between items-center pt-2">
-                    <div className="h-4 bg-white/10 rounded w-1/4" />
-                    <div className="h-4 bg-white/10 rounded w-1/4" />
+        <div className="bg-white rounded-[2rem] overflow-hidden animate-pulse border border-zinc-100 shadow-sm">
+            <div className="aspect-[16/10] bg-zinc-100" />
+            <div className="p-6 space-y-4">
+                <div className="flex gap-2">
+                    <div className="h-4 bg-zinc-100 rounded-full w-20" />
+                </div>
+                <div className="space-y-2">
+                    <div className="h-6 bg-zinc-100 rounded-xl w-full" />
+                    <div className="h-6 bg-zinc-100 rounded-xl w-3/4" />
+                </div>
+                <div className="flex items-center gap-3 pt-4">
+                    <div className="w-6 h-6 rounded-full bg-zinc-100" />
+                    <div className="h-4 bg-zinc-100 rounded w-24" />
                 </div>
             </div>
         </div>
@@ -18,7 +23,7 @@ export function CourseCardSkeleton() {
 
 export function GridSkeleton({ count = 4 }: { count?: number }) {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {Array.from({ length: count }).map((_, i) => (
                 <CourseCardSkeleton key={i} />
             ))}
@@ -28,12 +33,10 @@ export function GridSkeleton({ count = 4 }: { count?: number }) {
 
 export function CategorySkeleton() {
     return (
-        <div className="flex items-center space-x-4 p-4 bg-white/5 rounded-lg animate-pulse">
-            <div className="w-12 h-12 bg-white/10 rounded-full" />
-            <div className="flex-1 space-y-2">
-                <div className="h-4 bg-white/10 rounded w-1/2" />
-                <div className="h-3 bg-white/5 rounded w-1/3" />
-            </div>
+        <div className="aspect-[9/11] bg-white rounded-[2rem] border border-zinc-100 animate-pulse flex flex-col justify-end p-6 shadow-sm">
+            <div className="h-6 bg-zinc-100 rounded-xl w-3/4 mx-auto mb-2" />
+            <div className="h-3 bg-zinc-50 rounded-full w-1/2 mx-auto" />
         </div>
     );
 }
+

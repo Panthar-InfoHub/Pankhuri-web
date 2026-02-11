@@ -12,7 +12,8 @@ const plans = [
   {
     id: "cmkp30f4b0002s61wh7clpglh",
     name: "Monthly",
-    price: "₹349",
+    price: "₹140",
+    originalPrice: "₹349",
     period: "/month",
     description: "Perfect for trying out",
     features: ["Access to all courses", "Certificates included", "Recording access", "Community access"],
@@ -21,7 +22,8 @@ const plans = [
   {
     id: "cmkp32skx0003s61w7ggh60q1",
     name: "Yearly",
-    price: "₹1,999",
+    price: "₹1,400",
+    originalPrice: "₹1,999",
     period: "/year",
     description: "Best value - Save 50%",
     features: [
@@ -92,7 +94,10 @@ export function SubscriptionPricing() {
             <Zap className="h-4 w-4" />
             Choose Your Plan
           </div>
-          <h2 className="mb-3 text-3xl font-bold text-foreground md:text-4xl">Start Learning Today</h2>
+          <h2 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">Start Learning Today</h2>
+          <h3 className="mb-4 text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent animate-pulse">
+            Valentine's Special Offer 💖
+          </h3>
           <p className="mx-auto max-w-2xl text-muted-foreground">
             Select the plan that works best for you and unlock your potential
           </p>
@@ -122,7 +127,16 @@ export function SubscriptionPricing() {
               </div>
 
               <div className="mb-6 text-center">
-                <span className="text-4xl font-extrabold text-foreground">{plan.price}</span>
+                <div className="flex items-center justify-center gap-2">
+                  {/* @ts-ignore */}
+                  {plan.originalPrice && (
+                    <span className="text-xl font-medium text-muted-foreground line-through">
+                      {/* @ts-ignore */}
+                      {plan.originalPrice}
+                    </span>
+                  )}
+                  <span className="text-4xl font-extrabold text-foreground">{plan.price}</span>
+                </div>
                 <span className="text-muted-foreground">{plan.period}</span>
               </div>
 

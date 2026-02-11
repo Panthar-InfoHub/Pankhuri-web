@@ -8,9 +8,9 @@ import Image from "next/image"
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100">
-      <div className="container mx-auto px-4 py-16 md:py-24">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
+      <div className="container mx-auto px-4 pt-16 pb-16 md:pt-20 md:pb-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="space-y-8 lg:mt-0">
             <div className="flex flex-wrap gap-3">
               <Badge className="bg-gradient-to-r from-pink-500/10 to-purple-500/10 text-pink-600 border-pink-200 rounded-full px-4 py-1.5">
                 <Star className="h-3.5 w-3.5 mr-1.5 fill-pink-500 text-pink-500" />
@@ -39,27 +39,38 @@ export function HeroSection() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-500/10 to-purple-500/10 rounded-full blur-3xl" />
 
                 <div className="relative space-y-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="h-5 w-5 text-pink-500 fill-pink-500" />
-                    <span className="text-sm font-semibold text-pink-600 uppercase tracking-wide">
-                      Choose Your Plan
-                    </span>
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Sparkles className="h-5 w-5 text-pink-500 fill-pink-500" />
+                      <span className="text-sm font-semibold text-pink-600 uppercase tracking-wide">
+                        Valentine’s Week offer
+                      </span>
+                    </div>
+                    <p className="text-[10px] md:text-xs text-pink-500 font-medium leading-tight">
+                      limited time offer avail now, only valid for 14th feb 2025
+                    </p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-4 border-2 border-pink-200">
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Monthly</p>
-                      <p className="text-3xl font-extrabold text-foreground">₹349</p>
-                      <p className="text-xs text-muted-foreground mt-1">per month</p>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-muted-foreground line-through opacity-70">₹349</span>
+                        <span className="text-3xl font-extrabold text-foreground">₹140</span>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-1">per month</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-200 relative">
-                      <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                        SAVE 52%
+                      <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        VALENTINE SPECIAL
                       </div>
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Yearly</p>
-                      <p className="text-3xl font-extrabold text-foreground">₹1,999</p>
-                      <p className="text-xs text-muted-foreground mt-1">₹166/month</p>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-muted-foreground line-through opacity-70">₹1,999</span>
+                        <span className="text-3xl font-extrabold text-foreground">₹1,400</span>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-1">₹116/month</p>
                     </div>
                   </div>
 
@@ -75,7 +86,7 @@ export function HeroSection() {
             </div>
             {/* End of redesigned pricing section */}
 
-            <div className="flex flex-wrap gap-4 pt-4">
+            {/* <div className="flex flex-wrap gap-4 pt-4">
               <div className="pt-4">
                 <Image
                   src="/landing/logo.png"
@@ -85,7 +96,7 @@ export function HeroSection() {
                   className="w-64 h-auto"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="relative">
@@ -111,7 +122,7 @@ export function HeroSection() {
                   />
                 </div>
               </div>
-              <div className="space-y-4 pt-8">
+              <div className="space-y-4 pt-4">
                 <div className="rounded-2xl overflow-hidden shadow-xl border-4 border-white">
                   <Image
                     src="/landing/hero-images/indian-woman-fitness-yoga-instructor.jpg"
