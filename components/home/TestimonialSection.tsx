@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import { Star } from "lucide-react"
+import { Star, Quote } from "lucide-react"
 
 export function TestimonialSection() {
   const testimonials = [
@@ -27,20 +27,41 @@ export function TestimonialSection() {
   ]
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16">
-      <h2 className="text-3xl font-bold text-muted-foreground mb-12 text-center">What Our Students Say</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <section className="max-w-7xl mx-auto px-6">
+      <div className="flex flex-col items-center text-center mb-16">
+        <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 tracking-tight mb-4">
+          What Our <span className="text-purple-600">Students</span> Say
+        </h2>
+        <p className="text-zinc-500 text-lg max-w-2xl leading-relaxed">
+          Join thousands of successful learners who have transformed their careers and passions through Pankhuri.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {testimonials.map((testimonial, index) => (
-          <Card key={index} className="p-6 shadow-md">
-            <div className="flex gap-1 mb-4">
+          <Card key={index} className="relative p-8 border-zinc-100 shadow-xl shadow-zinc-200/50 rounded-3xl overflow-hidden group hover:-translate-y-2 transition-transform duration-300">
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+              <Quote size={80} className="text-zinc-900" />
+            </div>
+
+            <div className="flex gap-1 mb-6">
               {Array.from({ length: testimonial.rating }).map((_, i) => (
-                <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
+                <Star key={i} size={18} className="text-yellow-400 fill-yellow-400" />
               ))}
             </div>
-            <p className="text-gray-600 mb-6 leading-relaxed">{testimonial.content}</p>
-            <div>
-              <p className="text-black font-semibold">{testimonial.name}</p>
-              <p className="text-gray-500 text-sm">{testimonial.role}</p>
+
+            <p className="text-zinc-600 mb-8 leading-relaxed text-lg font-light italic">
+              "{testimonial.content}"
+            </p>
+
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center text-purple-600 font-bold text-xl">
+                {testimonial.name[0]}
+              </div>
+              <div>
+                <p className="text-zinc-900 font-bold">{testimonial.name}</p>
+                <p className="text-zinc-500 text-sm font-medium">{testimonial.role}</p>
+              </div>
             </div>
           </Card>
         ))}
@@ -48,3 +69,4 @@ export function TestimonialSection() {
     </section>
   )
 }
+
