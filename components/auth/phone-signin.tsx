@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { RecaptchaVerifier, signInWithPhoneNumber, type ConfirmationResult } from "firebase/auth"
-import { FirebaseAuth } from "@/config/firebase"
+import { RequestOtp, VerifyOtp } from "@/actions/phone-auth"
 import { signIn as nextAuthSignIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,19 +13,12 @@ import { useRouter, useSearchParams } from "next/navigation"
 export function PhoneSignIn() {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [otp, setOtp] = useState("")
-    const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null)
+    // const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null)
     const [step, setStep] = useState<"phone" | "otp">("phone")
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get("callbackUrl")
-
-    const setupRecaptcha = () => {
-        if ((window as any).recaptchaVerifier) return
-        (window as any).recaptchaVerifier = new RecaptchaVerifier(FirebaseAuth, 'recaptcha-container', {
-            'size': 'invisible',
-        })
-    }
 
     const handleSendOtp = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -34,16 +26,16 @@ export function PhoneSignIn() {
 
         setLoading(true)
         try {
-            setupRecaptcha()
-            const appVerifier = (window as any).recaptchaVerifier
-            const formatPhone = phoneNumber.startsWith("+") ? phoneNumber : `+91${phoneNumber}`
-            const result = await signInWithPhoneNumber(FirebaseAuth, formatPhone, appVerifier)
-            setConfirmationResult(result)
-            setStep("otp")
-            toast.success("OTP sent!")
+            const res = await RequestOtp(phoneNumber)
+            if (res.success) {
+                setStep("otp")
+                toast.success("OTP sent!")
+            } else {
+                toast.error(res.message || "There is not otp in the backend response")
+            }
         } catch (error: any) {
             console.error(error)
-            toast.error(error.message || "Failed to send OTP")
+            toast.error(error.message)
         } finally {
             setLoading(false)
         }
@@ -55,23 +47,24 @@ export function PhoneSignIn() {
 
         setLoading(true)
         try {
-            const firebaseUser = await confirmationResult?.confirm(otp)
-            const idToken = await firebaseUser?.user.getIdToken()
+            const res = await VerifyOtp(phoneNumber, otp)
 
-            if (idToken) {
+            if (res.success && res.data) {
                 const result = await nextAuthSignIn("credentials", {
-                    idToken,
+                    idToken: res.data.token,
                     method: "phone",
                     redirect: false,
                 })
 
                 if (result?.error) {
-                    toast.error("Backend authentication failed")
+                    toast.error("Session creation failed")
                 } else {
                     toast.success("Logged in successfully!")
                     router.push(callbackUrl || "/")
                     router.refresh()
                 }
+            } else {
+                toast.error(res.message || "Invalid OTP")
             }
         } catch (error: any) {
             console.error(error)
