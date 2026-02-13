@@ -13,9 +13,10 @@ interface VideoPlayerProps {
   thumbnailUrl?: string
   initialTimestamp?: number
   lessonId?: string
+  externalUrl?: string
 }
 
-export function VideoPlayer({ videoId, title, thumbnailUrl, initialTimestamp = 0, lessonId }: VideoPlayerProps) {
+export function VideoPlayer({ videoId, title, thumbnailUrl, initialTimestamp = 0, lessonId, externalUrl }: VideoPlayerProps) {
   const playerRef = useRef<any>(null)
   const [streamUrl, setStreamUrl] = useState<string | null>(null)
   const [token, setToken] = useState<string | null>(null)
@@ -34,6 +35,8 @@ export function VideoPlayer({ videoId, title, thumbnailUrl, initialTimestamp = 0
   const lastSavedTimeRef = useRef(0)
   const isSavingRef = useRef(false)
   const hasSeekedInitial = useRef(false)
+
+  const isHls = streamUrl?.includes(".m3u8");
 
   useEffect(() => {
     setIsMounted(true)
@@ -61,19 +64,28 @@ export function VideoPlayer({ videoId, title, thumbnailUrl, initialTimestamp = 0
           setStreamUrl(data.streamUrl)
           // Use provided token or session token
           if (data.token) setToken(data.token)
+        } else if (externalUrl) {
+          // Fallback to external URL if provided and API doesn't give a stream
+          setStreamUrl(externalUrl)
+          setLoading(false)
         } else {
           setError(response.data?.message || "Video stream not available")
         }
       } catch (err: any) {
         console.error("Video Load Error:", err)
-        setError(err.response?.data?.message || err.message || "Failed to load video stream")
+        if (externalUrl) {
+          setStreamUrl(externalUrl)
+          setError(null)
+        } else {
+          setError(err.response?.data?.message || err.message || "Failed to load video stream")
+        }
       } finally {
         setLoading(false)
       }
     }
 
     fetchStream()
-  }, [videoId])
+  }, [videoId, externalUrl])
 
   const saveProgress = async (currentTime: number) => {
     if (!lessonId || isSavingRef.current) return;
@@ -196,11 +208,11 @@ export function VideoPlayer({ videoId, title, thumbnailUrl, initialTimestamp = 0
               file: {
                 attributes: {
                   controlsList: 'nodownload',
-                  crossOrigin: 'anonymous',
+                  crossOrigin: isHls ? 'anonymous' : undefined,
                   poster: thumbnailUrl,
                 },
-                forceHLS: true,
-                hlsOptions: {
+                forceHLS: isHls,
+                hlsOptions: isHls ? {
                   enableWorker: true,
                   autoStartLoad: false, // Don't download segments until play
                   lowLatencyMode: false,
@@ -212,7 +224,7 @@ export function VideoPlayer({ videoId, title, thumbnailUrl, initialTimestamp = 0
                       xhr.setRequestHeader("Authorization", `Bearer ${token}`)
                     }
                   },
-                },
+                } : undefined,
               },
             }}
           />
