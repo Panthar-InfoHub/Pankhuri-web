@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { RecaptchaVerifier, signInWithPhoneNumber, type ConfirmationResult } from "firebase/auth"
-import { FirebaseAuth } from "@/config/firebase"
+import { useState, useEffect } from "react"
+import { RequestOtp, VerifyOtp } from "@/actions/phone-auth"
 import { signIn as nextAuthSignIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,19 +13,23 @@ import { useRouter, useSearchParams } from "next/navigation"
 export function PhoneSignIn() {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [otp, setOtp] = useState("")
-    const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null)
+    // const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null)
     const [step, setStep] = useState<"phone" | "otp">("phone")
     const [loading, setLoading] = useState(false)
+    const [resendTimer, setResendTimer] = useState(0)
     const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get("callbackUrl")
 
-    const setupRecaptcha = () => {
-        if ((window as any).recaptchaVerifier) return
-        (window as any).recaptchaVerifier = new RecaptchaVerifier(FirebaseAuth, 'recaptcha-container', {
-            'size': 'invisible',
-        })
-    }
+    useEffect(() => {
+        let interval: NodeJS.Timeout
+        if (resendTimer > 0) {
+            interval = setInterval(() => {
+                setResendTimer((prev) => prev - 1)
+            }, 1000)
+        }
+        return () => clearInterval(interval)
+    }, [resendTimer])
 
     const handleSendOtp = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -34,16 +37,17 @@ export function PhoneSignIn() {
 
         setLoading(true)
         try {
-            setupRecaptcha()
-            const appVerifier = (window as any).recaptchaVerifier
-            const formatPhone = phoneNumber.startsWith("+") ? phoneNumber : `+91${phoneNumber}`
-            const result = await signInWithPhoneNumber(FirebaseAuth, formatPhone, appVerifier)
-            setConfirmationResult(result)
-            setStep("otp")
-            toast.success("OTP sent!")
+            const res = await RequestOtp(phoneNumber)
+            if (res.success) {
+                setStep("otp")
+                setResendTimer(60)
+                toast.success("OTP sent!")
+            } else {
+                toast.error(res.message || "There is not otp in the backend response")
+            }
         } catch (error: any) {
             console.error(error)
-            toast.error(error.message || "Failed to send OTP")
+            toast.error(error.message)
         } finally {
             setLoading(false)
         }
@@ -55,23 +59,20 @@ export function PhoneSignIn() {
 
         setLoading(true)
         try {
-            const firebaseUser = await confirmationResult?.confirm(otp)
-            const idToken = await firebaseUser?.user.getIdToken()
 
-            if (idToken) {
-                const result = await nextAuthSignIn("credentials", {
-                    idToken,
-                    method: "phone",
-                    redirect: false,
-                })
+            const result = await nextAuthSignIn("credentials", {
+                phoneNumber,
+                otp,
+                method: "phone",
+                redirect: false,
+            })
 
-                if (result?.error) {
-                    toast.error("Backend authentication failed")
-                } else {
-                    toast.success("Logged in successfully!")
-                    router.push(callbackUrl || "/")
-                    router.refresh()
-                }
+            if (result?.error) {
+                toast.error("Session creation failed")
+            } else {
+                toast.success("Logged in successfully!")
+                router.push(callbackUrl || "/")
+                router.refresh()
             }
         } catch (error: any) {
             console.error(error)
@@ -97,10 +98,11 @@ export function PhoneSignIn() {
                         Didn't receive code? {" "}
                         <button
                             type="button"
-                            onClick={() => setStep("phone")}
-                            className="text-rose-500 font-bold hover:text-rose-400 transition-colors"
+                            onClick={(e) => handleSendOtp(e as any)}
+                            disabled={resendTimer > 0 || loading}
+                            className="text-rose-500 font-bold hover:text-rose-400 transition-colors disabled:text-zinc-400 disabled:cursor-not-allowed"
                         >
-                            Resend
+                            {resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend"}
                         </button>
                     </p>
                 </div>
