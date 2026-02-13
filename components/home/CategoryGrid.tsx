@@ -9,7 +9,7 @@ interface CategoryGridProps {
 
 export function CategoryGrid({ categories }: CategoryGridProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-10">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8 md:gap-10">
       {categories.map((category) => (
         <Link
           key={category.id}
@@ -19,7 +19,7 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
           {/* Decorative halo glow behind card */}
           <div className="absolute -inset-2 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-indigo-500/20 rounded-[2.5rem] blur-2xl transition-all duration-700 opacity-0 group-hover:opacity-100" />
 
-          <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-white border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] group-hover:-translate-y-4">
+          <div className="relative aspect-[4/5] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden bg-white border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] group-hover:-translate-y-4">
 
             {/* Image Layer with Zoom */}
             <div className="absolute inset-0 overflow-hidden">
@@ -35,15 +35,15 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
             </div>
 
             {/* Floating "Studio" Label */}
-            <div className="absolute top-5 left-5 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+            <div className="absolute top-3 left-3 sm:top-5 sm:left-5 flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-[8px] sm:text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
               <Sparkles size={10} className="text-pink-400" />
               Studio
             </div>
 
             {/* Content Section */}
-            <div className="absolute inset-x-0 bottom-0 p-8 flex flex-col items-center text-center">
+            <div className="absolute inset-x-0 bottom-0 p-4 sm:p-8 flex flex-col items-center text-center">
               <div className="w-full relative">
-                <h3 className="text-white font-bold text-xl md:text-2xl tracking-tight transition-all duration-500 transform group-hover:-translate-y-2">
+                <h3 className="text-white font-bold text-lg sm:text-xl md:text-2xl tracking-tight transition-all duration-500 transform group-hover:-translate-y-2">
                   {category.name}
                 </h3>
 
@@ -55,7 +55,7 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
             </div>
 
             {/* Animated Gradient Border Bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
+            <div className="absolute bottom-0 left-0 right-0 h-1 sm:h-1.5 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
           </div>
         </Link>
       ))}

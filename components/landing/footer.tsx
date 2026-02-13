@@ -133,7 +133,9 @@ export function Footer() {
           <p>© 2025 Pankhuri. All rights reserved. Made with ❤️ for women everywhere.</p>
           <p className="mt-2 text-purple-400">
             Designed & Developed by{" "}
-            <span className="font-semibold text-pink-400 hover:text-pink-300 transition-colors">Panthar Infohub</span>
+            <Link href="https://www.pantharinfohub.com/" target="_blank" className="font-semibold text-pink-400 hover:text-pink-300 transition-colors">
+              Panthar Infohub Pvt. Ltd.
+            </Link>
           </p>
         </div>
       </div>

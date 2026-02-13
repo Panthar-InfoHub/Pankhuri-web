@@ -39,14 +39,15 @@ export function StatsSection() {
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                 style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
-            <div className="max-w-7xl mx-auto relative">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center">
+            <div className="max-w-7xl mx-auto relative px-4 sm:px-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center w-full">
                     {stats.map((stat, index) => (
                         <div
                             key={index}
-                            className={`group relative flex flex-col items-center justify-center p-12 transition-all duration-700 
+                            className={`group relative flex flex-col items-center justify-center p-8 md:p-12 transition-all duration-700 
                                 ${index !== stats.length - 1 ? 'lg:border-r border-zinc-100' : ''} 
-                                ${index % 2 === 0 && index !== stats.length - 1 ? 'md:border-r lg:border-r-0' : ''}`}
+                                ${index % 2 === 0 && index !== stats.length - 1 ? 'md:border-r lg:border-r-0' : ''}
+                                ${index < 2 ? 'border-b md:border-b-0' : ''}`}
                         >
                             {/* Hover Backdrop Glow */}
                             <div className={`absolute inset-0 ${stat.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10`} />

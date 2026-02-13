@@ -27,8 +27,8 @@ export function TestimonialSection() {
   ]
 
   return (
-    <section className="max-w-7xl mx-auto px-6">
-      <div className="flex flex-col items-center text-center mb-16">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 w-full overflow-hidden">
+      <div className="flex flex-col items-center text-center mb-12 md:mb-16">
         <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 tracking-tight mb-4">
           What Our <span className="text-purple-600">Students</span> Say
         </h2>

@@ -42,7 +42,7 @@ export function CourseUtilizationGuide() {
                 <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-purple-200/10 blur-[150px] rounded-full" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
                 <div className="flex flex-col items-center text-center mb-16">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-xs font-bold uppercase tracking-wider mb-4">
                         <Sparkles size={14} className="animate-pulse" />
