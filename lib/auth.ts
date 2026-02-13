@@ -8,18 +8,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       name: "Firebase",
       credentials: {
         idToken: { label: "ID Token", type: "text" },
+        phoneNumber: { label: "Phone Number", type: "text" },
+        otp: { label: "OTP", type: "text" },
         method: { label: "Method", type: "text" }, // google or phone
       },
       async authorize(credentials) {
         try {
           const method = (credentials?.method as string) || "google";
-          const endpoint = method === "phone" ? "api/auth/phone-verify" : "api/auth/google-verify";
+          const endpoint = method === "phone" ? "api/auth/otp/verify" : "api/auth/google-verify";
 
           const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/\/$/, "");
           const fullUrl = `${baseUrl}/${endpoint}`;
 
           const res = await axios.post(fullUrl, {
             idToken: credentials?.idToken,
+            phone: credentials?.phoneNumber,
+            otp: credentials?.otp,
           });
 
           if (res.data.success && res.data.data) {

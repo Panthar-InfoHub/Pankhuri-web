@@ -70,7 +70,7 @@ export default function PlansPage() {
   const yearlyPlan = plans.find((p) => p.subscriptionType === "yearly");
 
   return (
-    <main className="bg-zinc-50 min-h-screen">
+    <main id="pricing" className="bg-zinc-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -88,7 +88,7 @@ export default function PlansPage() {
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Monthly Plan */}
           {monthlyPlan && (
-            <Card className="bg-white border-zinc-200 rounded-3xl overflow-hidden hover:border-zinc-300 transition-all shadow-sm hover:shadow-md">
+            <Card className="flex flex-col bg-white border-zinc-200 rounded-3xl overflow-hidden hover:border-zinc-300 transition-all shadow-sm hover:shadow-md">
               <CardHeader className="border-b border-zinc-100 px-8 py-10">
                 <CardTitle className="text-2xl font-bold text-zinc-900">
                   {monthlyPlan.name}
@@ -103,7 +103,7 @@ export default function PlansPage() {
                   <span className="text-zinc-500 text-lg">/month</span>
                 </div>
               </CardHeader>
-              <CardContent className="p-8">
+              <CardContent className="p-8 flex-1 flex flex-col">
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-center gap-3 text-zinc-600">
                     <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
@@ -125,7 +125,7 @@ export default function PlansPage() {
                 <Button
                   onClick={() => handleSubscribe(monthlyPlan)}
                   disabled={processingPlanId === monthlyPlan.id}
-                  className="w-full bg-zinc-900 text-white hover:bg-zinc-800 h-14 text-lg font-semibold rounded-2xl transition-all shadow-sm"
+                  className="mt-auto w-full bg-zinc-900 text-white hover:bg-zinc-800 h-14 text-lg font-semibold rounded-2xl transition-all shadow-sm"
                 >
                   {processingPlanId === monthlyPlan.id ? (
                     <>
@@ -142,7 +142,7 @@ export default function PlansPage() {
 
           {/* Yearly Plan */}
           {yearlyPlan && (
-            <Card className="bg-gradient-to-br from-purple-50 via-white to-pink-50 border-purple-200 rounded-3xl overflow-hidden relative hover:border-purple-300 transition-all shadow-md hover:shadow-xl">
+            <Card className="flex flex-col bg-gradient-to-br from-purple-50 via-white to-pink-50 border-purple-200 rounded-3xl overflow-hidden relative hover:border-purple-300 transition-all shadow-md hover:shadow-xl">
               <div className="absolute top-6 right-6">
                 <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-3 py-1 shadow-sm">
                   Best Value
@@ -174,7 +174,7 @@ export default function PlansPage() {
                   )}
                 </div>
               </CardHeader>
-              <CardContent className="p-8">
+              <CardContent className="p-8 flex-1 flex flex-col">
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-center gap-3 text-zinc-700">
                     <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
@@ -200,7 +200,7 @@ export default function PlansPage() {
                 <Button
                   onClick={() => handleSubscribe(yearlyPlan)}
                   disabled={processingPlanId === yearlyPlan.id}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-95 h-14 text-lg font-semibold rounded-2xl shadow-lg shadow-purple-100 transition-all"
+                  className="mt-auto w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-95 h-14 text-lg font-semibold rounded-2xl shadow-lg shadow-purple-100 transition-all"
                 >
                   {processingPlanId === yearlyPlan.id ? (
                     <>

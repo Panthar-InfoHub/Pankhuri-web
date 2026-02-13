@@ -25,8 +25,8 @@ export function ServiceSection() {
             {/* Background Decor */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-purple-50/50 to-pink-50/50 blur-[120px] -z-10 rounded-full opacity-60" />
 
-            <div className="max-w-5xl mx-auto px-6">
-                <div className="flex flex-col md:items-center text-center mb-20 space-y-4">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 w-full relative z-10">
+                <div className="flex flex-col md:items-center text-center mb-12 md:mb-20 space-y-4">
                     <h2 className="text-4xl md:text-5xl font-bold text-zinc-800 tracking-tight">
                         Why Choose <span className="text-pink-600">Pankhuri?</span>
                     </h2>
