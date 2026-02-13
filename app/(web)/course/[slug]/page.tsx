@@ -46,9 +46,9 @@ export default async function CoursePage({ params }: CoursePageProps) {
       <CourseHeader course={course} />
 
       <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <div className="">
           {/* Main Content */}
-          <div className="lg:col-span-8 space-y-20">
+          <div className="w-full space-y-20">
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-8">About this course</h2>
               <CourseDescription description={course.description} />
@@ -124,7 +124,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-4 self-start">
+          {/* <div className="lg:col-span-4 self-start">
             <div className="sticky top-24 space-y-8">
               {course.metadata?.prerequisites && (course.metadata.prerequisites as string[]).length > 0 && (
                 <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
@@ -145,7 +145,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
