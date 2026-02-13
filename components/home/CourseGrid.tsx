@@ -30,32 +30,23 @@ export function CourseGrid({ title, courses }: CourseGridProps) {
 
       <Carousel
         opts={{
-          align: "center",
+          align: "start",
           loop: true,
         }}
         className="w-full relative"
       >
-        <CarouselContent className="-ml-4 pb-4">
+        <CarouselContent className="-ml-2 md:-ml-4 pb-4">
           {courses.map((course) => (
-            <CarouselItem key={course.id} className="pl-4 basis-[85%] md:basis-[45%] lg:basis-[29%]">
-              <div className="h-full select-none">
-                <CourseCard course={course} />
-              </div>
-            </CarouselItem>
-          ))}
-          {/* User requested duplicates for looping effect */}
-          {courses.map((course) => (
-            <CarouselItem key={`${course.id}-dup`} className="pl-4 basis-[85%] md:basis-[45%] lg:basis-[29%]">
+            <CarouselItem key={course.id} className="pl-2 md:pl-4 basis-[90%] sm:basis-[50%] md:basis-[45%] lg:basis-[29%]">
               <div className="h-full select-none">
                 <CourseCard course={course} />
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-
         {/* Blur Effects */}
-        <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-white/80 via-white/40 to-transparent z-10 pointer-events-none backdrop-blur-[1px]" />
-        <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-white/80 via-white/40 to-transparent z-10 pointer-events-none backdrop-blur-[1px]" />
+        <div className="absolute inset-y-0 left-0 w-8 md:w-32 bg-gradient-to-r from-white/95 via-white/40 to-transparent z-10 pointer-events-none backdrop-blur-[1px]" />
+        <div className="absolute inset-y-0 right-0 w-8 md:w-32 bg-gradient-to-l from-white/95 via-white/40 to-transparent z-10 pointer-events-none backdrop-blur-[1px]" />
 
         <CarouselPrevious className="hidden md:flex -left-4 lg:-left-12 z-20" />
         <CarouselNext className="hidden md:flex -right-4 lg:-right-12 z-20" />
