@@ -49,7 +49,7 @@ export default function PlansPage() {
       toast.success("Redirecting to payment...");
 
       // Redirect to Razorpay short URL
-      window.location.href = data.shortUrl;
+      window.open(data.shortUrl, "_blank");
     } catch (error: any) {
       console.error("❌ [Subscription] Failed:", error);
       toast.error(error?.response?.data?.message || "Failed to initiate subscription");
@@ -106,19 +106,19 @@ export default function PlansPage() {
               <CardContent className="p-8 flex-1 flex flex-col">
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-center gap-3 text-zinc-600">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     Access to all courses
                   </li>
                   <li className="flex items-center gap-3 text-zinc-600">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     HD video quality
                   </li>
                   <li className="flex items-center gap-3 text-zinc-600">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     Cancel anytime
                   </li>
                   <li className="flex items-center gap-3 text-zinc-600">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     Download resources
                   </li>
                 </ul>
@@ -142,9 +142,9 @@ export default function PlansPage() {
 
           {/* Yearly Plan */}
           {yearlyPlan && (
-            <Card className="flex flex-col bg-gradient-to-br from-purple-50 via-white to-pink-50 border-purple-200 rounded-3xl overflow-hidden relative hover:border-purple-300 transition-all shadow-md hover:shadow-xl">
+            <Card className="flex flex-col bg-linear-to-br from-purple-50 via-white to-pink-50 border-purple-200 rounded-3xl overflow-hidden relative hover:border-purple-300 transition-all shadow-md hover:shadow-xl">
               <div className="absolute top-6 right-6">
-                <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-3 py-1 shadow-sm">
+                <Badge className="bg-linear-to-r from-purple-600 to-pink-600 text-white border-0 px-3 py-1 shadow-sm">
                   Best Value
                 </Badge>
               </div>
@@ -177,30 +177,30 @@ export default function PlansPage() {
               <CardContent className="p-8 flex-1 flex flex-col">
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-center gap-3 text-zinc-700">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     Access to all courses
                   </li>
                   <li className="flex items-center gap-3 text-zinc-700">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     HD video quality
                   </li>
                   <li className="flex items-center gap-3 text-zinc-700">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     Priority support
                   </li>
                   <li className="flex items-center gap-3 text-zinc-700">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     Early access to new courses
                   </li>
                   <li className="flex items-center gap-3 text-zinc-700">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <Check className="w-5 h-5 text-emerald-600 shrink-0" />
                     Download resources
                   </li>
                 </ul>
                 <Button
                   onClick={() => handleSubscribe(yearlyPlan)}
                   disabled={processingPlanId === yearlyPlan.id}
-                  className="mt-auto w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-95 h-14 text-lg font-semibold rounded-2xl shadow-lg shadow-purple-100 transition-all"
+                  className="mt-auto w-full bg-linear-to-r from-purple-600 to-pink-600 text-white hover:opacity-95 h-14 text-lg font-semibold rounded-2xl shadow-lg shadow-purple-100 transition-all"
                 >
                   {processingPlanId === yearlyPlan.id ? (
                     <>
