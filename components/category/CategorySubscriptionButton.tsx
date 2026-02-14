@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Check, Crown, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { CategoryPricing } from "@/types/category";
+import { initiateSubscription } from "@/lib/api/plan";
 
 interface CategorySubscriptionButtonProps {
   categoryName: string;
@@ -28,14 +29,10 @@ export function CategorySubscriptionButton({
     setSelectedPlanId(plan.id);
 
     try {
-      // Call subscription API
-      const response = await fetch("/api/subscriptions/initiate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planId: plan.id }),
-      });
+      // Use the subscription API client
+      const result = await initiateSubscription(plan.id);
 
-      const result = await response.json();
+      console.log(result);
 
       if (!result.success) {
         throw new Error(result.message || "Failed to initiate subscription");
@@ -43,7 +40,9 @@ export function CategorySubscriptionButton({
 
       // Redirect to Razorpay hosted page
       if (result.data?.shortUrl) {
-        window.location.href = result.data.shortUrl;
+        window.open(result.data.shortUrl, "_blank");
+        setIsProcessing(false);
+        setSelectedPlanId(null);
       } else {
         throw new Error("No subscription URL received");
       }
