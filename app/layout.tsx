@@ -5,6 +5,8 @@ import { Outfit } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
 import { SessionProvider } from "next-auth/react"
+import GoogleAnalyticsWrpper from "@/components/google-analytics"
+
 
 export const metadata: Metadata = {
     title: "Pankhuri - Online Learning Platform",
@@ -51,6 +53,7 @@ export default function RootLayout({
                 </SessionProvider>
                 <Toaster />
                 <Analytics />
+                <GoogleAnalyticsWrpper/>
             </body>
         </html>
     )
