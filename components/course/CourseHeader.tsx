@@ -74,7 +74,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
 
               {/* Trainer */}
               <Link
-                href={`/trainer/${course.trainer.id}`}
+                href={`/trainer/${course?.trainer?.id}`}
                 className="group/trainer flex items-center gap-4 w-fit"
               >
                 <div className="relative w-12 h-12 rounded-full overflow-hidden border border-gray-300 shadow-sm transition-transform duration-300 group-hover/trainer:scale-110 group-hover/trainer:border-purple-500">
