@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react"
 import GoogleAnalyticsWrpper from "@/components/google-analytics"
 import Script from "next/script"
 import MetaPixelTracker from "@/components/metaPixelTracker";
+import { Suspense } from "react"
 
 
 export const metadata: Metadata = {
@@ -79,7 +80,9 @@ export default function RootLayout({
                         alt=""
                     />
                 </noscript>
-                <MetaPixelTracker />
+                <Suspense fallback={null}>
+                    <MetaPixelTracker />
+                </Suspense>
                 <SessionProvider>
                     {children}
                 </SessionProvider>
