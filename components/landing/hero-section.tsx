@@ -43,11 +43,11 @@ export function HeroSection() {
                     <div className="flex items-center gap-2 mb-1">
                       <Sparkles className="h-5 w-5 text-pink-500 fill-pink-500" />
                       <span className="text-sm font-semibold text-pink-600 uppercase tracking-wide">
-                        Valentine's Week offer
+                        Plans
                       </span>
                     </div>
                     <p className="text-[10px] md:text-xs text-pink-500 font-medium leading-tight">
-                      limited time offer avail now, only valid for 14th feb 2026
+                      Here are some our plans where you can get the best courses at the best price.
                     </p>
                   </div>
 
@@ -55,22 +55,22 @@ export function HeroSection() {
                     <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-4 border-2 border-pink-200">
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Monthly</p>
                       <div className="flex flex-col">
-                        <span className="text-sm text-muted-foreground line-through opacity-70">₹349</span>
-                        <span className="text-3xl font-extrabold text-foreground">₹140</span>
+                        {/* <span className="text-sm text-muted-foreground line-through opacity-70">₹349</span> */}
+                        <span className="text-3xl font-extrabold text-foreground">₹299</span>
                       </div>
                       <p className="text-[10px] text-muted-foreground mt-1">per month</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-200 relative">
-                      <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {/* <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                         VALENTINE SPECIAL
-                      </div>
+                      </div> */}
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Yearly</p>
                       <div className="flex flex-col">
-                        <span className="text-sm text-muted-foreground line-through opacity-70">₹1,999</span>
-                        <span className="text-3xl font-extrabold text-foreground">₹1,402</span>
+                        {/* <span className="text-sm text-muted-foreground line-through opacity-70">₹1,999</span> */}
+                        <span className="text-3xl font-extrabold text-foreground">₹2,499</span>
                       </div>
-                      <p className="text-[10px] text-muted-foreground mt-1">₹116/month</p>
+                      <p className="text-[10px] text-muted-foreground mt-1">₹208/month</p>
                     </div>
                   </div>
 
