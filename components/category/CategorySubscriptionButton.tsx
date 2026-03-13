@@ -47,8 +47,8 @@ export function CategorySubscriptionButton({
         throw new Error("No subscription URL received");
       }
     } catch (error: any) {
-      console.error("❌ Subscription Error:", error);
-      toast.error(error.message || "Failed to start subscription");
+      console.error("❌ Subscription Error:", error); 
+      toast.error(error?.response?.data?.message || "Failed to initiate subscription");
       setIsProcessing(false);
       setSelectedPlanId(null);
     }
