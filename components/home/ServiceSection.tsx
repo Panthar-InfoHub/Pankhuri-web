@@ -5,7 +5,7 @@ export function ServiceSection() {
     const services = [
         {
             title: "Community access",
-            description: "Get in the paid whatsapp group with fellow learners and instructor to clear any doubts or roadblocks.",
+            description: "Get in the paid whatsapp group with fellow learners to clear any doubts or roadblocks.",
             number: "01",
         },
         {

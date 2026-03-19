@@ -199,7 +199,7 @@ export default async function TrainerPage({ params }: TrainerPageProps) {
                                         <Award className="w-8 h-8 text-purple-600" />
                                     </div>
                                     <h4 className="font-bold text-gray-900 mb-2 text-sm">Verified Professional</h4>
-                                    <p className="text-[10px] text-gray-600 uppercase tracking-widest leading-relaxed">Top Tier Instructor • Vetted Content</p>
+                                    <p className="text-[10px] text-gray-600 uppercase tracking-widest leading-relaxed">Top Tier     • Vetted Content</p>
                                 </div>
 
                                 {trainer.socialLinks?.website && (

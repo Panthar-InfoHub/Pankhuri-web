@@ -117,7 +117,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
               </section>
             )}
 
-            {course.trainer && <TrainerSection trainer={course.trainer} />}
+            {/* {course.trainer && <TrainerSection trainer={course.trainer} />} */}
 
             {/* Reviews Section */}
             <CourseReviews courseId={course.id} />

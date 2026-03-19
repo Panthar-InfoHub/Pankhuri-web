@@ -9,6 +9,7 @@ import GoogleAnalyticsWrpper from "@/components/google-analytics"
 import Script from "next/script"
 import MetaPixelTracker from "@/components/metaPixelTracker";
 import { Suspense } from "react"
+import { ExitIntentWrapper } from "@/components/common/ExitIntentWrapper"
 
 
 export const metadata: Metadata = {
@@ -86,6 +87,7 @@ export default function RootLayout({
                 <SessionProvider>
                     {children}
                 </SessionProvider>
+                <ExitIntentWrapper />
                 <Toaster />
                 <Analytics />
                 <GoogleAnalyticsWrpper />

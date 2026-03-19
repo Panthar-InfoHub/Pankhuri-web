@@ -1,0 +1,52 @@
+# Once-Per-Session Exit Intent Popup Fix
+
+**Goal**: The popup should trigger **at most once per browser tab session**. Opening a new tab should allow it to fire again.
+
+> [!NOTE]
+> `sessionStorage` is already scoped per-tab by the browser spec, so the "new tab = fresh popup" behavior comes for free. The only fix needed is ensuring the popup doesn't re-trigger within the same tab after it has already been shown once.
+
+## Current Problem
+
+In [use-exit-intent.ts](file:///d:/Codes/Panthar/Pankhuri-web/hooks/use-exit-intent.ts), the `sessionStorage` flag `exit-intent-shown` is only set inside the `dismiss()` callback (line 13). This means:
+
+- **Desktop**: Moving the mouse to the top edge multiple times before dismissing keeps setting `showPopup = true`.
+- **Mobile**: Pressing back multiple times keeps firing the handler.
+
+## Proposed Changes
+
+### [MODIFY] [use-exit-intent.ts](file:///d:/Codes/Panthar/Pankhuri-web/hooks/use-exit-intent.ts)
+
+Two changes inside the `useEffect`:
+
+1. **Set the `sessionStorage` flag immediately when the popup triggers** (inside both [handleMouseLeave](file:///d:/Codes/Panthar/Pankhuri-web/hooks/use-exit-intent.ts#38-44) and [handlePopState](file:///d:/Codes/Panthar/Pankhuri-web/hooks/use-exit-intent.ts#28-34)), not just on dismiss.
+2. **Remove the event listener after the first trigger** so no further events are processed.
+
+```diff
+ const handleMouseLeave = (e: MouseEvent) => {
+   if (e.clientY <= 0) {
+     setShowPopup(true)
++    sessionStorage.setItem("exit-intent-shown", "true")
++    document.removeEventListener("mouseleave", handleMouseLeave)
+   }
+ }
+```
+
+```diff
+ const handlePopState = () => {
+   setShowPopup(true)
+-  window.history.pushState({ popup: true }, "")
++  sessionStorage.setItem("exit-intent-shown", "true")
++  window.removeEventListener("popstate", handlePopState)
+ }
+```
+
+No other files are modified.
+
+## Why This Works
+
+| Scenario | Behavior |
+|----------|----------|
+| User triggers popup, dismisses it | Popup won't fire again — flag is set, listener is removed |
+| User triggers popup, doesn't dismiss, moves mouse up again | Won't re-trigger — listener already removed |
+| User opens a new tab | Fresh `sessionStorage` → popup can fire once |
+| User refreshes the same tab | `sessionStorage` persists → popup won't fire |

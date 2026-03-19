@@ -74,7 +74,7 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
             {course.title}
           </h3>
 
-          <div className="flex items-center gap-2 mb-6">
+          {/* <div className="flex items-center gap-2 mb-6">
             <div className="w-6 h-6 rounded-full bg-zinc-100 overflow-hidden border border-zinc-200">
               {course.trainer?.user?.profileImage ? (
                 <Image src={course.trainer.user.profileImage} alt="Instructor" width={24} height={24} />
@@ -87,7 +87,7 @@ export function CourseCard({ course, hasAccess = true }: CourseCardProps) {
             <p className="text-zinc-500 text-xs">
               By <span className="text-zinc-900 font-semibold">{course.trainer?.user?.displayName}</span>
             </p>
-          </div>
+          </div> */}
 
           <div className="mt-auto pt-5 border-t border-zinc-50 flex items-center justify-between">
             <div className="flex items-center gap-4 text-[10px] text-zinc-400 font-medium">
