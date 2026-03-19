@@ -52,9 +52,6 @@ export function BuyCourseButton({
           name: (session?.user as any)?.name || "",
           email: (session?.user as any)?.email || "",
         },
-        theme: {
-          color: "#8B5CF6",
-        },
         handler: async (response) => {
           try {
          
