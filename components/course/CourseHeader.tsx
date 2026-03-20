@@ -73,7 +73,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
               </div>
 
               {/* Trainer */}
-              <Link
+              {/* <Link
                 href={`/trainer/${course?.trainer?.id}`}
                 className="group/trainer flex items-center gap-4 w-fit"
               >
@@ -91,7 +91,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                   </p>
                   <p className="text-gray-900 font-bold group-hover/trainer:text-purple-600 transition-colors">{course.trainer?.user?.displayName}</p>
                 </div>
-              </Link>
+              </Link> */}
             </div>
 
             {/* Enhanced Pricing Panel */}
