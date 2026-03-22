@@ -8,8 +8,10 @@ import { purchaseCourse, verifyCoursePurchase } from "@/lib/api/course.client";
 import { initiateRazorpayPayment, formatPrice } from "@/lib/razorpay";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { event } from "@/lib/metaPixel"; // Meta Pixel tracking
 
 interface BuyCourseButtonProps {
+
   courseId: string;
   courseName: string;
   isPurchased?: boolean;
@@ -39,6 +41,15 @@ export function BuyCourseButton({
       const { data: orderData } = await purchaseCourse(courseId);
 
 
+
+      // Track InitiateCheckout in Meta Pixel
+      event("InitiateCheckout", {
+        content_name: courseName,
+        content_ids: [courseId],
+        content_type: "product",
+        value: orderData.amount / 100, // Razorpay amount is in paise
+        currency: orderData.currency || "INR",
+      });
 
       // Step 2: Open Razorpay payment
       await initiateRazorpayPayment({

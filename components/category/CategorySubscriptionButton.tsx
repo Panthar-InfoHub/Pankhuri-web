@@ -9,8 +9,10 @@ import { Check, Crown, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { CategoryPricing } from "@/types/category";
 import { initiateSubscription, verifySubscription } from "@/lib/api/plan";
+import { event } from "@/lib/metaPixel"; // Meta Pixel tracking
 
 interface CategorySubscriptionButtonProps {
+
   categoryName: string;
   pricing: CategoryPricing[];
   hasAccess: boolean;
@@ -85,6 +87,15 @@ export function CategorySubscriptionButton({
           },
         },
       };
+
+      // Track InitiateCheckout in Meta Pixel
+      event("InitiateCheckout", {
+        content_name: `${categoryName} - ${plan.name || plan.subscriptionType}`,
+        content_ids: [plan.id],
+        content_type: "product",
+        value: data.amount / 100, // Razorpay amount is in paise
+        currency: data.currency || "INR",
+      });
 
       const { initiateRazorpayPayment } = await import("@/lib/razorpay");
       await initiateRazorpayPayment(options);

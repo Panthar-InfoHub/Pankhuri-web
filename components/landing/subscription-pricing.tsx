@@ -10,8 +10,10 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, Check, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { formatPrice } from "@/lib/razorpay";
+import { event } from "@/lib/metaPixel"; // Meta Pixel tracking
 
 export default function PlansPage() {
+
   const router = useRouter();
   const { data: session, status } = useSession();
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -80,6 +82,15 @@ export default function PlansPage() {
           },
         },
       };
+
+      // Track InitiateCheckout in Meta Pixel
+      event("InitiateCheckout", {
+        content_name: data.planName,
+        content_ids: [plan.id],
+        content_type: "product",
+        value: data.amount / 100, // Razorpay amount is in paise
+        currency: data.currency || "INR",
+      });
 
       const { initiateRazorpayPayment } = await import("@/lib/razorpay");
       await initiateRazorpayPayment(options);
