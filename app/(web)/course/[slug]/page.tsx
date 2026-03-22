@@ -10,6 +10,7 @@ import { CertificateClaim } from "@/components/course/CertificateClaim";
 import { CourseReviews } from "@/components/course/CourseReviews";
 import { getCourseProgressServer } from "@/lib/api/progress.server";
 import { Progress } from "@/components/ui/progress";
+import { CourseFAQ } from "@/components/course/CourseFAQ";
 
 interface CoursePageProps {
   params: Promise<{ slug: string }>;
@@ -155,7 +156,8 @@ export default async function CoursePage({ params }: CoursePageProps) {
               </section>
             )}
 
-            {/* {course.trainer && <TrainerSection trainer={course.trainer} />} */}
+            {/* Course FAQ Section */}
+            <CourseFAQ faqData={(course as any).faqData} />
 
             {/* Reviews Section */}
             <CourseReviews courseId={course.id} />
