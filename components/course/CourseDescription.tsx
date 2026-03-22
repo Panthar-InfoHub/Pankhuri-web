@@ -8,6 +8,14 @@ interface CourseDescriptionProps {
 }
 
 export function CourseDescription({ description }: CourseDescriptionProps) {
+    if (!description || description.trim() === "") {
+        return (
+            <div className="p-8 bg-gray-50 border border-gray-100 rounded-3xl text-center">
+                <p className="text-gray-500 font-medium">No description available for this course yet. Stay tuned for updates!</p>
+            </div>
+        )
+    }
+
     const [isExpanded, setIsExpanded] = useState(false)
     const maxLength = 300
 
