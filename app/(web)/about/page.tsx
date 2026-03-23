@@ -16,7 +16,6 @@ import {
 export default function AboutPage() {
     const stats = [
         { label: "Community Members", value: "1M+", icon: Users2, color: "text-pink-600", bg: "bg-pink-100" },
-        { label: "Expert Trainers", value: "500+", icon: Award, color: "text-purple-600", bg: "bg-purple-100" },
         { label: "Live Classes Daily", value: "100+", icon: Globe2, color: "text-blue-600", bg: "bg-blue-100" },
         { label: "Happy Learners", value: "4.8/5", icon: Heart, color: "text-red-600", bg: "bg-red-100" }
     ];
@@ -95,11 +94,11 @@ export default function AboutPage() {
                                         <CheckCircle2 size={24} />
                                     </div>
                                     <div>
-                                        <p className="font-bold text-zinc-900">Verified Expert</p>
-                                        <p className="text-xs text-zinc-500">Trainers</p>
+                                        <p className="font-bold text-zinc-900">Premium Courses</p>
+                                        <p className="text-xs text-zinc-500"></p>
                                     </div>
                                 </div>
-                                <p className="text-zinc-600 text-sm">Quality learning from industry professionals.</p>
+                                <p className="text-zinc-600 text-sm">Quality learning from industry experts.</p>
                             </div>
                         </div>
 

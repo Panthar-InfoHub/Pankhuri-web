@@ -3,16 +3,19 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { getPlans, initiateSubscription, Plan } from "@/lib/api/plan";
+import { getPlans, initiateSubscription, verifySubscription, Plan } from "@/lib/api/plan";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Check, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { formatPrice } from "@/lib/razorpay";
+import { event } from "@/lib/metaPixel"; // Meta Pixel tracking
 
 export default function PlansPage() {
   const router = useRouter();
+
+
   const { data: session, status } = useSession();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,14 +49,55 @@ export default function PlansPage() {
     try {
       const { data } = await initiateSubscription(plan.id);
 
-      toast.success("Redirecting to payment...");
+      const options = {
+        key: data.keyId,
+        subscription_id: data.subscriptionId,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Pankhuri",
+        description: data.planName,
+        prefill: {
+          name: session?.user?.name || "",
+          email: session?.user?.email || "",
+        },
+        handler: async (response: any) => {
+          try {
+            toast.loading("Verifying payment...");
+            await verifySubscription({
+              subscriptionId: data.subscriptionId,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+            });
+            toast.dismiss();
+            toast.success("Subscription activated successfully!");
+            router.push("/dashboard");
+          } catch (error) {
+            toast.dismiss();
+            console.error("Verification failed:", error);
+            toast.error("Payment verification failed. Please contact support.");
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setProcessingPlanId(null);
+          },
+        },
+      };
 
-      // Redirect to Razorpay short URL
-      window.open(data.shortUrl, "_blank");
+      // Track InitiateCheckout in Meta Pixel
+      event("InitiateCheckout", {
+        content_name: data.planName,
+        content_ids: [plan.id],
+        content_type: "product",
+        value: data.amount / 100, // Razorpay amount is in paise
+        currency: data.currency || "INR",
+      });
+
+      const { initiateRazorpayPayment } = await import("@/lib/razorpay");
+      await initiateRazorpayPayment(options);
     } catch (error: any) {
       console.error("❌ [Subscription] Failed:", error);
       toast.error(error?.response?.data?.message || "Failed to initiate subscription");
-    } finally {
       setProcessingPlanId(null);
     }
   };

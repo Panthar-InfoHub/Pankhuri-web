@@ -148,7 +148,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     {
                       ...course,
                       category: { name: category.name },
-                      trainer: undefined,
+                      // trainer: undefined,
                       pricing: undefined,
                       totalReviews: 0,
                       language: "English",

@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Crown, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { CategoryPricing } from "@/types/category";
-import { initiateSubscription } from "@/lib/api/plan";
+import { initiateSubscription, verifySubscription } from "@/lib/api/plan";
+import { event } from "@/lib/metaPixel"; // Meta Pixel tracking
 
 interface CategorySubscriptionButtonProps {
+
   categoryName: string;
   pricing: CategoryPricing[];
   hasAccess: boolean;
@@ -19,36 +23,86 @@ export function CategorySubscriptionButton({
   pricing,
   hasAccess,
 }: CategorySubscriptionButtonProps) {
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
   const handleSubscribe = async (plan: CategoryPricing) => {
     if (hasAccess) return;
 
+    if (status === "unauthenticated") {
+      toast.error("Please login to subscribe");
+      router.push("/login?callbackUrl=" + window.location.pathname);
+      return;
+    }
+
     setIsProcessing(true);
     setSelectedPlanId(plan.id);
 
     try {
-      // Use the subscription API client
       const result = await initiateSubscription(plan.id);
-
-      console.log(result);
 
       if (!result.success) {
         throw new Error(result.message || "Failed to initiate subscription");
       }
 
-      // Redirect to Razorpay hosted page
-      if (result.data?.shortUrl) {
-        window.open(result.data.shortUrl, "_blank");
-        setIsProcessing(false);
-        setSelectedPlanId(null);
-      } else {
-        throw new Error("No subscription URL received");
-      }
+      const { data } = result;
+
+      const options = {
+        key: data.keyId,
+        subscription_id: data.subscriptionId,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Pankhuri",
+        description: data.planName,
+        prefill: {
+          name: session?.user?.name || "",
+          email: session?.user?.email || "",
+        },
+        handler: async (response: any) => {
+          try {
+            toast.loading("Verifying payment...");
+            await verifySubscription({
+              subscriptionId: data.subscriptionId,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+            });
+            toast.dismiss();
+            toast.success("Subscription activated successfully!");
+            router.push("/dashboard");
+          } catch (error) {
+            toast.dismiss();
+            console.error("Verification failed:", error);
+            toast.error("Payment verification failed. Please contact support.");
+          } finally {
+            setIsProcessing(false);
+            setSelectedPlanId(null);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setIsProcessing(false);
+            setSelectedPlanId(null);
+          },
+        },
+      };
+
+      // Track InitiateCheckout in Meta Pixel
+      event("InitiateCheckout", {
+        content_name: `${categoryName} - ${plan.name || plan.subscriptionType}`,
+        content_ids: [plan.id],
+        content_type: "product",
+        value: data.amount / 100, // Razorpay amount is in paise
+        currency: data.currency || "INR",
+      });
+
+      const { initiateRazorpayPayment } = await import("@/lib/razorpay");
+      await initiateRazorpayPayment(options);
+
     } catch (error: any) {
       console.error("❌ Subscription Error:", error);
-      toast.error(error.message || "Failed to start subscription");
+      toast.error(error?.response?.data?.message || "Failed to initiate subscription");
       setIsProcessing(false);
       setSelectedPlanId(null);
     }
