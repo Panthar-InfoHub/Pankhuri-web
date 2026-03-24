@@ -70,7 +70,7 @@ export function CategorySubscriptionButton({
             });
             toast.dismiss();
             toast.success("Subscription activated successfully!");
-            router.push("/dashboard");
+            router.push("/account");
           } catch (error) {
             toast.dismiss();
             console.error("Verification failed:", error);
