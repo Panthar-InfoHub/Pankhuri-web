@@ -9,14 +9,20 @@ import { Testimonials } from "@/components/landing/testimonials"
 import PlansPage from "@/components/landing/subscription-pricing"
 import { FinalCTA } from "@/components/landing/final-cta"
 import { Footer } from "@/components/landing/footer"
+import { AnnouncementBarWrapper } from "@/components/common/AnnouncementBar"
 
 export default function Home() {
     return (
         <div className="min-h-screen">
-            <Header />
+            <div className="sticky top-0 z-50">
+                <AnnouncementBarWrapper />
+                <Header />
+            </div>
             <HeroSection />
             <WhyPankhuri />
+
             <CourseCurriculum />
+
             <HowItWorks />
             <CertificateSection />
             {/* <SubscriptionPricing /> */}
@@ -28,3 +34,4 @@ export default function Home() {
 
     )
 }
+

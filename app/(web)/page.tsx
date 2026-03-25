@@ -8,10 +8,13 @@ import { FeaturedCourses } from "@/components/home/FeaturedCourses"
 import { TrendingCourses } from "@/components/home/TrendingCourses"
 import { CourseUtilizationGuide } from "@/components/home/CourseUtilizationGuide"
 import { ServiceSection } from "@/components/home/ServiceSection"
+import { FAQSectionWrapper, FAQSkeleton } from "@/components/home/FAQSectionWrapper"
+import { Suspense } from "react"
 
 export const dynamic = 'force-dynamic'
 
 export default function HomePage() {
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-zinc-50 via-white to-pink-50/30 overflow-x-hidden">
       {/* Hero Section */}
@@ -67,6 +70,11 @@ export default function HomePage() {
 
       {/* Course Utilization Guide Section */}
       <CourseUtilizationGuide />
+
+      {/* FAQ Section with Suspense */}
+      <Suspense fallback={<FAQSkeleton />}>
+        <FAQSectionWrapper />
+      </Suspense>
     </main>
   )
 }

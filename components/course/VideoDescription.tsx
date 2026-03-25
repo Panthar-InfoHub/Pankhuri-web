@@ -33,13 +33,13 @@ export function VideoDescription({ video, course }: VideoDescriptionProps) {
         </div>
 
         {/* Instructor */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <User size={18} className="text-pink-400" />
           <div>
             <p className="text-xs text-gray-500 uppercase">Instructor</p>
             <p className="text-white font-medium">{course.instructor.name}</p>
           </div>
-        </div>
+        </div> */}
 
         {/* Course Name */}
         <div>
