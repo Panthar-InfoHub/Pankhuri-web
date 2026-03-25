@@ -39,7 +39,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                 </div>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-[1.1] tracking-tight text-balance">
-                  {course.title}
+                  {course.title ? course.title.charAt(0).toUpperCase() + course.title.slice(1) : ""}
                 </h1>
 
                 <p className="text-gray-600 text-lg md:text-xl max-w-2xl leading-relaxed line-clamp-2">
@@ -73,7 +73,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
               </div>
 
               {/* Trainer */}
-              <Link
+              {/* <Link
                 href={`/trainer/${course?.trainer?.id}`}
                 className="group/trainer flex items-center gap-4 w-fit"
               >
@@ -91,7 +91,7 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                   </p>
                   <p className="text-gray-900 font-bold group-hover/trainer:text-purple-600 transition-colors">{course.trainer?.user?.displayName}</p>
                 </div>
-              </Link>
+              </Link> */}
             </div>
 
             {/* Enhanced Pricing Panel */}

@@ -51,3 +51,16 @@ export const initiateSubscription = async (planId: string) => {
   }>("/api/subscriptions", { planId });
   return response.data;
 };
+
+export const verifySubscription = async (data: {
+  subscriptionId: string;
+  paymentId: string;
+  signature: string;
+}) => {
+  const response = await apiClient.post<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>("/api/subscriptions/verify", data);
+  return response.data;
+};
