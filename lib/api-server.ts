@@ -11,6 +11,7 @@ export async function serverApi(path: string, options: AxiosRequestConfig = {}) 
 
     const apiClient = axios.create({
         baseURL: getBaseURL(),
+        adapter: "fetch",
     });
 
     try {
