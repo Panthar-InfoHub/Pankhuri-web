@@ -20,11 +20,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/\/$/, "");
           const fullUrl = `${baseUrl}/${endpoint}`;
 
-          const res = await axios.post(fullUrl, {
-            idToken: credentials?.idToken,
-            phone: credentials?.phoneNumber,
-            otp: credentials?.otp,
-          });
+          const res = await axios.post(
+            fullUrl,
+            {
+              idToken: credentials?.idToken,
+              phone: credentials?.phoneNumber,
+              otp: credentials?.otp,
+            },
+            { adapter: "fetch" }
+          );
 
           if (res.data.success && res.data.data) {
             const { user, token } = res.data.data;
